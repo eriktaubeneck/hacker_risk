@@ -1,6 +1,7 @@
 import hashlib
 import random
 
+
 class Country(object):
     def __init__(self, name):
         self.border_countries = set()
@@ -30,18 +31,18 @@ class Country(object):
         else:
             raise NameError('attacking country has no troops')
 
-        defending_rolls = sorted([random.randint(1,6) for i in xrange(defending_die)], 
-                               reverse=True)
-        attacking_rolls = sorted([random.randint(1,6) for i in xrange(attacking_die)], 
-                               reverse=True)
+        defending_rolls = sorted([random.randint(1, 6) for i in xrange(defending_die)],
+                                 reverse=True)
+        attacking_rolls = sorted([random.randint(1, 6) for i in xrange(attacking_die)],
+                                 reverse=True)
 
         for i in xrange(min(defending_die, attacking_die)):
             if attacking_rolls[i] > defending_rolls[i]:
                 country.troops -= 1
             else:
                 self.troops -= 1
-                attacking_troops -= 1 # Kept track in case of invasion
-        
+                attacking_troops -= 1  # Kept track in case of invasion
+
         if country.troops == 0:
             country.owner = self.owner
             country.troops = attacking_troops
@@ -53,6 +54,7 @@ class Country(object):
     def __eq__(self, other):
         return isinstance(other, Country) and self.name == other.name
 
+
 class Continent(object):
     def __init__(self, name, bonus):
         self.name = name
@@ -62,17 +64,20 @@ class Continent(object):
     def __hash__(self):
         return hash(self.name)
 
-    def __eq__(self,other):
+    def __eq__(self, other):
         return isinstance(other, Continent) and self.name == other.name
+
 
 class Map(object):
     def __init__(self):
         self.continents = {}
         self.countries = {}
 
+
 class Card(object):
     def __init__(self):
         pass
+
 
 class Player(object):
     def __init__(self, base_url):
@@ -81,6 +86,7 @@ class Player(object):
         self.errors = 0
         self.cards = set()
         self.is_neutral = False
+
 
 class World(object):
     def __init__(self, _map, players):

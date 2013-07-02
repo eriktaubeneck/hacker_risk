@@ -15,4 +15,3 @@ Northwest_Territory.owner = players[1]
 
 Alaska.troops = 30
 Northwest_Territory.troops = 10
-
