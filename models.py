@@ -2,18 +2,31 @@ import hashlib
 import random
 
 class Country(object):
-    def __init__(self):
+    def __init__(self, name):
         self.border_countries = set()
         self.name = name
+        self.owner = None
+        self.troops = 0
+
         
-    def set_continent(self,continent):
-        self.continent = continent
-        self.contient.countries.add(self)
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __eq__(self, other):
+        return isinstance(other, Country) and self.name == other.name
 
 class Continent(object):
-    def __init__(self, bonus):
+    def __init__(self, name, bonus):
+        self.name = name
         self.countries = set()
         self.bonus = bonus
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __eq__(self,other):
+        return isinstance(other, Continent) and self.name == other.name
 
 class Map(object):
     def __init__(self):
