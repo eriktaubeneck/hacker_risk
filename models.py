@@ -3,21 +3,23 @@ import random
 
 class Country(object):
     def __init__(self):
-        self.boarder_countries = []
-
+        self.border_countries = set()
+        self.name = name
+        
     def set_continent(self,continent):
         self.continent = continent
         self.contient.countries.add(self)
 
 class Continent(object):
-    def __init__(self):
+    def __init__(self, bonus):
         self.countries = set()
+        self.bonus = bonus
 
 class Map(object):
     def __init__(self):
         self.continents = set()
         self.countries = set()
-        
+
     def add_continent(self,continent):
         self.continents.add(continent)
         self.countries.union(continent.countries)
