@@ -30,11 +30,22 @@ class Country(object):
         else:
             raise NameError('attacking country has no troops')
 
-        defending_die = sorted([random.randint(1,6) for i in xrange(defending_die)])
-        attacking_die = sorted([random.randint(1,6) for i in xrange(attacking_die)])
+        defending_rolls = sorted([random.randint(1,6) for i in xrange(defending_die)], 
+                               reverse=True)
+        attacking_rolls = sorted([random.randint(1,6) for i in xrange(attacking_die)], 
+                               reverse=True)
 
+        for i in xrange(min(defending_die, attacking_die)):
+            if attacking_rolls[i] > defending_rolls[i]:
+                country.troops -= 1
+            else:
+                self.troops -= 1
+                attacking_troops -= 1 # Kept track in case of invasion
         
-        
+        if country.troops == 0:
+            country.owner = self.owner
+            country.troops = attacking_troops
+            self.troops -= attacking_troops
 
     def __hash__(self):
         return hash(self.name)
@@ -45,7 +56,7 @@ class Country(object):
 class Continent(object):
     def __init__(self, name, bonus):
         self.name = name
-        self.countries = set()
+        self.countries = {}
         self.bonus = bonus
 
     def __hash__(self):
@@ -56,12 +67,8 @@ class Continent(object):
 
 class Map(object):
     def __init__(self):
-        self.continents = set()
-        self.countries = set()
-
-    def add_continent(self,continent):
-        self.continents.add(continent)
-        self.countries.union(continent.countries)
+        self.continents = {}
+        self.countries = {}
 
 class Card(object):
     def __init__(self):
