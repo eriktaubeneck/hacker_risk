@@ -8,6 +8,32 @@ class Country(object):
         self.owner = None
         self.troops = 0
 
+    def attack(self, country, attacking_troops):
+        assert country in self.border_countries
+        assert country.owner is not None
+        assert country.owner is not self.country.owner
+        assert self.troops - attacking_troops >= 1
+
+        if country.troops >= 2:
+            defending_die = 2
+        elif country.troop == 1:
+            defending_die = 1
+        else:
+            raise NameError('defending country has no troops')
+
+        if attacking_troops >= 3:
+            attacking_die = 3
+        elif attacking_troops == 2:
+            attacking_die = 2
+        elif attacking_troops == 1:
+            attacking_die = 1
+        else:
+            raise NameError('attacking country has no troops')
+
+        defending_die = sorted([random.randint(1,6) for i in xrange(defending_die)])
+        attacking_die = sorted([random.randint(1,6) for i in xrange(attacking_die)])
+
+        
         
 
     def __hash__(self):
