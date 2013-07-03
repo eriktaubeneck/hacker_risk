@@ -84,9 +84,6 @@ class Card(object):
 class Player(object):
     def __init__(self, name, base_url):
         self.name = name
-        self.base_url = base_url
-        self.key = hashlib.md5().hexdigest()
-        self.errors = 0
         self.cards = set()
         self.is_neutral = False
 

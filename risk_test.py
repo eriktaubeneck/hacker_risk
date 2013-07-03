@@ -1,5 +1,15 @@
 import models
 import mapgen
+import unittest
+import random
+
+class TestBoard(unittest.TestCase):
+    def setUp(self):
+        self.board = mapgen.generate_board()
+        self.players = [models.Player('Erty'),models.Player('Alex')]
+        self.Alaska = board.countries['alaska']
+        self.Northwest_Territory = board.countries['northwest territory']
+        
 
 board = mapgen.generate_board()
 players = []
