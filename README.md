@@ -1,5 +1,7 @@
 # Hacker Risk
 
+Based on <a href="http://www.hasbro.com/common/instruct/risk.pdf">the official Hasbro rules</a> - refer to these for any disputes.
+
 ## The Game Pieces
 
 ### Continents and Countries
@@ -45,3 +47,16 @@ At the beginning of your turn, you will be able to trade in any risk cards (expl
 
     max(ceiling([# OF COUNTRIES YOU CONTROL] / 3), 3) + [TROOPS BOUGHT WITH RISK CARDS] + [CONTINENT BONUSES]
 
+Thus you will always receive at least 3 troops on every turn.
+
+You may also gain 2 additional troops from trading in risk cards for a country you own, but since you do not get to control the placement of those units, they will simply be added to that country.
+
+### Risk Cards
+
+At the end of any turn in which you have captured at least one territory, you will earn one (and only one) risk card. You are trying to collect sets of 3 cards in any of the following combinations:
+
+- 3 cards of the same design (Infantry, Cavalry, Artillery)
+- 1 of each three designs
+- Any two card plus a wild card
+
+If you have collected a set of three risk cards, you may turn them in at the beginning of your next turn, or you may wait. However, if you have 5 or 6 cards at the beginning of your turn, you must trade in at least one set, and you may choose to turn in more than one if you have it.
