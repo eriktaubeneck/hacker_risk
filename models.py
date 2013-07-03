@@ -79,9 +79,8 @@ class Continent(object):
         return isinstance(other, Continent) and self.name == other.name
 
     def get_player_set(self):
-        print(self.countries)
-        return set(country for country in self.countries)
-
+        keys = self.countries.keys()
+        return set([self.countries[key].owner for key in keys])
 
 class Board(object):
     def __init__(self):
