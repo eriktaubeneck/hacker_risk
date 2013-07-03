@@ -98,6 +98,7 @@ class Player(object):
         self.name = name
         self.cards = set()
         self.is_neutral = False
+        self.countries = set() 
 
 
 class World(object):
