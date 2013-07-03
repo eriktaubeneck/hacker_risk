@@ -1,9 +1,10 @@
 import hashlib
 import random
 
+
 class Country(object):
     def __init__(self, name):
-        self.border_countries = set()
+        self.border_countries = []
         self.name = name
         self.owner = None
         self.troops = 0
@@ -11,12 +12,14 @@ class Country(object):
     def attack(self, country, attacking_troops):
         assert country in self.border_countries
         assert country.owner is not None
-        assert country.owner is not self.country.owner
+        assert country.owner is not self.owner
         assert self.troops - attacking_troops >= 1
-
+        assert attacking_troops > 0
+        assert attacking_troops <= 3
+        
         if country.troops >= 2:
             defending_die = 2
-        elif country.troop == 1:
+        elif country.troops == 1:
             defending_die = 1
         else:
             raise NameError('defending country has no troops')
@@ -30,11 +33,22 @@ class Country(object):
         else:
             raise NameError('attacking country has no troops')
 
-        defending_die = sorted([random.randint(1,6) for i in xrange(defending_die)])
-        attacking_die = sorted([random.randint(1,6) for i in xrange(attacking_die)])
+        defending_rolls = sorted([random.randint(1, 6) for i in range(defending_die)],
+                                 reverse=True)
+        attacking_rolls = sorted([random.randint(1, 6) for i in range(attacking_die)],
+                                 reverse=True)
 
-        
-        
+        for i in range(min(defending_die, attacking_die)):
+            if attacking_rolls[i] > defending_rolls[i]:
+                country.troops -= 1
+            else:
+                self.troops -= 1
+                attacking_troops -= 1  # Kept track in case of invasion
+
+        if country.troops == 0:
+            country.owner = self.owner
+            country.troops = attacking_troops
+            self.troops -= attacking_troops
 
     def __hash__(self):
         return hash(self.name)
@@ -42,38 +56,40 @@ class Country(object):
     def __eq__(self, other):
         return isinstance(other, Country) and self.name == other.name
 
+
 class Continent(object):
     def __init__(self, name, bonus):
         self.name = name
-        self.countries = set()
+        self.countries = {}
         self.bonus = bonus
 
     def __hash__(self):
         return hash(self.name)
 
-    def __eq__(self,other):
+    def __eq__(self, other):
         return isinstance(other, Continent) and self.name == other.name
 
-class Map(object):
-    def __init__(self):
-        self.continents = set()
-        self.countries = set()
 
-    def add_continent(self,continent):
-        self.continents.add(continent)
-        self.countries.union(continent.countries)
+class Board(object):
+    def __init__(self):
+        self.continents = {}
+        self.countries = {}
+
 
 class Card(object):
     def __init__(self):
         pass
 
+
 class Player(object):
-    def __init__(self, base_url):
+    def __init__(self, name, base_url):
+        self.name = name
         self.base_url = base_url
         self.key = hashlib.md5().hexdigest()
         self.errors = 0
         self.cards = set()
         self.is_neutral = False
+
 
 class World(object):
     def __init__(self, _map, players):
