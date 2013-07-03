@@ -73,7 +73,7 @@ class Continent(object):
 
     def get_player_set(self):
         print(self.countries)
-        return set(country for country in self.countries)
+        return {country for country in self.countries}
 
     def __hash__(self):
         return hash(self.name)
