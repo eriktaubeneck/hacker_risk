@@ -4,7 +4,7 @@ import random
 
 class Country(object):
     def __init__(self, name):
-        self.border_countries = set()
+        self.border_countries = []
         self.name = name
         self.owner = None
         self.troops = 0
@@ -12,12 +12,14 @@ class Country(object):
     def attack(self, country, attacking_troops):
         assert country in self.border_countries
         assert country.owner is not None
-        assert country.owner is not self.country.owner
+        assert country.owner is not self.owner
         assert self.troops - attacking_troops >= 1
-
+        assert attacking_troops > 0
+        assert attacking_troops <= 3
+        
         if country.troops >= 2:
             defending_die = 2
-        elif country.troop == 1:
+        elif country.troops == 1:
             defending_die = 1
         else:
             raise NameError('defending country has no troops')
@@ -31,12 +33,12 @@ class Country(object):
         else:
             raise NameError('attacking country has no troops')
 
-        defending_rolls = sorted([random.randint(1, 6) for i in xrange(defending_die)],
+        defending_rolls = sorted([random.randint(1, 6) for i in range(defending_die)],
                                  reverse=True)
-        attacking_rolls = sorted([random.randint(1, 6) for i in xrange(attacking_die)],
+        attacking_rolls = sorted([random.randint(1, 6) for i in range(attacking_die)],
                                  reverse=True)
 
-        for i in xrange(min(defending_die, attacking_die)):
+        for i in range(min(defending_die, attacking_die)):
             if attacking_rolls[i] > defending_rolls[i]:
                 country.troops -= 1
             else:
@@ -68,7 +70,7 @@ class Continent(object):
         return isinstance(other, Continent) and self.name == other.name
 
 
-class Map(object):
+class Board(object):
     def __init__(self):
         self.continents = {}
         self.countries = {}
