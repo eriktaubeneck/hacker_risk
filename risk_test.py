@@ -20,14 +20,18 @@ players.append(models.Player('Alex', None))
 Alaska = board.countries['alaska']
 Northwest_Territory = board.countries['northwest territory']
 
-Alaska.owner = players[0]
-Northwest_Territory.owner = players[1]
+Alaska.add_troops(players[0], 30)
+Northwest_Territory.add_troops(players[1], 10)
 
-Alaska.troops = 30
-Northwest_Territory.troops = 10
+assert(Alaska.owner == players[0])
+assert(Northwest_Territory.owner == players[1])
 
-while Alaska.owner != Northwest_Territory.owner and Alaska.troops > 1:
-    Alaska.attack(Northwest_Territory, min(Alaska.troops, 3))
-    print("Alaska: " + Alaska.owner.name + " : " + str(Alaska.troops))
-    print("NWTerr: " + Northwest_Territory.owner.name + " : " + str(Northwest_Territory.troops))
-    print("---")
+#while Alaska.owner != Northwest_Territory.owner and Alaska.troops > 1:
+#    Alaska.attack(Northwest_Territory, min(Alaska.troops, 3))
+#    print("Alaska: " + Alaska.owner.name + " : " + str(Alaska.troops))
+#    print("NWTerr: " + Northwest_Territory.owner.name + " : " + str(Northwest_Territory.troops))
+#    print("---")
+
+print(board.continents)
+
+print(board.continents['north america'].get_player_set())

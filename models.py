@@ -3,8 +3,8 @@ import random
 
 
 class Country(object):
-    def __init__(self, name):
-        self.border_countries = []
+    def __init__(self, name, border_countries):
+        self.border_countries = border_countries
         self.name = name
         self.owner = None
         self.troops = 0
@@ -16,7 +16,7 @@ class Country(object):
         assert self.troops - attacking_troops >= 1
         assert attacking_troops > 0
         assert attacking_troops <= 3
-        
+
         if country.troops >= 2:
             defending_die = 2
         elif country.troops == 1:
@@ -56,6 +56,15 @@ class Country(object):
     def __eq__(self, other):
         return isinstance(other, Country) and self.name == other.name
 
+    def add_troops(self, owner, troops):
+        assert owner
+        assert owner == self.owner or (self.troops == 0 and self.owner is None)
+        assert troops > 0
+
+        if(self.owner is None):
+            self.owner = owner
+        self.troops += troops
+
 
 class Continent(object):
     def __init__(self, name, bonus):
@@ -68,6 +77,10 @@ class Continent(object):
 
     def __eq__(self, other):
         return isinstance(other, Continent) and self.name == other.name
+
+    def get_player_set(self):
+        print(self.countries)
+        return set(country for country in self.countries)
 
 
 class Board(object):

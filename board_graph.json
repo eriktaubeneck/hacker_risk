@@ -1,0 +1,74 @@
+{
+	"north america": {
+		"bonus": 5,
+		"countries": {
+			"alaska": ["kamchatka", "northwest territory", "alberta"],
+			"northwest territory": ["alaska", "alberta", "ontario", "greenland"],
+			"greenland": ["northwest territory", "ontario", "eastern canada", "iceland"],
+			"alberta": ["alaska", "northwest territory", "ontario", "western united states"],
+			"ontario": ["northwest territory", "alberta", "western united states", "eastern united states", "eastern canada", "greenland"],
+			"eastern canada": ["ontario", "eastern united states", "greenland"],
+			"western united states": ["alberta", "ontario", "eastern united states", "central america"],
+			"eastern united states": ["western united states", "ontario", "eastern canada", "central america"],
+			"central america": ["western united states", "eastern united states", "venezuela"]
+		}
+	},
+	"south america": {
+		"bonus": 2,
+		"countries": {
+			"venezuela": ["central america", "peru", "brazil"],
+			"peru": ["venezuela", "brazil", "argentina"],
+			"brazil": ["venezuela", "peru", "argentina", "north africa"],
+			"argentina": ["peru", "brazil"]
+		}
+	},
+	"europe": {
+		"bonus": 5,
+		"countries": {
+			"iceland": ["greenland", "great britain", "scandanavia"],
+			"scandanavia": ["iceland", "great britain", "northern europe", "russia"],
+			"russia": ["scandanavia", "northern europe", "southern europe", "ural", "afghanistan", "middle east"],
+			"great britain": ["iceland", "scandanavia", "northern europe", "western europe"],
+			"northern europe": ["great britain", "scandanavia", "russia", "southern europe", "western europe"],
+			"western europe": ["great britain", "northern europe", "southern europe", "north africa"],
+			"southern europe": ["western europe", "northern europe", "russia", "middle east", "north africa", "egypt"]
+		}
+	},
+	"africa": {
+		"bonus": 3,
+		"countries": {
+			"north africa": ["brazil", "western europe", "egypt", "southern europe", "east africa", "central africa"],
+			"egypt": ["southern europe", "middle east", "east africa", "north africa"],
+			"east africa": ["egypt", "middle east", "madagascar", "south africa", "central africa", "north africa"],
+			"central africa": ["north africa", "egypt", "east africa", "south africa"],
+			"south africa": ["central africa", "east africa", "madagascar"],
+			"madagascar": ["east africa", "south africa"]
+		}
+	},
+	"asia": {
+		"bonus": 7,
+		"countries": {
+			"ural": ["russia", "siberia", "china", "afghanistan"],
+			"siberia": ["ural", "china", "mongolia", "yakutsk", "irkutsk"],
+			"yakutsk": ["siberia", "irkutsk", "kamchatka"],
+			"kamchatka": ["yakutsk", "irkutsk", "mongolia", "japan", "alaska"],
+			"irkutsk": ["siberia", "yakutsk", "kamchatka", "mongolia"],
+			"mongolia": ["siberia", "irkutsk", "kamchatka", "japan", "china"],
+			"japan": ["kamchatka", "mongolia"],
+			"afghanistan": ["russia", "ural", "china", "india", "middle east"],
+			"china": ["afghanistan", "ural", "siberia", "mongolia", "southeast asia", "india"],
+			"middle east": ["southern europe", "russia", "afghanistan", "india", "east africa", "egypt"],
+			"india": ["middle east", "afghanistan", "china", "southeast asia"],
+			"southeast asia": ["india", "china", "indonesia"]
+		}
+	},
+	"australia": {
+		"bonus": 2,
+		"countries": {
+			"indonesia": ["southeast asia", "new guinea", "western australia"],
+			"new guinea": ["indonesia", "eastern australia"],
+			"western australia": ["indonesia", "eastern australia"],
+			"eastern australia": ["new guinea", "western australia"]
+		}
+	}
+}

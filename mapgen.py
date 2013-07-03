@@ -1,31 +1,26 @@
-import re
+import json
 import models
 
 
 def generate_board():
-    countries_file = open('./countries_graph.txt')
-    current_continent = None
-    current_country = None
+    board_file = open('./board_graph.txt')
+    board_json = json.load(board_file)
+    board_file.close()
     board = models.Board()
-    for line in countries_file:
-        split_line = re.split("\s", line)
-        if(split_line[0] != ''):  # we are on a continent
-            current_continent = models.Continent(' '.join(split_line[:-2]), split_line[:-1])
-            board.continents[current_continent.name] = current_continent
-        else:
-            if(split_line[0] == '' and split_line[1] != ''):  # we are on a country
-                current_country = models.Country(' '.join(split_line[1:-2]))
-                current_continent.countries[int(split_line[-2:-1][0])] = current_country
-                board.countries[split_line[-2:-1][0]] = current_country
-            else:  # we are defining the relations
-                for c in split_line[3:-1]:
-                    current_country.border_countries.append(c.replace(",", ""))
-    new_countries = {}
-    for c_id in board.countries:
-        board.countries[c_id].border_countries = [board.countries[x] for x in board.countries[c_id].border_countries]
-        new_countries[board.countries[c_id].name] = board.countries[c_id]
-    board.countries = new_countries
+    countries = {}
+    for continent_name in board_json:
+        board.continents[continent_name] = models.Continent(continent_name,
+                                                            board_json[continent_name]["bonus"])
+        for country_name in board_json[continent_name]["countries"]:
+            countries[country_name] = models.Country(country_name,
+                                                     board_json[continent_name]["countries"][country_name])
+            board.continents[continent_name].countries[country_name] = countries[country_name]
+    for country_name in countries:
+        borders = [countries[name] for name in countries[country_name].border_countries]
+        countries[country_name].border_countries = borders
+    board.countries = countries
     return board
+
 
 if __name__ == '__main__':
     board = generate_board()
