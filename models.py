@@ -95,7 +95,7 @@ class Card(object):
 
 
 class Player(object):
-    def __init__(self, name, base_url):
+    def __init__(self, name):
         self.name = name
         self.cards = set()
         self.is_neutral = False
