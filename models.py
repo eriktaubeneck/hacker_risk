@@ -50,12 +50,6 @@ class Country(object):
             country.troops = attacking_troops
             self.troops -= attacking_troops
 
-    def __hash__(self):
-        return hash(self.name)
-
-    def __eq__(self, other):
-        return isinstance(other, Country) and self.name == other.name
-
     def add_troops(self, owner, troops):
         assert owner
         assert owner == self.owner or (self.troops == 0 and self.owner is None)
@@ -65,12 +59,21 @@ class Country(object):
             self.owner = owner
         self.troops += troops
 
+    def __hash__(self):
+        return hash(self.name)
+
+    def __eq__(self, other):
+        return isinstance(other, Country) and self.name == other.name
 
 class Continent(object):
     def __init__(self, name, bonus):
         self.name = name
         self.countries = {}
         self.bonus = bonus
+
+    def get_player_set(self):
+        print(self.countries)
+        return set(country for country in self.countries)
 
     def __hash__(self):
         return hash(self.name)
@@ -81,6 +84,7 @@ class Continent(object):
     def get_player_set(self):
         keys = self.countries.keys()
         return set([self.countries[key].owner for key in keys])
+
 
 class Board(object):
     def __init__(self):
@@ -99,6 +103,12 @@ class Player(object):
         self.cards = set()
         self.is_neutral = False
         self.countries = set() 
+
+    def __hash__(self):
+        return hash(self.name)
+
+    def __eq__(self, other):
+        return isinstance(other, Country) and self.name == other.name
 
 
 class World(object):
