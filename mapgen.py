@@ -3,7 +3,7 @@ import models
 
 
 def generate_board():
-    board_file = open('./board_graph.txt')
+    board_file = open('./board_graph.json')
     board_json = json.load(board_file)
     board_file.close()
     board = models.Board()
