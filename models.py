@@ -113,5 +113,5 @@ class Player(object):
 
 class World(object):
     def __init__(self, _map, players):
-        self._map = map
+        self._map = _map
         self.players = random.shuffle(players)
