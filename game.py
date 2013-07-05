@@ -46,6 +46,7 @@ class Game(object):
             player_done = False
             while not player_done:
                 player_done = self.attacking_phase(player)
+            self.reinforce(player)
 
 
     def deployment_phase(self, player):
