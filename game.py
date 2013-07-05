@@ -22,7 +22,7 @@ class Game(object):
         self.current_player = self.players.next()
 
 
-    def init_deploy(self,player_list):
+    def init_deploy(self):
         players = itertools.cycle(self.player_list)
         while {c for c in self.board.countries if not c.owner}:
             player = players.next()
