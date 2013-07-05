@@ -65,6 +65,7 @@ class Country(object):
     def __eq__(self, other):
         return isinstance(other, Country) and self.name == other.name
 
+
 class Continent(object):
     def __init__(self, name, bonus):
         self.name = name
@@ -72,7 +73,7 @@ class Continent(object):
         self.bonus = bonus
 
     def get_country_set(self):
-        return {country for country in self.countries}
+        return set([country for country in self.countries])
 
     def __hash__(self):
         return hash(self.name)
@@ -101,7 +102,7 @@ class Player(object):
         self.name = name
         self.cards = set()
         self.is_neutral = False
-        self.countries = set() 
+        self.countries = set()
 
     def __hash__(self):
         return hash(self.name)
