@@ -71,8 +71,7 @@ class Continent(object):
         self.countries = {}
         self.bonus = bonus
 
-    def get_player_set(self):
-        print(self.countries)
+    def get_country_set(self):
         return {country for country in self.countries}
 
     def __hash__(self):
