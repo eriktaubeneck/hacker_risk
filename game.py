@@ -4,7 +4,9 @@ import random
 import math
 import itertools
 
-#TODO we should define the phase_index-es as constants with names instead of magic numbers
+PHASE_DEPLOY = 0
+PHASE_ATTACK = 1
+
 
 class Game(object):
 
@@ -18,7 +20,7 @@ class Game(object):
         #assign countries to players
         self.init_deploy(player_list)
 
-        self.current_phase_index = 0
+        self.current_phase_index = PHASE_DEPLOY
         self.players = self.player_gen()  # reset players to start with p1
         self.current_player = self.players.next()
 
@@ -61,7 +63,7 @@ class Game(object):
         attacking_country, defending_country, attacking_troops = player.attack()
         if not attacking_country:
             return True
-        assert attacking_country.owner = player
+        assert attacking_country.owner == player
         attacking_country.attack(defending_country, attacking_troops)
         if not defending_country.owner.countries:
             self.eliminate_player(player, defending_country.owner)
@@ -71,24 +73,24 @@ class Game(object):
 
     def finish_turn(self):
         self.current_player = self.players.next()
-        self.current_phase_index = 0
+        self.current_phase_index = PHASE_DEPLOY
         self.check_for_winner()
 
     def next_phase(self):
         self.current_phase_index += 1
-        if self.current_phase_index >= 3:
+        if self.current_phase_index > PHASE_ATTACK:
             self.finish_turn()
 
     def check_for_winner(self):
-        players_remaining = [p for p in players if p.is_neutral is False]
+        players_remaining = [p for p in players if not p.is_neutral]
         if len(players_remaining) == 1:
             return players_remaining[0]
         else:
             return False
 
     def remove_player(self, eliminator, eliminated):
-        assert eliminator not None
-        assert eliminated not None
+        assert eliminator is not None
+        assert eliminated is not None
         assert eliminator.is_neutral is False
         assert len(eliminated.countries) is 0
 
