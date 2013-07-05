@@ -4,24 +4,22 @@ import random
 import math
 import itertools
 
+
 class Game(object):
 
     def __init__(self, players_list):
-        self.phases = ['place','attack','reinforce']
+        self.phases = ['place', 'attack', 'reinforce']
         self.board = generate_board()
         self.player_list = random.shuffle(list(player_list))
         self.uid = uuid4()
 
-
     def start_game(self):
         #assign countries to players
         self.init_deploy(player_list)
-        
 
         self.current_phase_index = 0
-        self.players = self.player_gen() # reset players to start with p1
+        self.players = self.player_gen()  # reset players to start with p1
         self.current_player = self.players.next()
-
 
     def init_deploy(self):
         players = itertools.cycle(self.player_list)
@@ -29,10 +27,10 @@ class Game(object):
             player = players.next()
             player.choose_country(self.board)
 
-        initial_troops = {3:35,
-                          4:30,
-                          5,25,
-                          6,20}
+        initial_troops = {3: 35,
+                          4: 30,
+                          5: 25,
+                          6: 20}
 
         for _ in xrange(len(player_list) * initial_troops(len(player_list))):
             player = players.next()
@@ -48,12 +46,11 @@ class Game(object):
                 player_done = self.attacking_phase(player)
             self.reinforce(player)
 
-
     def deployment_phase(self, player):
         #card troops
         card_troops = player.use_cards(self.board)
         #base troops
-        new_troops = max(math.ceil(len(player.countries)),3)
+        new_troops = max(math.ceil(len(player.countries)), 3)
         #continent troops
         continent_troops = sum({con.bonus for con in self.board.continents
                                 if con.get_player_set == {player}})
@@ -76,15 +73,30 @@ class Game(object):
         self.current_player = self.players.next()
         self.current_phase_index = 0
         self.check_for_winner()
-       
+
     def next_phase(self):
         self.current_phase_index += 1
         if self.current_phase_index >= 3:
             self.finish_turn()
 
     def check_for_winner(self):
-        if len(self.players) == 1:
-            return self.players[0]
+        players_remaining = [p for p in players if p.is_neutral is False]
+        if len(players_remaining) == 1:
+            return players_remaining[0]
         else:
             return False
 
+    def remove_player(self, eliminator, eliminated):
+        assert eliminator not None
+        assert eliminated not None
+        assert eliminator.is_neutral is False
+        assert len(eliminated.countries) is 0
+
+        #transfer cards
+        eliminator.cards += eliminated.cards
+        eliminated.cards = set()
+        #if 5 or more cards, they must be spent now
+        while(len(eliminator.cards) >= 5):
+            #TODO force cards to be spent
+        #make the eliminated player is_neutral
+        eliminated.is_neutral = True
