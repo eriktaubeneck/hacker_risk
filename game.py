@@ -4,6 +4,7 @@ import random
 import math
 import itertools
 
+#TODO we should define the phase_index-es as constants with names instead of magic numbers
 
 class Game(object):
 
@@ -68,7 +69,6 @@ class Game(object):
                 self.force_card_spend(player)
         return False
 
-
     def finish_turn(self):
         self.current_player = self.players.next()
         self.current_phase_index = 0
@@ -97,6 +97,7 @@ class Game(object):
         eliminated.cards = set()
         #if 5 or more cards, they must be spent now
         while(len(eliminator.cards) >= 5):
+            pass
             #TODO force cards to be spent
         #make the eliminated player is_neutral
         eliminated.is_neutral = True
