@@ -1,6 +1,7 @@
 from boardgen import generate_board
 from uuid import uuid4
 import random
+import math
 import itertools
 
 class Game(object):
@@ -36,7 +37,26 @@ class Game(object):
         for _ in xrange(len(player_list) * initial_troops(len(player_list))):
             player = players.next()
             player.deploy_troop(self.board)
-    
+
+    def play_game(self):
+        players = itertools.cycle(self.player_list)
+        while not self.check_for_winner():
+            player = players.next()
+            self.deployment_phase(player)
+            player_done = False
+            while not player_done:
+                player_done = self.attacking_phase(player)
+
+
+    def deployment_phase(self, player):
+        #card troops
+        card_troops = player.use_cards(self.board)
+        #base troops
+        new_troops = max(math.ceil(len(player.countries)),3)
+        #continent troops
+        continent_troops = sum({con.bonus for con in self.board.continents
+                                if con.get_player_set == {player}})
+        player.deploy_troops(self.board, card_troops + new_troops + continent_troops)
 
     def finish_turn(self):
         self.current_player = self.players.next()
@@ -51,4 +71,6 @@ class Game(object):
     def check_for_winner(self):
         if len(self.players) == 1:
             return self.players[0]
+        else:
+            return False
 
