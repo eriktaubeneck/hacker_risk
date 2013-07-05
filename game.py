@@ -58,6 +58,19 @@ class Game(object):
                                 if con.get_player_set == {player}})
         player.deploy_troops(self.board, card_troops + new_troops + continent_troops)
 
+    def attacking_phase(self, player):
+        attacking_country, defending_country, attacking_troops = player.attack()
+        if not attacking_country:
+            return True
+        assert attacking_country.owner = player
+        attacking_country.attack(defending_country, attacking_troops)
+        if not defending_country.owner.countries:
+            self.eliminate_player(player, defending_country.owner)
+            if len(player.cards) >= 5:
+                self.force_card_spend(player)
+        return False
+
+
     def finish_turn(self):
         self.current_player = self.players.next()
         self.current_phase_index = 0
