@@ -26,7 +26,7 @@ class Game(object):
 
     def init_deploy(self):
         players = itertools.cycle(self.player_list)
-        while {c for c in self.board.countries if not c.owner}:
+        while set([c for c in self.board.countries if not c.owner]):
             player = players.next()
             player.choose_country(self.board)
 
@@ -88,6 +88,12 @@ class Game(object):
         else:
             return False
 
+    def force_cards_spend(self, player):
+        assert not player.is_neutral
+        assert player.cards >= 5
+        # todo get the player's input on which cards to spend
+        pass
+
     def remove_player(self, eliminator, eliminated):
         assert eliminator is not None
         assert eliminated is not None
@@ -99,7 +105,6 @@ class Game(object):
         eliminated.cards = set()
         #if 5 or more cards, they must be spent now
         while(len(eliminator.cards) >= 5):
-            pass
-            #TODO force cards to be spent
+            force_cards_spend(eliminator)
         #make the eliminated player is_neutral
         eliminated.is_neutral = True
