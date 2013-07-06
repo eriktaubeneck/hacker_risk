@@ -13,7 +13,7 @@ initial_troops = {3: 35,
 class Game(object):
 
     def __init__(self, players_list):
-        self.board, self.card_deck = generate_board()
+        self.board, self.card_deck = self.import_board_graph('./board_graph.json')
         self.player_list = random.shuffle(list(player_list))
         self.card_deck = random.shuffle(list(card_deck))
         self.uid = uuid4()
@@ -21,6 +21,7 @@ class Game(object):
         self.init_turn = len(self.board.countries) + initial_troops[len(self.player_list)]
         self.turn = 0
         self.max_turns = 1000
+        self.card_sets_traded_in = 0
 
     def start_game(self):
         #assign countries to players
@@ -53,9 +54,8 @@ class Game(object):
                 player.earned_card_this_turn = False
                 player.cards.add(card_deck.next())
 
-
     def deployment_phase(self, player):
-        self.phase = 'deployment'
+        self.phase = 'deployment'  # is this even used anywhere?
         #card troops
         card_troops = player.use_cards(self.board)
         #base troops
@@ -98,3 +98,46 @@ class Game(object):
         eliminator.cards = eliminator.cards.union(eliminated.cards)
         eliminated.cards = set()
         eliminated.is_eliminated = True
+
+    def get_troops_for_card_set(self, player, traded_cards):
+        cards = list(traded_cards)
+        assert len(cards) == 3
+        if not cards[0].is_set_with(cards[1], cards[2]):
+            return False
+        for i in range(3):
+            if cards[i].country in player.countries:
+                cards[i].country.troops += 2
+                break
+        if(self.card_sets_traded_in < 6):
+            self.card_sets_traded_in += 1
+            return (self.card_sets_traded_in + 2) * 2
+        else:
+            self.card_sets_traded_in += 1
+            return (self.card_sets_traded_in - 3) * 5
+
+    def import_board_graph(json_url):
+        board_file = open(json_url)
+        board_json = json.load(board_file)
+        board_file.close()
+        board = models.Board()
+        countries = {}
+        cards = []
+        #go through the json and create the list of countries
+        for continent_name in board_json:
+            board.continents[continent_name] = models.Continent(continent_name,
+                                                                board_json[continent_name]["bonus"])
+            for country_name in board_json[continent_name]["countries"]:
+                countries[country_name] = models.Country(country_name,
+                                                         board_json[continent_name]["countries"][country_name]["border countries"])
+                cards.append(models.Card(countries[country_name], board_json[continent_name]["countries"][country_name]["card"]))
+                board.continents[continent_name].countries[country_name] = countries[country_name]
+        #loop through the country list and replace all of the border country strings with references to that country
+        for country_name in countries:
+            borders = [countries[name] for name in countries[country_name].border_countries]
+            countries[country_name].border_countries = borders
+        board.countries = countries
+        #add the two wild cards
+        cards.append(models.Card(None, "wild"))
+        cards.append(models.Card(None, "wild"))
+        #return a tuple with the board and the cards
+        return board, cards
