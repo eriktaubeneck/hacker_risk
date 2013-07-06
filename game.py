@@ -9,11 +9,13 @@ initial_troops = {3: 35,
                   5: 25,
                   6: 20}
 
+
 class Game(object):
 
     def __init__(self, players_list):
-        self.board = generate_board()
+        self.board, self.card_deck = generate_board()
         self.player_list = random.shuffle(list(player_list))
+        self.card_deck = random.shuffle(list(card_deck))
         self.uid = uuid4()
         self.init_turn = 0
         self.init_turn = len(self.board.countries) + initial_troops[len(self.player_list)]
@@ -73,23 +75,24 @@ class Game(object):
         return False
 
     def check_for_winner(self):
-        players_remaining = [p for p in players if not p.is_eliminated]
+        players_remaining = [p for p in players if (not p.is_eliminated) and (not p.is_neutral)]
         if len(players_remaining) == 1:
             return players_remaining[0]
         else:
             return False
 
     def force_cards_spend(self, player):
-        assert not player.is_eliminated
+        assert player.is_eliminated is False
+        assert player.is_neutral is False
         assert player.cards >= 5
         player.force_cards_spend(self)
-
 
     def eliminate_player(self, eliminator, eliminated):
         assert eliminator is not None
         assert eliminated is not None
         assert eliminator.is_eliminated is False
         assert eliminated.is_eliminated is False
+        assert eliminator.is_neutral is False
         assert len(eliminated.countries) is 0
 
         eliminator.cards = eliminator.cards.union(eliminated.cards)

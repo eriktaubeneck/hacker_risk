@@ -1,4 +1,3 @@
-import hashlib
 import random
 
 
@@ -93,8 +92,13 @@ class Board(object):
 
 
 class Card(object):
-    def __init__(self):
-        pass
+    def __init__(self, country, value):
+        self.country = country
+        self.value = value
+
+    def is_set_with(self, card_two, card_three):
+        wild_cards = [card for card in list(self, card_two, card_three) if card.value == "wild"]
+        return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
 
 
 class Player(object):
