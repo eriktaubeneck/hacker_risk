@@ -49,6 +49,10 @@ class Game(object):
             while not player_done:
                 player_done = self.attacking_phase(self.player)
             self.reinforce(self.player)
+            if(player.earned_card_this_turn and card_deck):
+                player.earned_card_this_turn = False
+                player.cards.add(card_deck.next())
+
 
     def deployment_phase(self, player):
         self.phase = 'deployment'
@@ -67,7 +71,9 @@ class Game(object):
         if not attacking_country:
             return True
         assert attacking_country.owner == player
-        attacking_country.attack(defending_country, attacking_troops)
+        country_invaded = attacking_country.attack(defending_country, attacking_troops)
+        if country_invaded and not player.earned_card_this_turn:
+            player.earned_card_this_turn = True
         if not defending_country.owner.countries:
             self.eliminate_player(player, defending_country.owner)
             if len(player.cards) >= 5:

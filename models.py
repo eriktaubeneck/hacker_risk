@@ -48,6 +48,8 @@ class Country(object):
             country.owner = self.owner
             country.troops = attacking_troops
             self.troops -= attacking_troops
+            return True
+        return False
 
     def add_troops(self, owner, troops):
         assert owner
@@ -108,6 +110,7 @@ class Player(object):
         self.is_eliminated = False
         self.is_neutral = False
         self.countries = set()
+        self.earned_card_this_turn = False
 
     def __hash__(self):
         return hash(self.name)
