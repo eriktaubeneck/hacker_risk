@@ -8,14 +8,14 @@ def generate_board():
     board_file.close()
     board = models.Board()
     countries = {}
-    cards = {}
+    cards = []
     for continent_name in board_json:
         board.continents[continent_name] = models.Continent(continent_name,
                                                             board_json[continent_name]["bonus"])
         for country_name in board_json[continent_name]["countries"]:
             countries[country_name] = models.Country(country_name,
-                                                     board_json[continent_name]["countries"][country_name])
-            cards.add(models.Card(country_name, countries[country_name]))
+                                                     board_json[continent_name]["countries"][country_name]["border countries"])
+            cards.append(models.Card(countries[country_name], board_json[continent_name]["countries"][country_name]["card"]))
             board.continents[continent_name].countries[country_name] = countries[country_name]
     for country_name in countries:
         borders = [countries[name] for name in countries[country_name].border_countries]
@@ -25,4 +25,4 @@ def generate_board():
 
 
 if __name__ == '__main__':
-    board = generate_board()
+    board, cards = generate_board()
