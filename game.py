@@ -4,52 +4,52 @@ import random
 import math
 import itertools
 
-PHASE_DEPLOY = 0
-PHASE_ATTACK = 1
-
+initial_troops = {3: 35,
+                  4: 30,
+                  5: 25,
+                  6: 20}
 
 class Game(object):
 
     def __init__(self, players_list):
-        self.phases = ['place', 'attack', 'reinforce']
         self.board = generate_board()
         self.player_list = random.shuffle(list(player_list))
         self.uid = uuid4()
+        self.init_turn = 0
+        self.init_turn = len(self.board.countries) + initial_troops[len(self.player_list)]
+        self.turn = 0
+        self.max_turns = 1000
 
     def start_game(self):
         #assign countries to players
-        self.init_deploy(player_list)
-
-        self.current_phase_index = PHASE_DEPLOY
-        self.players = self.player_gen()  # reset players to start with p1
-        self.current_player = self.players.next()
+        self.init_deploy(self.player_list)
+        self.play_game(self.player_list)
 
     def init_deploy(self):
         players = itertools.cycle(self.player_list)
-        while set([c for c in self.board.countries if not c.owner]):
+        while {c for c in self.board.countries if not c.owner}:
+            self.init_turn += 1
             player = players.next()
             player.choose_country(self.board)
 
-        initial_troops = {3: 35,
-                          4: 30,
-                          5: 25,
-                          6: 20}
-
         for _ in xrange(len(player_list) * initial_troops(len(player_list))):
+            self.init_turn += 1
             player = players.next()
             player.deploy_troop(self.board)
 
     def play_game(self):
         players = itertools.cycle(self.player_list)
         while not self.check_for_winner():
-            player = players.next()
-            self.deployment_phase(player)
+            self.turn += 1
+            self.player = players.next()
+            self.deployment_phase(self.player)
             player_done = False
             while not player_done:
-                player_done = self.attacking_phase(player)
-            self.reinforce(player)
+                player_done = self.attacking_phase(self.player)
+            self.reinforce(self.player)
 
     def deployment_phase(self, player):
+        self.phase = 'deployment'
         #card troops
         card_troops = player.use_cards(self.board)
         #base troops
@@ -60,6 +60,7 @@ class Game(object):
         player.deploy_troops(self.board, card_troops + new_troops + continent_troops)
 
     def attacking_phase(self, player):
+        self.phase = 'attacking'
         attacking_country, defending_country, attacking_troops = player.attack()
         if not attacking_country:
             return True
@@ -70,16 +71,6 @@ class Game(object):
             if len(player.cards) >= 5:
                 self.force_card_spend(player)
         return False
-
-    def finish_turn(self):
-        self.current_player = self.players.next()
-        self.current_phase_index = PHASE_DEPLOY
-        self.check_for_winner()
-
-    def next_phase(self):
-        self.current_phase_index += 1
-        if self.current_phase_index > PHASE_ATTACK:
-            self.finish_turn()
 
     def check_for_winner(self):
         players_remaining = [p for p in players if not p.is_neutral]
