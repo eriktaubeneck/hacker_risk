@@ -71,7 +71,7 @@ class Game(object):
         if not defending_country.owner.countries:
             self.eliminate_player(player, defending_country.owner)
             if len(player.cards) >= 5:
-                self.force_card_spend(player)
+                player.force_cards_spend
         return False
 
     def check_for_winner(self):
@@ -80,12 +80,6 @@ class Game(object):
             return players_remaining[0]
         else:
             return False
-
-    def force_cards_spend(self, player):
-        assert player.is_eliminated is False
-        assert player.is_neutral is False
-        assert player.cards >= 5
-        player.force_cards_spend(self)
 
     def eliminate_player(self, eliminator, eliminated):
         assert eliminator is not None
