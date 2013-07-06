@@ -71,7 +71,7 @@ class Game(object):
         if not defending_country.owner.countries:
             self.eliminate_player(player, defending_country.owner)
             if len(player.cards) >= 5:
-                player.force_cards_spend
+                player.force_cards_spend()
         return False
 
     def check_for_winner(self):
