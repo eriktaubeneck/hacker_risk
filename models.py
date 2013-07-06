@@ -101,6 +101,7 @@ class Player(object):
     def __init__(self, name):
         self.name = name
         self.cards = set()
+        self.is_eliminated = False
         self.is_neutral = False
         self.countries = set()
 

@@ -73,29 +73,25 @@ class Game(object):
         return False
 
     def check_for_winner(self):
-        players_remaining = [p for p in players if not p.is_neutral]
+        players_remaining = [p for p in players if not p.is_eliminated]
         if len(players_remaining) == 1:
             return players_remaining[0]
         else:
             return False
 
     def force_cards_spend(self, player):
-        assert not player.is_neutral
+        assert not player.is_eliminated
         assert player.cards >= 5
-        # todo get the player's input on which cards to spend
-        pass
+        player.force_cards_spend(self)
 
-    def remove_player(self, eliminator, eliminated):
+
+    def eliminate_player(self, eliminator, eliminated):
         assert eliminator is not None
         assert eliminated is not None
-        assert eliminator.is_neutral is False
+        assert eliminator.is_eliminated is False
+        assert eliminated.is_eliminated is False
         assert len(eliminated.countries) is 0
 
-        #transfer cards
-        eliminator.cards += eliminated.cards
+        eliminator.cards = eliminator.cards.union(eliminated.cards)
         eliminated.cards = set()
-        #if 5 or more cards, they must be spent now
-        while(len(eliminator.cards) >= 5):
-            force_cards_spend(eliminator)
-        #make the eliminated player is_neutral
-        eliminated.is_neutral = True
+        eliminated.is_eliminated = True
