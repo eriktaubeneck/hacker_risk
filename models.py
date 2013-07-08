@@ -1,5 +1,5 @@
 import random
-
+import json
 
 class Country(object):
     def __init__(self, name, border_countries):
@@ -123,5 +123,35 @@ class Player(object):
 
 class World(object):
     def __init__(self, _map, players):
-        self._map = map
+        self._map = _map
         self.players = random.shuffle(players)
+
+
+def import_board_data(json_url):
+    board_file = open(json_url)
+    board_json = json.load(board_file)
+    board_file.close()
+    board = Board()
+    countries = {}
+    cards = []
+    #go through the json and create the list of countries
+    for continent_name in board_json:
+        board.continents[continent_name] = Continent(continent_name,
+
+board_json[continent_name]["bonus"])
+        for country_name in board_json[continent_name]["countries"]:
+            countries[country_name] = Country(country_name,
+
+board_json[continent_name]["countries"][country_name]["border countries"])
+            cards.append(Card(countries[country_name],                              board_json[continent_name]["countries"][country_name]["card"]))
+            board.continents[continent_name].countries[country_name] =                     countries[country_name]
+    #loop through the country list and replace all of the border country strings with      references to that country
+    for country_name in countries:
+        borders = [countries[name] for name in countries[country_name].border_countries]
+        countries[country_name].border_countries = borders
+    board.countries = countries
+    #add the two wild cards
+    cards.append(Card(None, "wild"))
+    cards.append(Card(None, "wild"))
+    #return a tuple with the board and the cards
+    return board, cards
