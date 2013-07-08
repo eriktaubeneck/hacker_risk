@@ -113,6 +113,7 @@ class Player(object):
         self.is_neutral = False
         self.countries = set()
         self.earned_card_this_turn = False
+        self.troops_to_deploy = 0
 
     def choose_country(self, country):
         assert country.owner is None
