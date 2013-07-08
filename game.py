@@ -19,7 +19,9 @@ class Game(object):
         self.card_deck = random.shuffle(list(card_deck))
         self.uid = uuid4()
         self.init_turn = 0
-        self.init_turn = len(self.board.countries) + initial_troops[len(self.player_list)]
+        self.init_turn = len(self.board.countries) +\
+                initial_troops[len(self.player_list)]
+
         self.turn = 0
         self.max_turns = 1000
         self.card_sets_traded_in = 0
@@ -129,16 +131,27 @@ class Game(object):
         cards = []
         #go through the json and create the list of countries
         for continent_name in board_json:
-            board.continents[continent_name] = models.Continent(continent_name,
-                                                                board_json[continent_name]["bonus"])
+            board.continents[continent_name] = \
+                    models.Continent(continent_name,
+                                     board_json[continent_name]["bonus"])
+
             for country_name in board_json[continent_name]["countries"]:
-                countries[country_name] = models.Country(country_name,
-                                                         board_json[continent_name]["countries"][country_name]["border countries"])
-                cards.append(models.Card(countries[country_name], board_json[continent_name]["countries"][country_name]["card"]))
-                board.continents[continent_name].countries[country_name] = countries[country_name]
-        #loop through the country list and replace all of the border country strings with references to that country
+                countries[country_name] = \
+                        models.Country(country_name,
+                                       board_json[continent_name]["countries"]\
+                                                 [country_name]["border countries"])
+
+                cards.append(models.Card(countries[country_name],
+                    board_json[continent_name]["countries"][country_name]["card"]))
+
+                board.continents[continent_name].countries[country_name]\
+                        = countries[country_name]
+        #loop through the country list and replace all 
+        #of the border country strings with references to that country
         for country_name in countries:
-            borders = [countries[name] for name in countries[country_name].border_countries]
+            borders = [countries[name] 
+                       for name in countries[country_name].border_countries]
+
             countries[country_name].border_countries = borders
         board.countries = countries
         #add the two wild cards
