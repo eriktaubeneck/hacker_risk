@@ -15,12 +15,16 @@ class Game(object):
 
     def __init__(self, player_list):
         self.board, self.card_deck = self.import_board_graph('./board_graph.json')
-        self.player_list = random.shuffle(list(player_list))
-        self.card_deck = random.shuffle(list(self.card_deck))
+        random.shuffle(list(player_list)) #     FYI
+        self.player_list = player_list ##       random.shuffle() works in-place
+        random.shuffle(list(self.card_deck)) #  and returns None
         self.uid = uuid4()
         self.init_turn = 0
-        self.init_turn = len(self.board.countries) +\
-                initial_troops[len(self.player_list)]
+        try:
+            self.init_turn = len(self.board.countries) +\
+                    initial_troops[len(self.player_list)]
+        except KeyError:
+            print("Invalid number of players")
 
         self.turn = 0
         self.max_turns = 1000
@@ -122,7 +126,7 @@ class Game(object):
             self.card_sets_traded_in += 1
             return (self.card_sets_traded_in - 3) * 5
 
-    def import_board_graph(json_url):
+    def import_board_graph(self, json_url):
         board_file = open(json_url)
         board_json = json.load(board_file)
         board_file.close()
