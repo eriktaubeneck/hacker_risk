@@ -33,7 +33,7 @@ class Game(object):
 
         troops_to_deploy = initial_troops(len(self.players))
 
-        while {c for c in self.board.countries if not c.owner}:
+        while {c for c in self.board.countries.values() if not c.owner}:
             self.players.next()
             self.init_turn += 1
             self.players.choose_country(self)
