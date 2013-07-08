@@ -12,78 +12,87 @@ initial_troops = {3: 35,
 
 class Game(object):
 
-    def __init__(self, players_list):
+    def __init__(self, players):
         self.board, self.card_deck = self.import_board_graph('./board_graph.json')
-        self.player_list = random.shuffle(list(player_list))
+        self.players = players
         self.card_deck = random.shuffle(list(card_deck))
         self.uid = uuid4()
         self.init_turn = 0
-        self.init_turn = len(self.board.countries) + initial_troops[len(self.player_list)]
+        self.init_turn = len(self.board.countries) + initial_troops[len(self.players)]
         self.turn = 0
         self.max_turns = 1000
         self.card_sets_traded_in = 0
+        self.winner = None
 
     def start_game(self):
         #assign countries to players
-        self.init_deploy(self.player_list)
-        self.play_game(self.player_list)
+        self.init_deploy()
+        self.play_game()
 
     def init_deploy(self):
-        players = itertools.cycle(self.player_list)
-        while {c for c in self.board.countries if not c.owner}:
-            self.init_turn += 1
-            player = players.next()
-            player.choose_country(self.board)
 
-        for _ in xrange(len(player_list) * initial_troops(len(player_list))):
+        troops_to_deploy = initial_troops(len(players))
+
+        while {c for c in self.board.countries if not c.owner}:
+            self.players.next()
             self.init_turn += 1
-            player = players.next()
-            player.deploy_troop(self.board)
+            self.players.choose_country(self)
+            troops_to_deploy -= 1
+
+        for _ in xrange(len(players) * troops_to_deploy):
+            self.players.next()
+            self.init_turn += 1
+            self.players.deploy_troops(self, 1)
 
     def play_game(self):
-        players = itertools.cycle(self.player_list)
+        self.players.reset()
         while not self.check_for_winner():
             self.turn += 1
-            self.player = players.next()
-            self.deployment_phase(self.player)
+            self.players.next()
+            self.deployment_phase()
             player_done = False
             while not player_done:
-                player_done = self.attacking_phase(self.player)
-            self.reinforce(self.player)
-            if(player.earned_card_this_turn and card_deck):
-                player.earned_card_this_turn = False
-                player.cards.add(card_deck.next())
+                player_done = self.attacking_phase()
+            self.reinforce()
+            if(self.players.current_player.earned_card_this_turn and card_deck):
+                self.players.current_player.earned_card_this_turn = False
+                self.players.current_player.cards.add(card_deck.next())
 
-    def deployment_phase(self, player):
-        self.phase = 'deployment'  # is this even used anywhere?
+    def deployment_phase(self):
+        self.phase = 'deployment'
         #card troops
-        card_troops = player.use_cards(self.board)
+        card_troops = self.players.use_cards(self)
         #base troops
-        new_troops = max(math.ceil(len(player.countries)), 3)
+        new_troops = max(math.ceil(len(self.players.current_player.countries)), 3)
         #continent troops
         continent_troops = sum({con.bonus for con in self.board.continents
-                                if con.get_player_set == {player}})
-        player.deploy_troops(self.board, card_troops + new_troops + continent_troops)
+                                if con.get_player_set == {self.players.current_player}})
+        players.deploy_troops(self, card_troops + new_troops + continent_troops)
 
-    def attacking_phase(self, player):
+    def attacking_phase(self):
         self.phase = 'attacking'
-        attacking_country, defending_country, attacking_troops = player.attack()
+        attacking_country, defending_country, attacking_troops = self.players.current_player.attack()
         if not attacking_country:
             return True
-        assert attacking_country.owner == player
+        assert attacking_country.owner == self.players.current_player
         country_invaded = attacking_country.attack(defending_country, attacking_troops)
-        if country_invaded and not player.earned_card_this_turn:
-            player.earned_card_this_turn = True
+        if country_invaded and not self.players.current_player.earned_card_this_turn:
+            self.players.current_player.earned_card_this_turn = True
         if not defending_country.owner.countries:
-            self.eliminate_player(player, defending_country.owner)
-            if len(player.cards) >= 5:
-                player.force_cards_spend()
+            self.eliminate_player(self.players.current_player, defending_country.owner)
+            if len(self.players.current_player.cards) >= 5:
+                self.players.current_player.force_cards_spend()
         return False
 
     def check_for_winner(self):
-        players_remaining = [p for p in players if (not p.is_eliminated) and (not p.is_neutral)]
+        players_remaining = {p for p in players if not p.is_eliminated}
+        neutral_players = {p for p in players_remaining if p.is_neutral}
         if len(players_remaining) == 1:
-            return players_remaining[0]
+            self.winner = list(players_remaining)[0]
+            return True
+        elif players_remaining == neutral_players:
+            self.winner = "Draw"
+            return True
         else:
             return False
 
@@ -99,13 +108,13 @@ class Game(object):
         eliminated.cards = set()
         eliminated.is_eliminated = True
 
-    def get_troops_for_card_set(self, player, traded_cards):
+    def get_troops_for_card_set(self, traded_cards):
         cards = list(traded_cards)
         assert len(cards) == 3
         if not cards[0].is_set_with(cards[1], cards[2]):
             return False
         for i in range(3):
-            if cards[i].country in player.countries:
+            if cards[i].country in self.players.current_player.countries:
                 cards[i].country.troops += 2
                 break
         if(self.card_sets_traded_in < 6):

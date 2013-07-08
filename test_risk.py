@@ -8,7 +8,7 @@ from mock import patch
 class TestBoard(unittest.TestCase):
     def setUp(self):
         self.board = mapgen.generate_board()
-                
+
     def test_border_countries(self):
         country_A = self.board.countries['alaska']
         country_B = self.board.countries['northwest territory']
@@ -20,11 +20,11 @@ class TestBoard(unittest.TestCase):
         country_B = self.board.countries['northwest territory']
         self.assertNotIn(country_A, country_B.border_countries)
         self.assertNotIn(country_B, country_A.border_countries)
-        
+
     def test_attack(self):
         country_A = self.board.countries['alaska']
         country_B = self.board.countries['northwest territory']
-        players = [models.Player('Erty'),models.Player('Alex')]
+        players = Players([models.Player('Erty'),models.Player('Alex')])
         country_A.owner = players[0]
         country_B.owner = players[1]
         country_A.troops = 30
