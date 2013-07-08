@@ -13,13 +13,19 @@ initial_troops = {3: 35,
 
 class Game(object):
 
-    def __init__(self, player_list, card_deck):
+    def __init__(self, player_list):
         self.board, self.card_deck = self.import_board_graph('./board_graph.json')
-        self.player_list = random.shuffle(list(player_list))
-        self.card_deck = random.shuffle(list(card_deck))
+        random.shuffle(list(player_list)) #     FYI
+        self.player_list = player_list ##       random.shuffle() works in-place
+        random.shuffle(list(self.card_deck)) #  and returns None
         self.uid = uuid4()
         self.init_turn = 0
-        self.init_turn = len(self.board.countries) + initial_troops[len(self.player_list)]
+        try:
+            self.init_turn = len(self.board.countries) +\
+                    initial_troops[len(self.player_list)]
+        except KeyError:
+            print("Invalid number of players")
+
         self.turn = 0
         self.max_turns = 1000
         self.card_sets_traded_in = 0
@@ -58,7 +64,7 @@ class Game(object):
                 self.player.cards.add(self.card_deck.next())
 
     def deployment_phase(self, player):
-        self.phase = 'deployment'  # is this even used anywhere?
+        self.phase = 'deployment' 
         #card troops
         card_troops = player.use_cards(self.board)
         #base troops
@@ -120,7 +126,7 @@ class Game(object):
             self.card_sets_traded_in += 1
             return (self.card_sets_traded_in - 3) * 5
 
-    def import_board_graph(json_url):
+    def import_board_graph(self, json_url):
         board_file = open(json_url)
         board_json = json.load(board_file)
         board_file.close()
@@ -129,16 +135,27 @@ class Game(object):
         cards = []
         #go through the json and create the list of countries
         for continent_name in board_json:
-            board.continents[continent_name] = models.Continent(continent_name,
-                                                                board_json[continent_name]["bonus"])
+            board.continents[continent_name] = \
+                    models.Continent(continent_name,
+                                     board_json[continent_name]["bonus"])
+
             for country_name in board_json[continent_name]["countries"]:
-                countries[country_name] = models.Country(country_name,
-                                                         board_json[continent_name]["countries"][country_name]["border countries"])
-                cards.append(models.Card(countries[country_name], board_json[continent_name]["countries"][country_name]["card"]))
-                board.continents[continent_name].countries[country_name] = countries[country_name]
-        #loop through the country list and replace all of the border country strings with references to that country
+                countries[country_name] = \
+                        models.Country(country_name,
+                                       board_json[continent_name]["countries"]\
+                                                 [country_name]["border countries"])
+
+                cards.append(models.Card(countries[country_name],
+                    board_json[continent_name]["countries"][country_name]["card"]))
+
+                board.continents[continent_name].countries[country_name]\
+                        = countries[country_name]
+        #loop through the country list and replace all 
+        #of the border country strings with references to that country
         for country_name in countries:
-            borders = [countries[name] for name in countries[country_name].border_countries]
+            borders = [countries[name] 
+                       for name in countries[country_name].border_countries]
+
             countries[country_name].border_countries = borders
         board.countries = countries
         #add the two wild cards
