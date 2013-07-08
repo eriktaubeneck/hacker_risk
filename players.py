@@ -5,13 +5,17 @@ import random
 class Players(object):
 
     def __init__(self, players_list):
-        self.players_list = random.shuffle(players_list)
-        self.players_cycle = itertools.cycle(players_list)
+        random.shuffle(players_list)
+        self.players_list=players_list
+        self.players_cycle = itertools.cycle(self.players_list)
         self.current_player = self.players_list[0]
         self.__generate_other_players()
 
     def __iter__(self):
-        return self.players_list
+        return (player for player in self.players_list)
+
+    def __getitem__(self, key):
+        return self.players_list[key]
 
     def __len__(self):
         return len(self.players_list)
