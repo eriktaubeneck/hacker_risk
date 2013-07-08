@@ -45,7 +45,7 @@ Each turn consists of three steps, in this order:
 
 At the beginning of your turn, you will be able to trade in any risk cards (explained later). The number of troops you may place is then:
 
-    max(ceiling([# OF COUNTRIES YOU CONTROL] / 3), 3) + [TROOPS BOUGHT WITH RISK CARDS] + [CONTINENT BONUSES]
+	max(ceiling([# OF COUNTRIES YOU CONTROL] / 3), 3) + [TROOPS BOUGHT WITH RISK CARDS] + [CONTINENT BONUSES]
 
 Thus you will always receive at least 3 troops on every turn.
 
@@ -60,3 +60,94 @@ At the end of any turn in which you have captured at least one territory, you wi
 - Any two card plus a wild card
 
 If you have collected a set of three risk cards, you may turn them in at the beginning of your next turn, or you may wait. However, if you have 5 or 6 cards at the beginning of your turn, you must trade in at least one set, and you may choose to turn in more than one if you have it.
+
+## API
+
+To write an AI for this competition is relatively straightforward - you provide an HTTP server which responds correctly to the following API calls, and then register the URL or IP of that server with the central AI game server.
+
+### API Request
+
+The server will make a POST request to your URL with the POST variable "risk". A typical request might look like:
+
+	{
+		"game": {
+			"continents": {
+				"europe": {
+					"bonus": 5,
+					"countries": {
+						"northern europe": {
+							"owner": "Erty's Awesome AI",
+							"troops": 13
+						},
+						[...]
+					}
+				},
+				[...]
+			}
+		},
+		"you": {
+			"cards": [{"country": "argentina", "value": "soldier"}],
+			"earned_cards_this_turn": false,
+			"is_eliminated": false,
+			"countries": ["northern europe", "venezuela", "western united states"],
+			"troops_to_deploy": 0,
+			"available_actions": ["attack", "end_phase"]
+		}
+	}
+
+Where [...] indicates data omitted for brevity.
+
+###You
+
+An API request made to your server will have a "you" section, which indicates data about your current state in the game.
+
+#### cards
+
+An array containing the Risk cards which you currently hold. If you have more than 5 of these at the beginning of your turn, or after you eliminate and enemy (and take their cards), you will be forced to spend these cards through the "spend_cards" action.
+
+#### earned_cards_this_turn
+
+Whether or not you have successfully conquered at least one country this turn, and you will recieve a new card at the end of your turn to be spent the next turn.
+
+#### is_eliminated
+
+Whether or not you have been removed from the game, due to either owning no countries, or failing to abide by the rules of the server.
+
+#### countries
+
+A list of the names of all of the countries you own. You can find out more details about these countries in the game->continents array
+
+#### available_actions
+
+A list of the actions which your server can take in its current state. The actions which can be in this list are listed below.
+
+##### choose_country
+
+This is an action taken at the beginning of the game, while there are still countries without owners. By choosing a country, you commit one troop to that country - more troops can be added later via the deploy_troops command.
+
+Response:
+
+	{"action": "choose_country", "data": "<The name of a country which is not yet owned>"}
+
+Example:
+
+	{"action": "choose_country", "data": "eastern united states"}
+
+
+##### deploy_troops
+
+Add troops to a country. In the "you" object, there is a parameter called "troops_to_deploy" which is the number of troops which you have available to deploy. If troops_to_deploy >0, deploy_troops will be the only action available. You will not have this action available if you have no troops to deploy. Some rules:
+
+ - You can only deploy to a country you are the owner of.
+ - You can only deploy the number of troops you have in troops_to_deploy (no more no less).
+
+Response:
+
+	{"action": "deploy_troops", "data": {"<country 0>": <number of troops for country 0>, "country 1": <number of troops for country 1> ...}}
+
+Example:
+
+	{"action": "deploy_troops", "data": {"eastern united states": 3, "western united states": 2}}
+
+##### "use_cards"
+
