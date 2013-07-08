@@ -13,6 +13,7 @@ initial_troops = {3: 35,
 class Game(object):
 
     def __init__(self, players):
+        assert 3 <= len(players) <= 6
         self.board, self.card_deck = models.import_board_data('./board_graph.json')
         self.players = players
         self.card_deck = random.shuffle(list(self.card_deck))
@@ -31,7 +32,7 @@ class Game(object):
 
     def init_deploy(self):
 
-        troops_to_deploy = initial_troops(len(self.players))
+        troops_to_deploy = initial_troops[len(self.players)]
 
         while {c for c in self.board.countries.values() if not c.owner}:
             self.players.next()
@@ -155,7 +156,8 @@ class GameEncoder(json.JSONEncoder):
             return { 'is_eliminated':obj.is_eliminated,
                      'cards':list(obj.cards),
                      'earned_cards_this_turn':obj.earned_card_this_turn,
-                     'countries':[ country.name for country in obj.countries ]
+                     'countries':[ country.name for country in obj.countries ],
+                     'troops_to_deploy':obj.troops_to_deploy
             }
 
         elif isinstance(obj, models.Continent):

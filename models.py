@@ -101,7 +101,7 @@ class Card(object):
     def is_set_with(self, card_two, card_three):
         assert card_two is not None
         assert card_three is not None
-        wild_cards = [card for card in list(self, card_two, card_three) if card.value == "wild"]
+        wild_cards = [card for card in [self, card_two, card_three] if card.value == "wild"]
         return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
 
 
@@ -113,6 +113,7 @@ class Player(object):
         self.is_neutral = False
         self.countries = set()
         self.earned_card_this_turn = False
+        self.troops_to_deploy = 0
 
     def choose_country(self, country):
         assert country.owner is None
