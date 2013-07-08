@@ -116,13 +116,10 @@ class Player(object):
 
     def choose_country(self, country):
         assert country.owner is None
-        self.countries.add(country)
-        country.owner = self
-        self.deploy_troops(country,1)
+        country.add_troops(self,1)
 
     def deploy_troops(self, country, troops):
-        assert country.owner is self
-        country.troop += troops
+        country.add_troops(self,troops)
 
     def __hash__(self):
         return hash(self.name)
