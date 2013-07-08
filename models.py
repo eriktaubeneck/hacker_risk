@@ -101,7 +101,7 @@ class Card(object):
     def is_set_with(self, card_two, card_three):
         assert card_two is not None
         assert card_three is not None
-        wild_cards = [card for card in list(self, card_two, card_three) if card.value == "wild"]
+        wild_cards = [card for card in [self, card_two, card_three] if card.value == "wild"]
         return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
 
 

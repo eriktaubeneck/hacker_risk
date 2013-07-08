@@ -2,7 +2,6 @@ import models
 import unittest
 import random
 from mock import patch
-from players import Players
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
@@ -25,18 +24,16 @@ class TestBoard(unittest.TestCase):
         country_A = self.board.countries['iceland']
         country_B = self.board.countries['northwest territory']
         erty = models.Player('Erty')
-        country_A.owner = erty
+        erty.choose_country(country_A)
         country_A.troops = 20
-        country_A.add_troops(erty, 10)
-        country_B.add_troops(erty, 10)
+        erty.deploy_troops(country_A, 10)
         self.assertEqual(country_A.troops, 30)
-        self.assertEqual(country_B.troops, 10)
 
 
     def test_attack(self):
         country_A = self.board.countries['alaska']
         country_B = self.board.countries['northwest territory']
-        players = Players([models.Player('Erty'),models.Player('Alex')])
+        players = [models.Player('Erty'),models.Player('Alex')]
         country_A.owner = players[0]
         country_B.owner = players[1]
         country_A.troops = 30
@@ -64,4 +61,21 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(len(player_set), 3)
 
     def test_cards(self):
-        pass
+        #this is a really dumb test, but it sort of works
+        card1 = self.cards[0]
+        card2 = self.cards[1]
+        card3 = self.cards[2]
+        card4 = self.cards[3]
+        card5 = self.cards[4]
+        set1=card1.is_set_with(card2, card3)
+        set2=card1.is_set_with(card2, card4)
+        set3=card1.is_set_with(card2, card5)
+        set4=card1.is_set_with(card3, card4)
+        set5=card1.is_set_with(card3, card5)
+        set6=card1.is_set_with(card4, card5)
+        set7=card2.is_set_with(card3, card4)
+        set8=card2.is_set_with(card3, card5)
+        set9=card2.is_set_with(card4, card5)
+        set10=card3.is_set_with(card4, card5)
+        
+        self.assertEqual(set1 or set2 or set3 or set4 or set5 or set6 or set7 or set8 or set9 or set10, True)
