@@ -1,9 +1,6 @@
 from uuid import uuid4
 import random
 import math
-import itertools
-import models
-import json
 
 initial_troops = {3: 35,
                   4: 30,
@@ -16,7 +13,7 @@ class Game(object):
     def __init__(self, players):
         self.board, self.card_deck = self.import_board_graph('./board_graph.json')
         self.players = players
-        self.card_deck = random.shuffle(list(card_deck))
+        self.card_deck = random.shuffle(list(self.card_deck))
         self.uid = uuid4()
         self.init_turn = 0
         self.init_turn = len(self.board.countries) + initial_troops[len(self.players)]
@@ -32,7 +29,7 @@ class Game(object):
 
     def init_deploy(self):
 
-        troops_to_deploy = initial_troops(len(players))
+        troops_to_deploy = initial_troops(len(self.players))
 
         while {c for c in self.board.countries if not c.owner}:
             self.players.next()
@@ -40,7 +37,7 @@ class Game(object):
             self.players.choose_country(self)
             troops_to_deploy -= 1
 
-        for _ in xrange(len(players) * troops_to_deploy):
+        for _ in xrange(len(self.players) * troops_to_deploy):
             self.players.next()
             self.init_turn += 1
             self.players.deploy_troops(self, 1)
@@ -55,9 +52,9 @@ class Game(object):
             while not player_done:
                 player_done = self.attacking_phase()
             self.reinforce()
-            if(self.players.current_player.earned_card_this_turn and card_deck):
+            if(self.players.current_player.earned_card_this_turn and self.card_deck):
                 self.players.current_player.earned_card_this_turn = False
-                self.players.current_player.cards.add(card_deck.next())
+                self.players.current_player.cards.add(self.card_deck.next())
 
     def deployment_phase(self):
         self.phase = 'deployment'
@@ -69,7 +66,7 @@ class Game(object):
         #continent troops
         continent_troops = sum({con.bonus for con in self.board.continents
                                 if con.get_player_set == {self.players.current_player}})
-        players.deploy_troops(self, card_troops + new_troops + continent_troops)
+        self.players.deploy_troops(self, card_troops + new_troops + continent_troops)
 
     def attacking_phase(self):
         self.phase = 'attacking'
@@ -87,7 +84,7 @@ class Game(object):
         return False
 
     def check_for_winner(self):
-        players_remaining = {p for p in players if not p.is_eliminated}
+        players_remaining = {p for p in self.players_list if not p.is_eliminated}
         neutral_players = {p for p in players_remaining if p.is_neutral}
         if len(players_remaining) == 1:
             self.winner = list(players_remaining)[0]
@@ -125,3 +122,6 @@ class Game(object):
         else:
             self.card_sets_traded_in += 1
             return (self.card_sets_traded_in - 3) * 5
+
+class BoardEncoder(json.JSONEncoder):
+    """Special JSON encoder for our objects"""
