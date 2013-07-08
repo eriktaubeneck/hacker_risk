@@ -7,7 +7,7 @@ from mock import patch
 class TestBoard(unittest.TestCase):
     def setUp(self):
         self.board, self.cards = models.import_board_data('./board_graph.json')
-                
+
     def test_border_countries(self):
         country_A = self.board.countries['alaska']
         country_B = self.board.countries['northwest territory']
@@ -63,4 +63,5 @@ class TestBoard(unittest.TestCase):
         player_set = self.board.continents['north america'].get_player_set()
         self.assertEqual(len(player_set), 3)
 
-
+    def test_cards(self):
+        print self.cards
