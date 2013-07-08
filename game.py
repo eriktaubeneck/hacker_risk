@@ -1,6 +1,8 @@
 from uuid import uuid4
 import random
 import math
+import json
+import models
 
 initial_troops = {3: 35,
                   4: 30,
@@ -11,7 +13,7 @@ initial_troops = {3: 35,
 class Game(object):
 
     def __init__(self, players):
-        self.board, self.card_deck = self.import_board_graph('./board_graph.json')
+        self.board, self.card_deck = models.import_board_data('./board_graph.json')
         self.players = players
         self.card_deck = random.shuffle(list(self.card_deck))
         self.uid = uuid4()
@@ -123,5 +125,37 @@ class Game(object):
             self.card_sets_traded_in += 1
             return (self.card_sets_traded_in - 3) * 5
 
-class BoardEncoder(json.JSONEncoder):
+    def game_state_json(self, player): # player should be a Player object
+        game_state = {'game':{},'you':{}}
+        game_state['game']['continents'] = {}
+        for key in self.board.continents:
+            continent = self.board.continents[key]
+            game_state['game']['continents'][key] = continent
+
+        game_state['you'] = player
+        return json.dumps(game_state, cls=GameEncoder)
+
+
+class GameEncoder(json.JSONEncoder):
     """Special JSON encoder for our objects"""
+    def default(self, obj):
+        if isinstance(obj, models.Country):
+            return { 'owner':obj.owner,
+                    'troops':obj.troops
+            }
+
+        elif isinstance(obj, models.Player):
+            return { 'is_eliminated':obj.is_eliminated,
+                     'cards':list(obj.cards),
+                     'earned_cards_this_turn':obj.earned_card_this_turn,
+                     'countries':[ country.name for country in obj.countries ]
+            }
+
+        elif isinstance(obj, models.Continent):
+            return {'countries': obj.countries, 'bonus':obj.bonus}
+
+        elif isinstance(obj, models.Card):
+            return { 'country':obj.country, 'value':obj.value }
+
+        else: 
+            return json.JSONEncoder.default(self, obj)
