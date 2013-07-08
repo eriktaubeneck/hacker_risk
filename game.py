@@ -86,6 +86,16 @@ class Game(object):
                 self.players.current_player.force_cards_spend()
         return False
 
+    def reinforce(self):
+        origin_country, destination_country, troops = self.players.current_player.reinforce()
+        assert origin_country.owner == self.players.current_player
+        assert destination_country.owner == self.players.current_player
+        assert origin_country.troops - troops >= 1
+        if not origin_country:
+            return True
+        origin_country.troops -= troops
+        destination_country.troops += troops
+
     def check_for_winner(self):
         players_remaining = {p for p in self.players_list if not p.is_eliminated}
         neutral_players = {p for p in players_remaining if p.is_neutral}
