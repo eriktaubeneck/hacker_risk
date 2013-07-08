@@ -61,4 +61,7 @@ class TestBoard(unittest.TestCase):
         players = [models.Player('Erty'),models.Player('Alex')]
         country_A.owner = players[0]
         country_B.owner = players[1]
-        
+        player_set = self.board.continents['north america'].get_player_set()
+        self.assertEqual(len(player_set), 3)
+
+
