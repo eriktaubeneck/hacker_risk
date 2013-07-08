@@ -1,8 +1,9 @@
-from boardgen import generate_board
 from uuid import uuid4
 import random
 import math
 import itertools
+import models
+import json
 
 initial_troops = {3: 35,
                   4: 30,
@@ -12,7 +13,7 @@ initial_troops = {3: 35,
 
 class Game(object):
 
-    def __init__(self, players_list):
+    def __init__(self, player_list, card_deck):
         self.board, self.card_deck = self.import_board_graph('./board_graph.json')
         self.player_list = random.shuffle(list(player_list))
         self.card_deck = random.shuffle(list(card_deck))
@@ -35,7 +36,9 @@ class Game(object):
             player = players.next()
             player.choose_country(self.board)
 
-        for _ in xrange(len(player_list) * initial_troops(len(player_list))):
+        for _ in xrange(len(self.player_list) * \
+                self.initial_troops(len(self.player_list))):
+
             self.init_turn += 1
             player = players.next()
             player.deploy_troop(self.board)
@@ -50,9 +53,9 @@ class Game(object):
             while not player_done:
                 player_done = self.attacking_phase(self.player)
             self.reinforce(self.player)
-            if(player.earned_card_this_turn and card_deck):
-                player.earned_card_this_turn = False
-                player.cards.add(card_deck.next())
+            if(self.player.earned_card_this_turn and self.card_deck):
+                self.player.earned_card_this_turn = False
+                self.player.cards.add(self.card_deck.next())
 
     def deployment_phase(self, player):
         self.phase = 'deployment'  # is this even used anywhere?
@@ -81,7 +84,9 @@ class Game(object):
         return False
 
     def check_for_winner(self):
-        players_remaining = [p for p in players if (not p.is_eliminated) and (not p.is_neutral)]
+        players_remaining = [p for p in self.players 
+                             if (not p.is_eliminated) and (not p.is_neutral)]
+
         if len(players_remaining) == 1:
             return players_remaining[0]
         else:
