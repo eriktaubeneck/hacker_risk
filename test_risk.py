@@ -2,7 +2,7 @@ import models
 import unittest
 import random
 from mock import patch
-
+from players import Players
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
@@ -24,15 +24,13 @@ class TestBoard(unittest.TestCase):
     def test_add_troops(self):
         country_A = self.board.countries['iceland']
         country_B = self.board.countries['northwest territory']
-        players = [models.Player('Erty'), models.Player('Alex')]
-        country_A.owner=players[0]
-        country_B.owner=players[1]
-        country_A.troops=20
-        country_B.troops=20
-        country_A.add_troops(players[0], 10)
-        country_B.add_troops(players[0], 10)
+        erty = models.Player('Erty')
+        country_A.owner = erty
+        country_A.troops = 20
+        country_A.add_troops(erty, 10)
+        country_B.add_troops(erty, 10)
         self.assertEqual(country_A.troops, 30)
-        self.assertEqual(country_B.troops, 20)
+        self.assertEqual(country_B.troops, 10)
 
 
     def test_attack(self):
@@ -66,4 +64,4 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(len(player_set), 3)
 
     def test_cards(self):
-        print self.cards
+        pass
