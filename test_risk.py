@@ -1,5 +1,4 @@
 import models
-import mapgen
 import unittest
 import random
 from mock import patch
@@ -7,7 +6,7 @@ from mock import patch
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
-        self.board = mapgen.generate_board()
+        self.board, self.cards = models.import_board_data('./board_graph.json')
                 
     def test_border_countries(self):
         country_A = self.board.countries['alaska']
