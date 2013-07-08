@@ -118,7 +118,7 @@ class Player(object):
         return hash(self.name)
 
     def __eq__(self, other):
-        return isinstance(other, Country) and self.name == other.name
+        return isinstance(other, Player) and self.name == other.name
 
 
 class World(object):
