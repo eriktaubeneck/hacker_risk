@@ -13,10 +13,10 @@ initial_troops = {3: 35,
 
 class Game(object):
 
-    def __init__(self, player_list, card_deck):
+    def __init__(self, player_list):
         self.board, self.card_deck = self.import_board_graph('./board_graph.json')
         self.player_list = random.shuffle(list(player_list))
-        self.card_deck = random.shuffle(list(card_deck))
+        self.card_deck = random.shuffle(list(self.card_deck))
         self.uid = uuid4()
         self.init_turn = 0
         self.init_turn = len(self.board.countries) +\
@@ -60,7 +60,7 @@ class Game(object):
                 self.player.cards.add(self.card_deck.next())
 
     def deployment_phase(self, player):
-        self.phase = 'deployment'  # is this even used anywhere?
+        self.phase = 'deployment' 
         #card troops
         card_troops = player.use_cards(self.board)
         #base troops
