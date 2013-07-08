@@ -68,7 +68,7 @@ class Game(object):
         new_troops = max(math.ceil(len(self.players.current_player.countries)), 3)
         #continent troops
         continent_troops = sum({con.bonus for con in self.board.continents
-                                if con.get_player_set == {self.players.current_player}})
+                                if con.get_player_set() == {self.players.current_player}})
         self.players.deploy_troops(self, card_troops + new_troops + continent_troops)
 
     def attacking_phase(self):
