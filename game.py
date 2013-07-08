@@ -126,6 +126,13 @@ class Game(object):
             return (self.card_sets_traded_in - 3) * 5
 
     def game_state_json(self, player): # player should be a Player object
+        """
+        Returns game state as JSON for sending to clients.
+        Where g = Game(*args), 
+        g.game_state_json(player)
+        returns a JSON object of the entire game state as visible to player,
+        where player is the requesting player
+        """
         game_state = {'game':{},'you':{}}
         game_state['game']['continents'] = {}
         for key in self.board.continents:
