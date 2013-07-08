@@ -1,4 +1,3 @@
-import hashlib
 import random
 
 
@@ -49,6 +48,8 @@ class Country(object):
             country.owner = self.owner
             country.troops = attacking_troops
             self.troops -= attacking_troops
+            return True
+        return False
 
     def add_troops(self, owner, troops):
         assert owner
@@ -93,16 +94,25 @@ class Board(object):
 
 
 class Card(object):
-    def __init__(self):
-        pass
+    def __init__(self, country, value):
+        self.country = country
+        self.value = value
+
+    def is_set_with(self, card_two, card_three):
+        assert card_two is not None
+        assert card_three is not None
+        wild_cards = [card for card in list(self, card_two, card_three) if card.value == "wild"]
+        return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
 
 
 class Player(object):
     def __init__(self, name):
         self.name = name
         self.cards = set()
+        self.is_eliminated = False
         self.is_neutral = False
         self.countries = set()
+        self.earned_card_this_turn = False
 
     def __hash__(self):
         return hash(self.name)
