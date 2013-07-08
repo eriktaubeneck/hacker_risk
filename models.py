@@ -114,11 +114,18 @@ class Player(object):
         self.countries = set()
         self.earned_card_this_turn = False
 
+    def choose_country(self, country):
+        assert country.owner is None
+        country.add_troops(self,1)
+
+    def deploy_troops(self, country, troops):
+        country.add_troops(self,troops)
+
     def __hash__(self):
         return hash(self.name)
 
     def __eq__(self, other):
-        return isinstance(other, Country) and self.name == other.name
+        return isinstance(other, Player) and self.name == other.name
 
 
 class World(object):
