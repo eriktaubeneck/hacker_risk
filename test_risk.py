@@ -20,7 +20,15 @@ class TestBoard(unittest.TestCase):
         country_B = self.board.countries['northwest territory']
         self.assertNotIn(country_A, country_B.border_countries)
         self.assertNotIn(country_B, country_A.border_countries)
-        
+    
+    def test_add_troops(self):
+        country_A = self.board.countries['iceland']
+        players = [models.Player('Erty')]
+        country_A.owner=players[0]
+        country_A.troops=20
+        country_A.add_troops(players[0], 10)
+        self.assertEqual(country_A.troops, 30)
+
     def test_attack(self):
         country_A = self.board.countries['alaska']
         country_B = self.board.countries['northwest territory']
