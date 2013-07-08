@@ -149,5 +149,40 @@ Example:
 
 	{"action": "deploy_troops", "data": {"eastern united states": 3, "western united states": 2}}
 
-##### "use_cards"
+##### use_cards
 
+Trade in a set of cards for units. You can do this at the beginning of your turn or (after you eliminate a player and you now have >= 5 cards).
+
+ - You must submit a valid set of cards (3 of the same, or 1 of each)
+ - You must hold each of the cards you wish to submit
+ - Cards are represented by their country name
+ - Wild cards are represented by the string "wild"
+ - The cards should be sent as a list. If you own any of the countries on the cards, only the first one in the list will be credited 2 extra units.
+
+ Response:
+
+ 	{"action": "use_cards", "data": [<card 1>, <card 2>, <card 3>]}
+
+ Example:
+
+ 	{"action": "use_cards", "data": ["argentina", "china", "iceland"]}
+
+##### attack
+
+Attack a country adjacent to one of your countries. Specify an origin country,  destination country, number of troops to attack with (1, 2, or 3), and a number of troops to move if you win the engagement.
+
+ - There is no way to lose troops and conquer a country in the same attack round
+ - The opponent will always defend with as many troops as they can (1 or 2)
+ - The attacking and defending countries must be adjacent
+ - You must own the attacking country, and not the defending country
+ - You must leave at least one unit in the attacking country when you invade the defending country
+
+Response:
+
+	{"action": "attack", "data": {"attacking_country": "<attacking country name>", "defending_country": "<defending country name>", "attacking_troops": <number of attacking troops>, "moving_troops": <number of troops to move into the country if you win>}}
+
+Example:
+
+	{"action": "attack", "data": {"attacking_country": "western united states", "defending_country": "eastern united states", "attacking_troops": 3, "moving_troops": 15}}
+
+Still working on this! --Erty
