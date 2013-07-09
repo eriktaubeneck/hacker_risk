@@ -45,7 +45,9 @@ Each turn consists of three steps, in this order:
 
 At the beginning of your turn, you will be able to trade in any risk cards (explained later). The number of troops you may place is then:
 
-	max(ceiling([# OF COUNTRIES YOU CONTROL] / 3), 3) + [TROOPS BOUGHT WITH RISK CARDS] + [CONTINENT BONUSES]
+```
+max(ceiling([# OF COUNTRIES YOU CONTROL] / 3), 3) + [TROOPS BOUGHT WITH RISK CARDS] + [CONTINENT BONUSES]
+```
 
 Thus you will always receive at least 3 troops on every turn.
 
@@ -69,31 +71,33 @@ To write an AI for this competition is relatively straightforward - you provide 
 
 The server will make a POST request to your URL with the POST variable "risk". A typical request might look like:
 
-	{
-		"game": {
-			"continents": {
-				"europe": {
-					"bonus": 5,
-					"countries": {
-						"northern europe": {
-							"owner": "Erty's Awesome AI",
-							"troops": 13
-						},
-						[...]
-					}
-				},
-				[...]
-			}
-		},
-		"you": {
-			"cards": [{"country": "argentina", "value": "soldier"}],
-			"earned_cards_this_turn": false,
-			"is_eliminated": false,
-			"countries": ["northern europe", "venezuela", "western united states"],
-			"troops_to_deploy": 0,
-			"available_actions": ["attack", "end_turn", "reinforce"]
+```
+{
+	"game": {
+		"continents": {
+			"europe": {
+				"bonus": 5,
+				"countries": {
+					"northern europe": {
+						"owner": "Erty's Awesome AI",
+						"troops": 13
+					},
+					[...]
+				}
+			},
+			[...]
 		}
+	},
+	"you": {
+		"cards": [{"country": "argentina", "value": "soldier"}],
+		"earned_cards_this_turn": false,
+		"is_eliminated": false,
+		"countries": ["northern europe", "venezuela", "western united states"],
+		"troops_to_deploy": 0,
+		"available_actions": ["attack", "end_turn", "reinforce"]
 	}
+}
+```
 
 Where [...] indicates data omitted for brevity.
 
@@ -103,7 +107,7 @@ An API request made to your server will have a "you" section, which indicates da
 
 #### cards
 
-An array containing the Risk cards which you currently hold. If you have more than 5 of these at the beginning of your turn, or after you eliminate and enemy (and take their cards), you will be forced to spend these cards through the "spend_cards" action.
+An array containing the Risk cards which you currently hold. If you have more than 5 of these at the beginning of your turn, or after you eliminate and enemy (and take their cards), you will be forced to spend these cards through the ```spend_cards``` action.
 
 #### earned_cards_this_turn
 
@@ -127,12 +131,15 @@ This is an action taken at the beginning of the game, while there are still coun
 
 Response:
 
-	{"action": "choose_country", "data": "<The name of a country which is not yet owned>"}
+```
+{"action": "choose_country", "data": "<The name of a country which is not yet owned>"}
+```
 
 Example:
 
-	{"action": "choose_country", "data": "eastern united states"}
-
+```
+{"action": "choose_country", "data": "eastern united states"}
+```
 
 ##### deploy_troops
 
@@ -143,11 +150,15 @@ Add troops to a country. In the "you" object, there is a parameter called ```tro
 
 Response:
 
-	{"action": "deploy_troops", "data": {"<country 0>": <number of troops for country 0>, "country 1": <number of troops for country 1> ...}}
+```
+{"action": "deploy_troops", "data": {"<country 0>": <number of troops for country 0>, "country 1": <number of troops for country 1> ...}}
+```
 
 Example:
 
-	{"action": "deploy_troops", "data": {"eastern united states": 3, "western united states": 2}}
+```
+{"action": "deploy_troops", "data": {"eastern united states": 3, "western united states": 2}}
+```
 
 ##### use_cards
 
@@ -162,11 +173,15 @@ Trade in a set of cards for units. You can do this at the beginning of your turn
 
 Response:
 
-	{"action": "use_cards", "data": [<card 1>, <card 2>, <card 3>]}
+```
+{"action": "use_cards", "data": [<card 1>, <card 2>, <card 3>]}
+```
 
 Example:
 
-	{"action": "use_cards", "data": ["argentina", "china", "iceland"]}
+```
+{"action": "use_cards", "data": ["argentina", "china", "iceland"]}
+```
 
 ##### attack
 
@@ -181,11 +196,15 @@ Attack a country adjacent to one of your countries. Specify an origin country,  
 
 Response:
 
-	{"action": "attack", "data": {"attacking_country": "<attacking country name>", "defending_country": "<defending country name>", "attacking_troops": <number of attacking troops>, "moving_troops": <number of troops to move into the country if you win>}}
+```
+{"action": "attack", "data": {"attacking_country": "<attacking country name>", "defending_country": "<defending country name>", "attacking_troops": <number of attacking troops>, "moving_troops": <number of troops to move into the country if you win>}}
+```
 
 Example:
 
-	{"action": "attack", "data": {"attacking_country": "western united states", "defending_country": "eastern united states", "attacking_troops": 3, "moving_troops": 15}}
+```
+{"action": "attack", "data": {"attacking_country": "western united states", "defending_country": "eastern united states", "attacking_troops": 3, "moving_troops": 15}}
+```
 
 ##### reinforce
 
@@ -198,11 +217,15 @@ This command allows you to move troops from one of your countries to an adjacent
 
 Response:
 
-	{"action": "reinforce", "data": {"origin_country": "<origin country name>", "destination_country": "<destination country name>", "moving_troops": <number of troops to move>}}
+```
+{"action": "reinforce", "data": {"origin_country": "<origin country name>", "destination_country": "<destination country name>", "moving_troops": <number of troops to move>}}
+```
 
 Example:
 
-	{"action": "reinforce", "data": {"origin_country": "greenland", "destination_country": "iceland", "moving_troops": 7}}
+```
+{"action": "reinforce", "data": {"origin_country": "greenland", "destination_country": "iceland", "moving_troops": 7}}
+```
 
 ##### end_turn
 
@@ -210,11 +233,15 @@ If you wish to end your turn without reinforcing, you may perform the ```end_tur
 
 Response:
 
-	{"action": "end_turn"}
+```
+{"action": "end_turn"}
+```
 
 Example:
 
-	{"action": "end_turn"}
+```
+{"action": "end_turn"}
+```
 
 ### Game Flow
 
