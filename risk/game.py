@@ -23,6 +23,7 @@ class Game(object):
         self.max_turns = 1000
         self.card_sets_traded_in = 0
         self.winner = None
+        self.last_action = ''
 
     def start_game(self):
         #assign countries to players
