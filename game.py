@@ -83,7 +83,7 @@ class Game(object):
         if not defending_country.owner.countries:
             self.eliminate_player(self.players.current_player, defending_country.owner)
             if len(self.players.current_player.cards) >= 5:
-                self.players.current_player.force_cards_spend()
+                self.players.force_cards_spend(self)
         return False
 
     def reinforce(self):

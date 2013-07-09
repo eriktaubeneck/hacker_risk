@@ -173,6 +173,10 @@ class Players(object):
         self.current_player.get_card_spend(game)
         self.broadcast_game(game)
 
+    def force_cards_spend(self, game):
+        self.current_player.use_cards(self, game)
+        self.broadcast_game(game)
+
     def reinforce(self, game):
         self.get_reinforcement_order(game)
         self.broadcast_game(game)
