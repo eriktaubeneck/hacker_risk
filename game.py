@@ -73,7 +73,7 @@ class Game(object):
 
     def attacking_phase(self):
         self.phase = 'attacking'
-        attacking_country, defending_country, attacking_troops = self.players.current_player.attack()
+        attacking_country, defending_country, attacking_troops = self.players.attack()
         if not attacking_country:
             return True
         assert attacking_country.owner == self.players.current_player
@@ -87,13 +87,13 @@ class Game(object):
         return False
 
     def reinforce(self):
-        origin_country, destination_country, troops = self.players.current_player.reinforce()
+        origin_country, destination_country, troops = self.players.reinforce()
         assert origin_country.owner == self.players.current_player
         assert destination_country.owner == self.players.current_player
         assert origin_country.troops - troops >= 1
         if not origin_country:
             return True
-        origin_country.troops -= troops
+        origin_country.add_troops(troops)
         destination_country.troops += troops
 
     def check_for_winner(self):
