@@ -91,7 +91,7 @@ The server will make a POST request to your URL with the POST variable "risk". A
 			"is_eliminated": false,
 			"countries": ["northern europe", "venezuela", "western united states"],
 			"troops_to_deploy": 0,
-			"available_actions": ["attack", "end_phase"]
+			"available_actions": ["attack", "end_turn", "reinforce"]
 		}
 	}
 
@@ -136,7 +136,7 @@ Example:
 
 ##### deploy_troops
 
-Add troops to a country. In the "you" object, there is a parameter called "troops_to_deploy" which is the number of troops which you have available to deploy. If troops_to_deploy >0, deploy_troops will be the only action available. You will not have this action available if you have no troops to deploy. Some rules:
+Add troops to a country. In the "you" object, there is a parameter called ```troops_to_deploy``` which is the number of troops which you have available to deploy. If ```troops_to_deploy >0```, ```deploy_troops``` will be the only action available. You will not have this action available if you have no troops to deploy. You must deploy your troops before the ```attack``` action will become available.
 
  - You can only deploy to a country you are the owner of.
  - You can only deploy the number of troops you have in troops_to_deploy (no more no less).
@@ -158,6 +158,7 @@ Trade in a set of cards for units. You can do this at the beginning of your turn
  - Cards are represented by their country name
  - Wild cards are represented by the string "wild"
  - The cards should be sent as a list. If you own any of the countries on the cards, only the first one in the list will be credited 2 extra units.
+ - This option may be available even if you don't have a valid set of cards
 
  Response:
 
@@ -176,6 +177,7 @@ Attack a country adjacent to one of your countries. Specify an origin country,  
  - The attacking and defending countries must be adjacent
  - You must own the attacking country, and not the defending country
  - You must leave at least one unit in the attacking country when you invade the defending country
+ - This command may be available even if you have no legal attacks
 
 Response:
 
@@ -185,4 +187,39 @@ Example:
 
 	{"action": "attack", "data": {"attacking_country": "western united states", "defending_country": "eastern united states", "attacking_troops": 3, "moving_troops": 15}}
 
-Still working on this! --Erty
+##### reinforce
+
+This command allows you to move troops from one of your countries to an adjacent country, once. Performing this action will end your turn.
+
+ - You must leave at least one unit in the origin country
+ - You must move at least one unit to the destination country
+ - You must have the number of troops in the origin country that you wish to move
+ - You must own the origin and destination countries
+
+Response:
+
+	{"action": "reinforce", "data": {"origin_country": "<origin country name>", "destination_country": "<destination country name>", "moving_troops": <number of troops to move>}}
+
+Example:
+
+	{"action": "reinforce", "data": {"origin_country": "greenland", "destination_country": "iceland", "moving_troops": 7}}
+
+##### end_turn
+
+If you wish to end your turn without reinforcing, you may perform the ```end_turn``` action. This action takes no extra data parameters.
+
+Response:
+
+	{"action": "end_turn"}
+
+Example:
+
+	{"action": "end_turn"}
+
+### Game Flow
+
+The game starts with all players choosing countries one at a time, using the ```choose_country``` command. After all countries have been chosen, players will place troops using the ```deploy_troops``` command, one troop at a time.
+
+At the beginning of a player's turn, if the player has more than three cards, the ```use_cards``` and ```deploy_troops``` options will be available. If you have more than 5 cards, the ```use_cards``` option will be the only one available, and after performing that action, ```deploy_troops``` will become available.
+
+During the main phase of a turn, the actions available are ```attack```, ```reinforce```, and ```end_turn```. A player may attack as many times as they want during a turn. Calling ```reinforce``` or ```end_turn``` will end the player's turn and move on to the next.
