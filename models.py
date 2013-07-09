@@ -129,12 +129,6 @@ class Player(object):
         return isinstance(other, Player) and self.name == other.name
 
 
-class World(object):
-    def __init__(self, _map, players):
-        self._map = _map
-        self.players = random.shuffle(players)
-
-
 def import_board_data(json_url):
     board_file = open(json_url)
     board_json = json.load(board_file)
