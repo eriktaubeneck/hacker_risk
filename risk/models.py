@@ -107,6 +107,7 @@ class Card(object):
 
 
 class Player(object):
+
     def __init__(self, name):
         self.name = name
         self.cards = set()
@@ -136,9 +137,8 @@ class Players(object):
         self.players_list = []
         self.game_started = False
 
-    def __get_players(self, player):
-        if self.game_started:
-            break
+    def __add_players(self, player):
+        assert not self.game_started
         self.players_list.append(player)
 
     def __start_game(self):
