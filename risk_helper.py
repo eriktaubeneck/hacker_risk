@@ -13,23 +13,45 @@ class Player(BasePlayer):
         self.timeout = 30.
 
     def get_country_choice(self, game):
-        if self.if_neutral:
+        if self.is_neutral:
             country = random.choice([c for c in game.board.countries.values() if not c.owner])
             country.add_troops(self,1)
-        else:
-            self.avaliable_actions = ['choose_country']
-            payload = {'risk': game.game_state_json(self)}
-            try:
-                r = requests.post(self.turn_url, data=payload, timeout=self.timeout)
-                r = json.loads(r.json())
-                assert r['action'] in self.avaliable_actions
-                country = game.board.countries[r['data']]
-                country.add_troops(self,1)
-            except:
-                self.errors += 1
-                game.last_action = 'error %s' % self.error
-                self.check_neutralized()
-                self.get_country_choice(game)
+            return True
+        self.avaliable_actions = ['choose_country']
+        payload = {'risk': game.game_state_json(self)}
+        try:
+            r = requests.post(self.turn_url, data=payload, timeout=self.timeout)
+            r = json.loads(r.json())
+            assert r['action'] in self.avaliable_actions
+            country = game.board.countries[r['data']]
+            country.add_troops(self,1)
+        except:
+            self.errors += 1
+            game.last_action = 'error %s' % self.error
+            self.check_neutralized()
+            self.get_country_choice(game)
 
         self.avaliable_actions = []
-        game.last_action = "%s chose country %s" % (self,country)
+        game.last_aciton = "%s chose country %s" % (self,country)
+
+    def get_troop_deployment(self, game, troop_count):
+        if self.is_neutral:
+            game.last_action = "pass % is neutral"
+            return True
+        self.avaliable_actions = ['deploy_troops']
+        payload = {'risk': game.game_state_json(self)}
+        try:
+            r = requests.post(self.turn_url, data=payload, timeout=self.timeout)
+            r = json.loads(r.json())
+            assert r['action'] in self.avaliable_actions
+            for country_name in r['data'].keys():
+                country = game.board.countries[country_name]
+                country.add_troops(self, countries[country])
+            game.last_action = "%s deployed %s" % (self.name, r['data'])
+        except:
+            self.errors += 1
+            game.last_action = 'error %s' % self.error
+            self.check_neutralized()
+            self.get_troop_deployment(self, game, troop_count)
+
+        self.avaliable_actions = []
