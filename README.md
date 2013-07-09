@@ -257,3 +257,19 @@ The game starts with all players choosing countries one at a time, using the ```
 At the beginning of a player's turn, if the player has more than three cards, the ```use_cards``` and ```deploy_troops``` options will be available. If you have more than 5 cards, the ```use_cards``` option will be the only one available, and after performing that action, ```deploy_troops``` will become available.
 
 During the main phase of a turn, the actions available are ```attack```, ```reinforce```, and ```end_turn```. A player may attack as many times as they want during a turn. Calling ```reinforce``` or ```end_turn``` will end the player's turn and move on to the next.
+
+#TODO
+
+## Things the server needs to check
+
+### Reinforce
+
+ - Can't reinforce unless you own two adjacent countries, one of which has more than one unit.
+
+### Attack
+
+ - Can't attack unless you own a country adjacent two a hostile country, your country has more than one unit
+
+ ### Use Cards
+
+  - Can't use cards unless your hand contains a set
