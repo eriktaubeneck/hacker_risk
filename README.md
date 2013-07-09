@@ -123,7 +123,14 @@ A list of the names of all of the countries you own. You can find out more detai
 
 #### available_actions
 
-A list of the actions which your server can take in its current state. The actions which can be in this list are listed below.
+A list of the actions which your server can take in its current state. The actions which can be in this list are:
+
+ - ```choose_country```
+ - ```deploy_troops```
+ - ```use_cards```
+ - ```attack```
+ - ```reinforce```
+ - ```end_turn```
 
 ##### choose_country
 
