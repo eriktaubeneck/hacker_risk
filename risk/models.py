@@ -138,7 +138,7 @@ class Players(object):
         self.players_list = []
         self.game_started = False
 
-    def __add_players(self, player):
+    def add_player(self, player):
         assert not self.game_started
         self.players_list.append(player)
 
