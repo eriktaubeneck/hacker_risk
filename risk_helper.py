@@ -32,4 +32,4 @@ class Player(BasePlayer):
                 self.get_country_choice(game)
 
         self.avaliable_actions = []
-        game.last_aciton = "%s chose country %s" % (self,country)
+        game.last_action = "%s chose country %s" % (self,country)
