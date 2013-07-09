@@ -62,7 +62,8 @@ class Game(object):
         self.phase = 'deployment'
 
         #card troops
-        card_troops = self.players.use_cards(self)
+        traded_cards = self.players.use_cards(self)
+        card_troops = get_troops_for_card_set(traded_cards)
         #base troops
         new_troops = max(math.ceil(len(self.players.current_player.countries)), 3)
         #continent troops
@@ -92,8 +93,8 @@ class Game(object):
         assert origin_country.troops - troops >= 1
         if not origin_country:
             return True
-        origin_country.add_troops(self.players.current_player, troops)
-        destination_country.troops += troops
+        destination_country.add_troops(self.players.current_player, troops)
+        origin_country.troops -= troops
 
     def check_for_winner(self):
         players_remaining = {p for p in self.players_list if not p.is_eliminated}
@@ -130,7 +131,7 @@ class Game(object):
                 break
         if(self.card_sets_traded_in < 6):
             self.card_sets_traded_in += 1
-            return (self.card_sets_traded_in + 2) * 2
+            return (self.card_sets_traded_in-1 + 2) * 2
         else:
             self.card_sets_traded_in += 1
             return (self.card_sets_traded_in - 3) * 5

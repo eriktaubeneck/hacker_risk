@@ -125,11 +125,27 @@ class Player(object):
     def deploy_troops(self, country, troops):
         country.add_troops(self,troops)
 
+    def get_country_choice(self):
+        pass
+
+    def get_troop_deployment(self):
+        pass
+
+    def get_card_spend(self):
+        pass
+
+    def reinforcement_order(self):
+        pass
+
+    def get_attack(self):
+        pass
+
     def __hash__(self):
         return hash(self.name)
 
     def __eq__(self, other):
         return isinstance(other, Player) and self.name == other.name
+    
 
 
 class Players(object):
@@ -142,7 +158,7 @@ class Players(object):
         assert not self.game_started
         self.players_list.append(player)
 
-    def __start_game(self):
+    def start_game(self):
         assert 3 <= len(self.players_list) <= 6
         self.game_started = True
         random.shuffle(self.players_list)
@@ -189,7 +205,11 @@ class Players(object):
         self.broadcast_game(game)
 
     def reinforce(self, game):
-        self.get_reinforcement_order(game)
+        self.current_player.get_reinforcement_order(game)
+        self.broadcast_game(game)
+
+    def attack(self, game):
+        self.current_player.get_attack(game)
         self.broadcast_game(game)
 
     def broadcast_game(self, game):
