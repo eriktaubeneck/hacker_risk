@@ -20,7 +20,7 @@ class TestBoard(unittest.TestCase):
         self.assertNotIn(country_B, country_A.border_countries)
 
 
-    def test_add_troops(self):
+    def test_deploy_troops(self):
         country_A = self.board.countries['iceland']
         erty = models.Player('Erty')
         erty.choose_country(country_A)
@@ -28,7 +28,7 @@ class TestBoard(unittest.TestCase):
         erty.deploy_troops(country_A, 10)
         self.assertEqual(country_A.troops, 30)
     
-    def test_add_troops_to_wrong_country(self):
+    def test_deploy_troops_to_wrong_country(self):
         country_A = self.board.countries['northwest territory']
         erty = models.Player('Erty')
         alex = models.Player('Alex')
@@ -58,14 +58,32 @@ class TestBoard(unittest.TestCase):
             self.assertEqual(country_A.troops, 28)
             self.assertEqual(country_B.troops, 8)
 
-    def test_get_player_set(self):
+    def test_attack_wrong_country(self):
+        country_A = self.board.countries['alaska']
+        country_B = self.board.countries['japan']
+        country_A.troops, country_B.troops = 15, 15
+        with self.assertRaises(AssertionError):
+            country_A.attack(country_B, 3)
+
+
+    def test_attack_self(self):
         country_A = self.board.countries['alaska']
         country_B = self.board.countries['northwest territory']
-        players = [models.Player('Erty'),models.Player('Alex')]
-        country_A.owner = players[0]
-        country_B.owner = players[1]
-        player_set = self.board.continents['north america'].get_player_set()
-        self.assertEqual(len(player_set), 3)
+        alex = models.Player('Alex')
+        alex.choose_country(country_A)
+        alex.choose_country(country_B)
+        with self.assertRaises(AssertionError):
+            country_A.attack(country_B, 3)
+    
+
+    def test_continent_bonus(self):
+        alex = models.Player('Alex')
+        north_america = self.board.continents["north america"]
+        for country in north_america.countries.values():
+            alex.choose_country(country)
+        self.assertEqual(north_america.get_player_set(), {alex})
+        self.assertEqual(north_america.bonus, 5)
+
 
     def test_cards(self):
         #this is a really dumb test, but it sort of works and I'm too lazy to make it better right now
@@ -84,13 +102,6 @@ class TestBoard(unittest.TestCase):
         set8=card2.is_set_with(card3, card5)
         set9=card2.is_set_with(card4, card5)
         set10=card3.is_set_with(card4, card5)
-        
         self.assertEqual(set1 or set2 or set3 or set4 or set5 or set6 or set7 or set8 or set9 or set10, True)
 
-    def test_continent_bonus(self):
-        alex = models.Player('Alex')
-        north_america = self.board.continents["north america"]
-        for country in north_america.countries.values():
-            alex.choose_country(country)
-        self.assertEqual(north_america.get_player_set(), {alex})
-        self.assertEqual(north_america.bonus, 5)
+
