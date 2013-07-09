@@ -132,9 +132,19 @@ class Player(object):
 
 class Players(object):
 
-    def __init__(self, players_list):
-        random.shuffle(players_list)
-        self.players_list=players_list
+    def __init__(self):
+        self.players_list = []
+        self.game_started = False
+
+    def __get_players(self, player):
+        if self.game_started:
+            break
+        self.players_list.append(player)
+
+    def __start_game(self):
+        assert 3 <= len(self.players_list) <= 6
+        self.game_started = True
+        random.shuffle(self.players_list)
         self.players_cycle = itertools.cycle(self.players_list)
         self.current_player = self.players_list[0]
         self.__generate_other_players()

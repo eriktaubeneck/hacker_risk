@@ -13,7 +13,6 @@ initial_troops = {3: 35,
 class Game(object):
 
     def __init__(self, players):
-        assert 3 <= len(players) <= 6
         self.board, self.card_deck = models.import_board_data('./board_graph.json')
         self.players = players
         self.card_deck = random.shuffle(list(self.card_deck))
