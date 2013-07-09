@@ -116,6 +116,7 @@ class Player(object):
         self.countries = set()
         self.earned_card_this_turn = False
         self.troops_to_deploy = 0
+        self.avaliable_actions = []
 
     def choose_country(self, country):
         assert country.owner is None

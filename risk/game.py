@@ -166,7 +166,8 @@ class GameEncoder(json.JSONEncoder):
                      'cards':list(obj.cards),
                      'earned_cards_this_turn':obj.earned_card_this_turn,
                      'countries':[ country.name for country in obj.countries ],
-                     'troops_to_deploy':obj.troops_to_deploy
+                     'troops_to_deploy':obj.troops_to_deploy,
+                     'avaliable_actions':obj.avaliable_actions,
             }
 
         elif isinstance(obj, models.Continent):
