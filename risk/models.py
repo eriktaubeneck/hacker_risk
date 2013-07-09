@@ -192,8 +192,8 @@ class Players(object):
         self.current_player.get_country_choice(game)
         self.broadcast_game(game)
 
-    def deploy_troops(self, game):
-        self.current_player.get_troop_deployment(game)
+    def deploy_troops(self, game, troop_count):
+        self.current_player.get_troop_deployment(game, troop_count)
         self.broadcast_game(game)
 
     def use_cards(self, game):
@@ -202,6 +202,10 @@ class Players(object):
 
     def force_cards_spend(self, game):
         self.current_player.use_cards(self, game)
+        self.broadcast_game(game)
+
+    def attack(self, game):
+        self.current_player.get_attack_order(game)
         self.broadcast_game(game)
 
     def reinforce(self, game):
