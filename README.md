@@ -160,13 +160,13 @@ Trade in a set of cards for units. You can do this at the beginning of your turn
  - The cards should be sent as a list. If you own any of the countries on the cards, only the first one in the list will be credited 2 extra units.
  - This option may be available even if you don't have a valid set of cards
 
- Response:
+Response:
 
- 	{"action": "use_cards", "data": [<card 1>, <card 2>, <card 3>]}
+	{"action": "use_cards", "data": [<card 1>, <card 2>, <card 3>]}
 
- Example:
+Example:
 
- 	{"action": "use_cards", "data": ["argentina", "china", "iceland"]}
+	{"action": "use_cards", "data": ["argentina", "china", "iceland"]}
 
 ##### attack
 
