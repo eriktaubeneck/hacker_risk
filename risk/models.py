@@ -126,6 +126,10 @@ class Player(object):
     def deploy_troops(self, country, troops):
         country.add_troops(self,troops)
 
+    def check_neutralized(self):
+        if self.errors >= 3:
+            self.is_neutral = True
+    
     def get_country_choice(self):
         pass
 
