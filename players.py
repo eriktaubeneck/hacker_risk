@@ -34,10 +34,20 @@ class Players(object):
         self.__generate_other_players()
 
     def choose_country(self, game):
-        pass
+        self.current_player.get_country_choice(game)
+        self.broadcast_game(game)
 
-    def deploy_troops(self, game, number_of_troops):
-        pass
+    def deploy_troops(self, game):
+        self.current_player.get_troop_deployment(game)
+        self.broadcast_game(game)
 
     def use_cards(self, game):
-        pass
+        self.current_player.get_card_spend(game)
+        self.broadcast_game(game)
+
+    def reinforce(self, game):
+        self.get_reinforcement_order(game)
+        self.broadcast_game(game)
+
+    def broadcast_game(self, game):
+        [player.send_game(game) for player in self.other_players]
