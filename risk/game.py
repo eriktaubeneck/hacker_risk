@@ -15,7 +15,7 @@ class Game(object):
     def __init__(self, players):
         self.board, self.card_deck = models.import_board_data('./board_graph.json')
         self.players = players
-        self.card_deck = random.shuffle(list(self.card_deck))
+        random.shuffle(self.card_deck)
         self.uid = uuid4()
         self.init_turn = 0
         self.init_turn = len(self.board.countries) + initial_troops[len(self.players)]
@@ -45,7 +45,7 @@ class Game(object):
             self.players.deploy_troops(self, 1)
 
     def play_game(self):
-        self.players.reset()
+        self.players.restart()
         while not self.check_for_winner():
             self.turn += 1
             self.players.next()
@@ -86,13 +86,13 @@ class Game(object):
         return False
 
     def reinforce(self):
-        origin_country, destination_country, troops = self.players.reinforce()
+        origin_country, destination_country, troops = self.players.reinforce(self)
         assert origin_country.owner == self.players.current_player
         assert destination_country.owner == self.players.current_player
         assert origin_country.troops - troops >= 1
         if not origin_country:
             return True
-        origin_country.add_troops(troops)
+        origin_country.add_troops(self.players.current_player, troops)
         destination_country.troops += troops
 
     def check_for_winner(self):
