@@ -63,7 +63,7 @@ class Game(object):
         self.phase = 'deployment'
 
         self.players.current_player.troops_to_deploy += max(math.ceil(len(self.players.current_player.countries)), 3)
-        self.players.current_player.troops_to_deploy += sum({con.bonus for con in self.board.continents
+        self.players.current_player.troops_to_deploy += sum({con.bonus for con in self.board.continents.values()
                                                              if con.get_player_set() == {self.players.current_player}})
         self.players.spend_cards(self)
         self.players.deploy_troops(self)
