@@ -90,7 +90,7 @@ class Game(object):
         origin_country.troops -= troops
 
     def check_for_winner(self):
-        players_remaining = {p for p in self.players_list if not p.is_eliminated}
+        players_remaining = {p for p in self.players if not p.is_eliminated}
         neutral_players = {p for p in players_remaining if p.is_neutral}
         if len(players_remaining) == 1:
             self.winner = list(players_remaining)[0]
