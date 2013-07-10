@@ -21,9 +21,11 @@ class Player(BasePlayer):
         assert r['action'] in self.avaliable_actions
         return r
 
-    def got_exception(self, game):
+    def got_exception(self, game, e):
         self.errors += 1
-        game.last_action = 'error %s' % self.error
+        game.last_action = 'error %s' % self.errors
+        self.avaliable_actions = []
+        print e
         self.check_neutralized()
 
     def get_country_choice(self, game):
@@ -40,8 +42,7 @@ class Player(BasePlayer):
             game.last_aciton = "%s chose country %s" % (self,country)
             return True
         except Exception as e:
-            self.got_exception(game)
-            print e
+            self.got_exception(game,e)
             return False
 
     def get_card_spend(self, game, force=False):
@@ -69,14 +70,12 @@ class Player(BasePlayer):
             else:
                 raise NameError('good job, you broke causality')
         except Exception as e:
-            self.got_exception(game)
-            print e
-            self.avaliable_actions = []
+            self.got_exception(game, e)
             return False
 
     def get_troop_deployment(self, game):
         if self.is_neutral:
-            game.last_action = "pass % is neutral"
+            game.last_action = "pass % is neutral" % self.name
             return True
 
         self.avaliable_actions = ['deploy_troops']
