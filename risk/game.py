@@ -13,7 +13,7 @@ initial_troops = {3: 35,
 class Game(object):
 
     def __init__(self, players):
-        self.board, self.card_lookup = models.import_board_data('./board_graph.json')
+        self.board, self.card_lookup = models.import_board_data('./risk/board_graph.json')
         self.card_deck = self.card_lookup.values()
         self.players = players
         random.shuffle(self.card_deck)
