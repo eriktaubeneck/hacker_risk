@@ -130,6 +130,15 @@ class Player(object):
         if self.errors >= 3:
             self.is_neutral = True
     
+    def has_card_set(self):
+        combos = itertools.combinations(self.cards, 3)
+        has_set = False
+        while has_set is False:
+            potential_set = combos.next()
+            if potential_set[0].is_set_with(potential_set[1], potential_set[2]):
+                has_set = True
+        return has_set
+
     def get_country_choice(self):
         pass
 
@@ -198,7 +207,7 @@ class Players(object):
             self.broadcast_game(game)
 
     def spend_cards(self, game):
-        if len(self.current_player.has_card_set():
+        if len(self.current_player.has_card_set()):
             while not self.current_player.get_card_spend(game):
                self.broadcast_game(game)
 
