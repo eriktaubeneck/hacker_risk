@@ -1,16 +1,20 @@
 <!doctype html>
-<title>Welcome</title>
+<title>add_player</title>
 <link rel=stylesheet type=text/css href="{{ 
           url_for('static', filename='style.css') }}">
 <div class=page>
   <h1>Welcome to the Hacker School batch[6] Risk(tm) AI Server!</h1>
   <div class=metanav>
 {% block body %}
-  <h2>[INSTRUCTIONS]</h2>
+  <h2>Launch your AI:</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="./add_player.html" method=post>
+  <form action="{{ url_for('login') }}" method=post>
     <dl>
-      <dd><input type=submit value="Let's get started!">
+      <dt>Username:
+      <dd><input type=text name=username>
+      <dt>AI url:
+      <dd><input type=url name=ai_url>
+      <dd><input type=submit value=Launch>
     </dl>
   </form>
 {% endblock %}
