@@ -27,6 +27,7 @@ class Game(object):
 
     def start_game(self):
         #assign countries to players
+        self.players.start_game()
         self.init_deploy()
         self.play_game()
 
