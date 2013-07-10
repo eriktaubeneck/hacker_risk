@@ -9,9 +9,10 @@ player2_url = 'http://localhost:4445'
 player3_name = 'player 3'
 player3_url = 'http://localhost:4446'
 
-players = Players([Player(player1_name, player1_url),
-                   Player(player2_name, player2_url),
-                   Player(player3_name, player3_url)])
+players = Players()
+players.add_player(Player(player1_name, player1_url))
+players.add_player(Player(player2_name, player2_url))
+players.add_player(Player(player3_name, player3_url))
 
 game = Game(players)
 
