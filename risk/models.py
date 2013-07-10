@@ -132,12 +132,10 @@ class Player(object):
     
     def has_card_set(self):
         combos = itertools.combinations(self.cards, 3)
-        has_set = False
-        while has_set is False:
-            potential_set = combos.next()
+        for potential_set in combos:
             if potential_set[0].is_set_with(potential_set[1], potential_set[2]):
-                has_set = True
-        return has_set
+                return True
+        return False
 
     def get_country_choice(self):
         pass

@@ -71,11 +71,11 @@ class Game(object):
 
     def attacking_phase(self):
         self.phase = 'attacking'
-        attacking_country, defending_country, attacking_troops = self.players.attack()
+        attacking_country, defending_country, attacking_troops, moving_troops = self.players.attack()
         if not attacking_country:
             return True
         assert attacking_country.owner == self.players.current_player
-        country_invaded = attacking_country.attack(defending_country, attacking_troops)
+        country_invaded = attacking_country.attack(defending_country, attacking_troops, moving_troops)
         if country_invaded and not self.players.current_player.earned_card_this_turn:
             self.players.current_player.earned_card_this_turn = True
         if not defending_country.owner.countries:
