@@ -91,20 +91,18 @@ class Player(BasePlayer):
             return True
 
         except Exception as e:
-            self.got_exception(game)
-            print e
-            self.avaliable_actions = []
+            self.got_exception(game, e)
             return False
 
     def get_attack_order(self, game):
         if self.is_neutral:
-            game.last_actions = "pass % is neutral"
+            game.last_action = "pass % is neutral" % self.name
             return True
         self.avaliable_actions = ['attack', 'end_attack_phase']
         try:
             r = self.send_request(game)
             if r['action'] == 'end_attack_phase':
-                return False
+                return True
             attacking_country = game.board.countries[r['data']['attacking_country']]
             defending_country = game.board.countries[r['data']['defending_country']]
             attacking_country_pre_attack_troops = attacking_country.troops
