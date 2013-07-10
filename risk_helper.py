@@ -25,7 +25,7 @@ class Player(BasePlayer):
         self.errors += 1
         game.last_action = 'error %s' % self.errors
         self.available_actions = []
-        print e
+        raise e
         self.check_neutralized()
 
     def get_country_choice(self, game):
