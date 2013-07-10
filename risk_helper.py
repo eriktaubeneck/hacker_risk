@@ -42,8 +42,34 @@ class Player(BasePlayer):
             print e
             return False
 
-        self.avaliable_actions = []
-        game.last_aciton = "%s chose country %s" % (self,country)
+    def get_card_spend(self, game, force=False):
+        assert self.has_card_set()
+        if self.is_neutral():
+            game.last_action = "%s is neutral, spent no cards" % self.name
+            return True
+        if len(self.cards) >= 5:
+            force = True
+        self.avaliable_actions = ['spend_cards']
+        if not force:
+            self.avaliable_actions = ['pass']
+        try:
+            r = self.send_request(game)
+            if r['action'] == 'spend_cards':
+                cards = [game.card_deck[k] for k in r['data']]
+                self.deployment_troops += game.get_troops_for_card_set(cards)
+                game.last_action = "%s spent cards %s" % (self.name, r['data'])
+                self.avaliable_actions = []
+                return True
+            elif r['action'] == 'pass':
+                game.last_action = "%s spent no cards" % self.name
+                self.avaliable_actions = []
+                return True
+            else:
+                raise NameError('good job, you broke causality')
+        except Exception as e:
+            self.got_exception(game)
+            print e
+            return False
 
     def get_troop_deployment(self, game):
         if self.is_neutral:
