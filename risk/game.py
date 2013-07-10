@@ -52,10 +52,8 @@ class Game(object):
             self.turn += 1
             self.players.next()
             self.deployment_phase()
-            player_done = False
-            while not player_done:
-                player_done = self.attacking_phase()
-            self.reinforce()
+            self.players.attack()
+            self.players.reinforce()
             if(self.players.current_player.earned_card_this_turn and self.card_deck):
                 self.players.current_player.earned_card_this_turn = False
                 self.players.current_player.cards.add(self.card_deck.next())
@@ -69,11 +67,8 @@ class Game(object):
         self.players.spend_cards(self)
         self.players.deploy_troops(self)
 
-    def attacking_phase(self):
+    def attack(self, attacking_country, defending_country, attacking_troops, moving_troops):
         self.phase = 'attacking'
-        attacking_country, defending_country, attacking_troops, moving_troops = self.players.attack()
-        if not attacking_country:
-            return True
         assert attacking_country.owner == self.players.current_player
         country_invaded = attacking_country.attack(defending_country, attacking_troops, moving_troops)
         if country_invaded and not self.players.current_player.earned_card_this_turn:
@@ -82,10 +77,9 @@ class Game(object):
             self.eliminate_player(self.players.current_player, defending_country.owner)
             if len(self.players.current_player.cards) >= 5:
                 self.players.force_cards_spend(self)
-        return False
+        return country_invaded
 
-    def reinforce(self):
-        origin_country, destination_country, troops = self.players.reinforce(self)
+    def reinforce(self, origin_country, destination_country, troops):
         assert origin_country.owner == self.players.current_player
         assert destination_country.owner == self.players.current_player
         assert origin_country.troops - troops >= 1

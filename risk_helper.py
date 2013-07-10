@@ -109,10 +109,10 @@ class Player(BasePlayer):
             defending_country_pre_attack_troops = defending_country.troops
             attacking_troops = r['data']['attacking_troops']
             moving_troops = r['data']['moving_troops']
-            assert attacking_country.owner == self
-            result = attacking_country.attack(defending_country,
-                                              attacking_troops,
-                                              moving_troops)
+            result = game.attack(attacking_country,
+                                 defending_country,
+                                 attacking_troops,
+                                 moving_troops)
             if result:
                 game.last_action = "%s defeated %s" % (attacking_country,
                                                        defending_country)
@@ -129,8 +129,28 @@ class Player(BasePlayer):
                    defending_country, defending_coutnry_lost)
                 self.avaliable_actions = []
                 return False
-        except:
-            self.got_exception(game)
-            print e
+        except Exception as e:
+            self.got_exception(game, e)
+            return False
+
+    def get_reinforce_order(self, game):
+        if self.is_neutral:
+            game.last_action = "pass % is neutral" % self.name
+            return True
+        self.avaliable_actions = ['reinforce', 'end_turn']
+        try:
+            r = self.send_request(game)
+            if r['action'] == 'end_turn':
+                return True
+            origin_country = game.board.countries[r['data']['origin_country']]
+            destination_country = game.board.countries[r['data']['destination_country']]
+            moving_troops = r['data']['moving_troops']
+            game.reinforce(origin_country, destination_country, moving_troops)
+            game.last_action = "%s reinforced %s with %s troops". % (origin_country,
+                                                                     destination_coutnry,
+                                                                     moving_troops)
             self.avaliable_actions = []
+            return True
+        except Exception as e:
+            self.got_exception(game, e)
             return False
