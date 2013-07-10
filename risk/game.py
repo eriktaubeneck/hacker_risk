@@ -139,10 +139,10 @@ class Game(object):
         where player is the requesting player
         """
         game_state = {'game':{},'you':{}}
-        game_state['game']['continents'] = {}
-        for key in self.board.continents:
-            continent = self.board.continents[key]
-            game_state['game']['continents'][key] = continent
+        game_state['game']['countries'] = {}
+        for key in self.board.countries:
+            country = self.board.countries[key]
+            game_state['game']['countries'][key] = country
 
         game_state['you'] = player
         return json.dumps(game_state, cls=GameEncoder)
