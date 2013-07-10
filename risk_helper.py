@@ -146,9 +146,9 @@ class Player(BasePlayer):
             destination_country = game.board.countries[r['data']['destination_country']]
             moving_troops = r['data']['moving_troops']
             game.reinforce(origin_country, destination_country, moving_troops)
-            game.last_action = "%s reinforced %s with %s troops". % (origin_country,
-                                                                     destination_coutnry,
-                                                                     moving_troops)
+            game.last_action = "%s reinforced %s with %s troops" % (origin_country,
+                                                                    destination_country,
+                                                                    moving_troops)
             self.avaliable_actions = []
             return True
         except Exception as e:
