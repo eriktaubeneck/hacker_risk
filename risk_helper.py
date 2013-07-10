@@ -58,7 +58,7 @@ class Player(BasePlayer):
         try:
             r = self.send_request(game)
             if r['action'] == 'spend_cards':
-                cards = [game.card_deck[k] for k in r['data']]
+                cards = [game.card_lookup[k] for k in r['data']]
                 self.troops_to_deploy += game.get_troops_for_card_set(cards)
                 game.last_action = "%s spent cards %s" % (self.name, r['data'])
                 self.avaliable_actions = []

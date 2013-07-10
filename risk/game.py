@@ -13,7 +13,8 @@ initial_troops = {3: 35,
 class Game(object):
 
     def __init__(self, players):
-        self.board, self.card_deck = models.import_board_data('./board_graph.json')
+        self.board, self.card_lookup = models.import_board_data('./board_graph.json')
+        self.card_deck = self.card_lookup.values()
         self.players = players
         random.shuffle(self.card_deck)
         self.uid = uuid4()
@@ -56,7 +57,7 @@ class Game(object):
             self.players.reinforce()
             if(self.players.current_player.earned_card_this_turn and self.card_deck):
                 self.players.current_player.earned_card_this_turn = False
-                self.players.current_player.cards.add(self.card_deck.next())
+                self.players.current_player.cards.add(self.card_deck.pop())
 
     def deployment_phase(self):
         self.phase = 'deployment'
