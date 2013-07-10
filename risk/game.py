@@ -53,8 +53,8 @@ class Game(object):
             self.turn += 1
             self.players.next()
             self.deployment_phase()
-            self.players.attack()
-            self.players.reinforce()
+            self.players.attack(self)
+            self.players.reinforce(self)
             if(self.players.current_player.earned_card_this_turn and self.card_deck):
                 self.players.current_player.earned_card_this_turn = False
                 self.players.current_player.cards.add(self.card_deck.pop())
