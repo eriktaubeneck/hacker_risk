@@ -62,15 +62,11 @@ class Game(object):
     def deployment_phase(self):
         self.phase = 'deployment'
 
-        #card troops
-        traded_cards = self.players.use_cards(self)
-        card_troops = get_troops_for_card_set(traded_cards)
-        #base troops
-        new_troops = max(math.ceil(len(self.players.current_player.countries)), 3)
-        #continent troops
-        continent_troops = sum({con.bonus for con in self.board.continents
-                                if con.get_player_set() == {self.players.current_player}})
-        self.players.deploy_troops(self, card_troops + new_troops + continent_troops)
+        self.players.current_player.troops_to_deploy += max(math.ceil(len(self.players.current_player.countries)), 3)
+        self.players.current_player.troops_to_deploy += sum({con.bonus for con in self.board.continents
+                                                             if con.get_player_set() == {self.players.current_player}})
+        self.players.spend_cards(self)
+        self.players.deploy_troops(self)
 
     def attacking_phase(self):
         self.phase = 'attacking'
@@ -121,14 +117,15 @@ class Game(object):
         eliminated.cards = set()
         eliminated.is_eliminated = True
 
-    def get_troops_for_card_set(self, traded_cards):
-        cards = list(traded_cards)
+    def get_troops_for_card_set(self, cards):
         assert len(cards) == 3
-        if not cards[0].is_set_with(cards[1], cards[2]):
-            return False
-        for i in range(3):
-            if cards[i].country in self.players.current_player.countries:
-                cards[i].country.troops += 2
+        for card in cards:
+            assert card in self.players.current_player.cards
+        assert cards[0].is_set_with(cards[1], cards[2])
+        self.players.current_player.cards -= set(cards)
+        for card in cards:
+            if card.country in self.players.current_player.countries:
+                card.country.troops += 2
                 break
         if(self.card_sets_traded_in < 6):
             self.card_sets_traded_in += 1

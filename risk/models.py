@@ -201,13 +201,19 @@ class Players(object):
         self.current_player.get_troop_deployment(game, troop_count)
         self.broadcast_game(game)
 
-    def use_cards(self, game):
-        self.current_player.get_card_spend(game)
-        self.broadcast_game(game)
+    def spend_cards(self, game):
+        if len(self.current_player.has_card_set():
+            while not self.current_player.get_card_spend(game):
+               self.broadcast_game(game)
 
     def force_cards_spend(self, game):
-        self.current_player.use_cards(self, game)
-        self.broadcast_game(game)
+        assert len(self.current_player.cards) >= 5
+        while not self.current_player.get_card_spend(game, force=True):
+            self.broadcast_game(game)
+
+    def deploy_troops(self, game):
+        while not self.current_player.get_troop_deployment(game):
+            self.broadcast_game(game)
 
     def attack(self, game):
         self.current_player.get_attack_order(game)
