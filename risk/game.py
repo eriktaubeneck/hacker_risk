@@ -157,7 +157,8 @@ class GameEncoder(json.JSONEncoder):
             }
 
         elif isinstance(obj, models.Player):
-            return { 'is_eliminated':obj.is_eliminated,
+            return { 'name':obj.name,
+                     'is_eliminated':obj.is_eliminated,
                      'cards':list(obj.cards),
                      'earned_cards_this_turn':obj.earned_card_this_turn,
                      'countries':[ country.name for country in obj.countries ],
