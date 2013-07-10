@@ -203,28 +203,34 @@ class Players(object):
     def choose_country(self, game):
         while not self.current_player.get_country_choice(game):
             self.broadcast_game(game)
+        self.boardcast_game(game)
 
     def spend_cards(self, game):
         if len(self.current_player.has_card_set()):
             while not self.current_player.get_card_spend(game):
                self.broadcast_game(game)
+            self.broadcast_game(game)
 
     def force_cards_spend(self, game):
         assert len(self.current_player.cards) >= 5
         while not self.current_player.get_card_spend(game, force=True):
             self.broadcast_game(game)
+        self.broadcast_game(game)
 
     def deploy_troops(self, game):
         while not self.current_player.get_troop_deployment(game):
             self.broadcast_game(game)
+        self.broadcast_game(game)
 
     def attack(self, game):
         while not self.current_player.get_attack_order(game):
             self.broadcast_game(game)
+        self.broadcast_game(game)
 
     def reinforce(self, game):
         while not self.current_player.get_reinforce_order(game):
             self.broadcast_game(game)
+        self.broadcast_game(game)
 
     def broadcast_game(self, game):
         [player.send_game(game) for player in self.other_players]
