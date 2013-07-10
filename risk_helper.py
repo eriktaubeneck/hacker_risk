@@ -17,7 +17,7 @@ class Player(BasePlayer):
     def send_request(self, game):
         payload = {'risk': game.game_state_json(self)}
         r = requests.post(self.turn_url, data=payload, timeout=self.timeout)
-        r = json.loads(r.json())
+        r = r.json()
         assert r['action'] in self.available_actions
         return r
 
@@ -75,12 +75,12 @@ class Player(BasePlayer):
 
     def get_troop_deployment(self, game):
         if self.is_neutral:
-            game.last_action = "pass % is neutral" % self.name
+            game.last_action = "pass %s is neutral" % self.name
             return True
 
         self.available_actions = ['deploy_troops']
         try:
-            r = self.send_requests(game)
+            r = self.send_request(game)
             assert sum(r['data'].values()) == self.troops_to_deploy
             self.troops_to_deploy = 0
             for country_name in r['data'].keys():
@@ -96,7 +96,7 @@ class Player(BasePlayer):
 
     def get_attack_order(self, game):
         if self.is_neutral:
-            game.last_action = "pass % is neutral" % self.name
+            game.last_action = "pass %s is neutral" % self.name
             return True
         self.available_actions = ['attack', 'end_attack_phase']
         try:
@@ -135,7 +135,7 @@ class Player(BasePlayer):
 
     def get_reinforce_order(self, game):
         if self.is_neutral:
-            game.last_action = "pass % is neutral" % self.name
+            game.last_action = "pass %s is neutral" % self.name
             return True
         self.available_actions = ['reinforce', 'end_turn']
         try:
