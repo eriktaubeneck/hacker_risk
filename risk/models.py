@@ -133,16 +133,16 @@ class Player(object):
     def get_country_choice(self):
         pass
 
-    def get_troop_deployment(self):
+    def get_card_spend(self):
         pass
 
-    def get_card_spend(self):
+    def get_troop_deployment(self):
         pass
 
     def reinforcement_order(self):
         pass
 
-    def get_attack(self):
+    def get_attack_order(self):
         pass
 
     def __hash__(self):
