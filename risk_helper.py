@@ -11,6 +11,8 @@ class Player(BasePlayer):
         self.turn_url = self.base_url+"/turn"
         self.broadcast_url = self.base_url+"/get_board"
         self.timeout = 30.
+        r = requests.get(self.base_url+"/status", timeout=self.timeout)
+        assert r.status_code == 200
 
     def send_request(self, game):
         payload = {'risk': game.game_state_json(self)}
