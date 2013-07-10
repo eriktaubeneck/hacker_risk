@@ -56,7 +56,7 @@ class Player(BasePlayer):
             r = self.send_request(game)
             if r['action'] == 'spend_cards':
                 cards = [game.card_deck[k] for k in r['data']]
-                self.deployment_troops += game.get_troops_for_card_set(cards)
+                self.troops_to_deploy += game.get_troops_for_card_set(cards)
                 game.last_action = "%s spent cards %s" % (self.name, r['data'])
                 self.avaliable_actions = []
                 return True
@@ -69,6 +69,7 @@ class Player(BasePlayer):
         except Exception as e:
             self.got_exception(game)
             print e
+            self.avaliable_actions = []
             return False
 
     def get_troop_deployment(self, game):
@@ -79,6 +80,8 @@ class Player(BasePlayer):
         self.avaliable_actions = ['deploy_troops']
         try:
             r = self.send_requests(game)
+            assert sum(r['data'].values()) == self.troops_to_deploy
+            self.troops_to_deploy = 0
             for country_name in r['data'].keys():
                 country = game.board.countries[country_name]
                 country.add_troops(self, countries[country])
@@ -89,6 +92,18 @@ class Player(BasePlayer):
         except Exception as e:
             self.got_exception(game)
             print e
+            self.avaliable_actions = []
             return False
 
-        self.avaliable_actions = []
+    def get_attack_order(self, game):
+        if self.is_neutral:
+            game.last_actions = "pass % is neutral"
+            return True
+        self.avaliable_actions = ['attack', 'end_attack_phase']
+        try:
+            r = self.send_request(game)
+            attacking_country = game.board.countries[r['data']['attacking_country']]
+            defending_country = game.board.countries[r['data']['defending_country']]
+            attacking_troops = r['data']['attacking_troops']
+            moving_troops = r['data']['moving_troops']
+
