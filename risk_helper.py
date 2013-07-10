@@ -12,6 +12,18 @@ class Player(BasePlayer):
         self.broadcast_url = self.base_url+"/get_board"
         self.timeout = 30.
 
+    def send_request(self, game):
+        payload = {'risk': game.game_state_json(self)}
+        r = requests.post(self.turn_url, data=payload, timeout=self.timeout)
+        r = json.loads(r.json())
+        assert r['action'] in self.avaliable_actions
+        return r
+
+    def got_exception(self, game):
+        self.errors += 1
+        game.last_action = 'error %s' % self.error
+        self.check_neutralized()
+
     def get_country_choice(self, game):
         if self.is_neutral:
             country = random.choice([c for c in game.board.countries.values() if not c.owner])
