@@ -9,11 +9,11 @@ class Country(object):
         self.owner = None
         self.troops = 0
 
-    def attack(self, country, attacking_troops):
+    def attack(self, country, attacking_troops, moving_troops):
         assert country in self.border_countries
         assert country.owner is not None
         assert country.owner is not self.owner
-        assert self.troops - attacking_troops >= 1
+        assert self.troops - (attacking_troops + moving_troops) >= 1
         assert attacking_troops > 0
         assert attacking_troops <= 3
 
@@ -47,7 +47,7 @@ class Country(object):
 
         if country.troops == 0:
             country.owner = self.owner
-            country.troops = attacking_troops
+            country.troops = attacking_troops + moving_troops
             self.troops -= attacking_troops
             return True
         return False

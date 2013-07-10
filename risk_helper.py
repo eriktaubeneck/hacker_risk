@@ -102,8 +102,36 @@ class Player(BasePlayer):
         self.avaliable_actions = ['attack', 'end_attack_phase']
         try:
             r = self.send_request(game)
+            if r['action'] == 'end_attack_phase':
+                return False
             attacking_country = game.board.countries[r['data']['attacking_country']]
             defending_country = game.board.countries[r['data']['defending_country']]
+            attacking_country_pre_attack_troops = attacking_country.troops
+            defending_country_pre_attack_troops = defending_country.troops
             attacking_troops = r['data']['attacking_troops']
             moving_troops = r['data']['moving_troops']
-
+            assert attacking_country.owner == self
+            result = attacking_country.attack(defending_country,
+                                              attacking_troops,
+                                              moving_troops)
+            if result:
+                game.last_action = "%s defeated %s" % (attacking_country,
+                                                       defending_country)
+                self.avaliable_actions = []
+                return False
+            else:
+                attacking_country_lost = (attacking_country_pre_attack_troops -
+                                          attacking_country.troops)
+                defending_country_lost = (defending_country_pre_attack_troops -
+                                          defending_country.troops)
+                game.last_action = "%s attacked %s. %s lost %s. %s lost %s." \
+                % (attacking_country, defending_country,
+                   attacking_country, attacking_country_lost,
+                   defending_country, defending_coutnry_lost)
+                self.avaliable_actions = []
+                return False
+        except:
+            self.got_exception(game)
+            print e
+            self.avaliable_actions = []
+            return False
