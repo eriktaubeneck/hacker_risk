@@ -143,13 +143,16 @@ class Player(object):
     def get_card_spend(self):
         pass
 
-    def get_troop_deployment(self):
+    def get_troop_deployment(self, game):
         pass
 
     def reinforcement_order(self):
         pass
 
     def get_attack_order(self):
+        pass
+
+    def send_game(self, game):
         pass
 
     def __hash__(self):
@@ -203,10 +206,10 @@ class Players(object):
     def choose_country(self, game):
         while not self.current_player.get_country_choice(game):
             self.broadcast_game(game)
-        self.boardcast_game(game)
+        self.broadcast_game(game)
 
     def spend_cards(self, game):
-        if len(self.current_player.has_card_set()):
+        if self.current_player.has_card_set():
             while not self.current_player.get_card_spend(game):
                self.broadcast_game(game)
             self.broadcast_game(game)

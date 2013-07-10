@@ -5,7 +5,8 @@ from mock import patch
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
-        self.board, self.cards = models.import_board_data('./board_graph.json')
+        self.board, self.cards_lookup = models.import_board_data('./board_graph.json')
+        self.cards = self.cards_lookup.values()
 
     def test_border_countries(self):
         country_A = self.board.countries['alaska']
