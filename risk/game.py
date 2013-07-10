@@ -27,6 +27,7 @@ class Game(object):
 
     def start_game(self):
         #assign countries to players
+        self.players.start_game()
         self.init_deploy()
         self.play_game()
 
@@ -62,23 +63,19 @@ class Game(object):
     def deployment_phase(self):
         self.phase = 'deployment'
 
-        #card troops
-        traded_cards = self.players.use_cards(self)
-        card_troops = get_troops_for_card_set(traded_cards)
-        #base troops
-        new_troops = max(math.ceil(len(self.players.current_player.countries)), 3)
-        #continent troops
-        continent_troops = sum({con.bonus for con in self.board.continents
-                                if con.get_player_set() == {self.players.current_player}})
-        self.players.deploy_troops(self, card_troops + new_troops + continent_troops)
+        self.players.current_player.troops_to_deploy += max(math.ceil(len(self.players.current_player.countries)), 3)
+        self.players.current_player.troops_to_deploy += sum({con.bonus for con in self.board.continents
+                                                             if con.get_player_set() == {self.players.current_player}})
+        self.players.spend_cards(self)
+        self.players.deploy_troops(self)
 
     def attacking_phase(self):
         self.phase = 'attacking'
-        attacking_country, defending_country, attacking_troops = self.players.attack()
+        attacking_country, defending_country, attacking_troops, moving_troops = self.players.attack()
         if not attacking_country:
             return True
         assert attacking_country.owner == self.players.current_player
-        country_invaded = attacking_country.attack(defending_country, attacking_troops)
+        country_invaded = attacking_country.attack(defending_country, attacking_troops, moving_troops)
         if country_invaded and not self.players.current_player.earned_card_this_turn:
             self.players.current_player.earned_card_this_turn = True
         if not defending_country.owner.countries:
@@ -121,14 +118,15 @@ class Game(object):
         eliminated.cards = set()
         eliminated.is_eliminated = True
 
-    def get_troops_for_card_set(self, traded_cards):
-        cards = list(traded_cards)
+    def get_troops_for_card_set(self, cards):
         assert len(cards) == 3
-        if not cards[0].is_set_with(cards[1], cards[2]):
-            return False
-        for i in range(3):
-            if cards[i].country in self.players.current_player.countries:
-                cards[i].country.troops += 2
+        for card in cards:
+            assert card in self.players.current_player.cards
+        assert cards[0].is_set_with(cards[1], cards[2])
+        self.players.current_player.cards -= set(cards)
+        for card in cards:
+            if card.country in self.players.current_player.countries:
+                card.country.troops += 2
                 break
         if(self.card_sets_traded_in < 6):
             self.card_sets_traded_in += 1

@@ -9,11 +9,11 @@ class Country(object):
         self.owner = None
         self.troops = 0
 
-    def attack(self, country, attacking_troops):
+    def attack(self, country, attacking_troops, moving_troops):
         assert country in self.border_countries
         assert country.owner is not None
         assert country.owner is not self.owner
-        assert self.troops - attacking_troops >= 1
+        assert self.troops - (attacking_troops + moving_troops) >= 1
         assert attacking_troops > 0
         assert attacking_troops <= 3
 
@@ -47,7 +47,7 @@ class Country(object):
 
         if country.troops == 0:
             country.owner = self.owner
-            country.troops = attacking_troops
+            country.troops = attacking_troops + moving_troops
             self.troops -= attacking_troops
             return True
         return False
@@ -130,19 +130,26 @@ class Player(object):
         if self.errors >= 3:
             self.is_neutral = True
     
-    def get_country_choice(self):
-        pass
+    def has_card_set(self):
+        combos = itertools.combinations(self.cards, 3)
+        for potential_set in combos:
+            if potential_set[0].is_set_with(potential_set[1], potential_set[2]):
+                return True
+        return False
 
-    def get_troop_deployment(self):
+    def get_country_choice(self):
         pass
 
     def get_card_spend(self):
         pass
 
+    def get_troop_deployment(self):
+        pass
+
     def reinforcement_order(self):
         pass
 
-    def get_attack(self):
+    def get_attack_order(self):
         pass
 
     def __hash__(self):
@@ -194,32 +201,30 @@ class Players(object):
         self.__generate_other_players()
 
     def choose_country(self, game):
-        self.current_player.get_country_choice(game)
-        self.broadcast_game(game)
+        while not self.current_player.get_country_choice(game):
+            self.broadcast_game(game)
 
-    def deploy_troops(self, game, troop_count):
-        self.current_player.get_troop_deployment(game, troop_count)
-        self.broadcast_game(game)
-
-    def use_cards(self, game):
-        self.current_player.get_card_spend(game)
-        self.broadcast_game(game)
+    def spend_cards(self, game):
+        if len(self.current_player.has_card_set()):
+            while not self.current_player.get_card_spend(game):
+               self.broadcast_game(game)
 
     def force_cards_spend(self, game):
-        self.current_player.use_cards(self, game)
-        self.broadcast_game(game)
+        assert len(self.current_player.cards) >= 5
+        while not self.current_player.get_card_spend(game, force=True):
+            self.broadcast_game(game)
+
+    def deploy_troops(self, game):
+        while not self.current_player.get_troop_deployment(game):
+            self.broadcast_game(game)
 
     def attack(self, game):
-        self.current_player.get_attack_order(game)
-        self.broadcast_game(game)
+        while not self.current_player.get_attack_order(game):
+            self.broadcast_game(game)
 
     def reinforce(self, game):
-        self.current_player.get_reinforcement_order(game)
-        self.broadcast_game(game)
-
-    def attack(self, game):
-        self.current_player.get_attack(game)
-        self.broadcast_game(game)
+        while not self.current_player.get_reinforce_order(game):
+            self.broadcast_game(game)
 
     def broadcast_game(self, game):
         [player.send_game(game) for player in self.other_players]

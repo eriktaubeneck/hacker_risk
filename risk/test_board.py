@@ -19,7 +19,6 @@ class TestBoard(unittest.TestCase):
         self.assertNotIn(country_A, country_B.border_countries)
         self.assertNotIn(country_B, country_A.border_countries)
 
-
     def test_deploy_troops(self):
         country_A = self.board.countries['iceland']
         erty = models.Player('Erty')
@@ -47,14 +46,14 @@ class TestBoard(unittest.TestCase):
         country_B.troops = 10
         with patch.object(random, 'randint') as mock_method:
             mock_method.side_effect = [6,6,1,1,1]
-            country_A.attack(country_B, 3)
+            country_A.attack(country_B, 3, 4)
             self.assertEqual(country_A.troops, 28)
             self.assertEqual(country_B.troops, 10)
 
 
         with patch.object(random, 'randint') as mock_method:
             mock_method.side_effect = [1,1,6,6,6]
-            country_A.attack(country_B,3)
+            country_A.attack(country_B,3, 2)
             self.assertEqual(country_A.troops, 28)
             self.assertEqual(country_B.troops, 8)
 
@@ -63,7 +62,7 @@ class TestBoard(unittest.TestCase):
         country_B = self.board.countries['japan']
         country_A.troops, country_B.troops = 15, 15
         with self.assertRaises(AssertionError):
-            country_A.attack(country_B, 3)
+            country_A.attack(country_B, 3, 1)
 
 
     def test_attack_self(self):
@@ -73,8 +72,7 @@ class TestBoard(unittest.TestCase):
         alex.choose_country(country_A)
         alex.choose_country(country_B)
         with self.assertRaises(AssertionError):
-            country_A.attack(country_B, 3)
-    
+            country_A.attack(country_B, 3, 1)
 
     def test_continent_bonus(self):
         alex = models.Player('Alex')
@@ -84,8 +82,7 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(north_america.get_player_set(), {alex})
         self.assertEqual(north_america.bonus, 5)
 
-
-    def test_cards(self):
+    def test_is_card_set(self):
         #this is a really dumb test, but it sort of works and I'm too lazy to make it better right now
         card1 = self.cards[0]
         card2 = self.cards[1]
@@ -104,4 +101,21 @@ class TestBoard(unittest.TestCase):
         set10=card3.is_set_with(card4, card5)
         self.assertEqual(set1 or set2 or set3 or set4 or set5 or set6 or set7 or set8 or set9 or set10, True)
 
+    def test_has_card_set(self):
+        card1 = self.cards[0]
+        card2 = self.cards[1]
+        card3 = self.cards[2]
+        card4 = self.cards[3]
+        card5 = self.cards[4]
+        alex = models.Player("Alex")
+        alex.cards = {card1, card2, card3, card4, card5}
+        self.assertEqual(alex.has_card_set(), True)
 
+    def test_not_card_set(self):
+        card1 = self.cards[0]
+        card2 = self.cards[1]
+        card3 = self.cards[2]
+        alex = models.Player("Alex")
+        alex.cards = { card2, card3}
+        self.assertEqual(alex.has_card_set(), False)
+        
