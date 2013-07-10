@@ -102,7 +102,7 @@ class Card(object):
     def is_set_with(self, card_two, card_three):
         assert card_two is not None
         assert card_three is not None
-        wild_cards = [card for card in [self, card_two, card_three] if card.value == "wild"]
+        wild_cards = [card for card in [self, card_two, card_three] if card.value in ["wild1", "wild2"]]
         return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
 
 
@@ -236,25 +236,21 @@ def import_board_data(json_url):
     board_file.close()
     board = Board()
     countries = {}
-    cards = []
+    cards = {}
     #go through the json and create the list of countries
     for continent_name in board_json:
-        board.continents[continent_name] = Continent(continent_name,
-
-board_json[continent_name]["bonus"])
+        board.continents[continent_name] = Continent(continent_name,board_json[continent_name]["bonus"])
         for country_name in board_json[continent_name]["countries"]:
-            countries[country_name] = Country(country_name,
-
-board_json[continent_name]["countries"][country_name]["border countries"])
-            cards.append(Card(countries[country_name],                              board_json[continent_name]["countries"][country_name]["card"]))
-            board.continents[continent_name].countries[country_name] =                     countries[country_name]
-    #loop through the country list and replace all of the border country strings with      references to that country
+            countries[country_name] = Country(country_name, board_json[continent_name]["countries"][country_name]["border countries"])
+            cards[country_name] = (Card(countries[country_name], board_json[continent_name]["countries"][country_name]["card"]))
+            board.continents[continent_name].countries[country_name] = countries[country_name]
+    #loop through the country list and replace all of the border country strings with references to that country
     for country_name in countries:
         borders = [countries[name] for name in countries[country_name].border_countries]
         countries[country_name].border_countries = borders
     board.countries = countries
     #add the two wild cards
-    cards.append(Card(None, "wild"))
-    cards.append(Card(None, "wild"))
+    cards['wild1'] = (Card(None, "wild1"))
+    cards['wild2'] = (Card(None, "wild2"))
     #return a tuple with the board and the cards
     return board, cards
