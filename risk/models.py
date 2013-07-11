@@ -46,6 +46,8 @@ class Country(object):
                 attacking_troops -= 1  # Kept track in case of invasion
 
         if country.troops == 0:
+            country.owner.countries.remove(country)
+            self.owner.countries.add(country)
             country.owner = self.owner
             country.troops = attacking_troops + moving_troops
             self.troops -= attacking_troops
