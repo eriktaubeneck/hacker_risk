@@ -5,8 +5,7 @@ from mock import patch
 
 class TestBoard(unittest.TestCase):
     def setUp(self):
-        self.board, self.cards_lookup = models.import_board_data('./board_graph.json')
-        self.cards = self.cards_lookup.values()
+        self.board = models.import_board_data('./board_graph.json')
 
     def test_border_countries(self):
         country_A = self.board.countries['alaska']
@@ -16,10 +15,9 @@ class TestBoard(unittest.TestCase):
 
     def test_all_borders(self):
         for country_A in self.board.countries:
-            for country_B in country_A.border_countries:
-                print(country_A, countryB)
-                self.assertIn(country_A, country_B.border_countries)
-                self.assertIn(country_B, country_A.border_countries)
+            for country_B in self.board.countries[country_A].border_countries:
+                self.assertIn(self.board.countries[country_A], country_B.border_countries)
+                self.assertIn(country_B, self.board.countries[country_A].border_countries)
 
     def test_not_border_countries(self):
         country_A = self.board.countries['iceland']
@@ -126,3 +124,6 @@ class TestBoard(unittest.TestCase):
         alex = models.Player("Alex")
         alex.cards = { card2, card3}
         self.assertEqual(alex.has_card_set(), False)
+
+if __name__ == "__main__":
+    unittest.main()

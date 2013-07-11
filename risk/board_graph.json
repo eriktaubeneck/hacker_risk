@@ -66,23 +66,23 @@
 		"countries": {
 			"iceland": {
 				"card": "horse",
-				"border countries": ["greenland", "great britain", "scandanavia"]
+				"border countries": ["greenland", "great britain", "scandinavia"]
 			},
-			"scandanavia": {
+			"scandinavia": {
 				"card": "soldier",
 				"border countries": ["iceland", "great britain", "northern europe", "russia"]
 			},
 			"russia": {
 				"card": "soldier",
-				"border countries": ["scandanavia", "northern europe", "southern europe", "ural", "afghanistan", "middle east"]
+				"border countries": ["scandinavia", "northern europe", "southern europe", "ural", "afghanistan", "middle east"]
 			},
 			"great britain": {
 				"card": "soldier",
-				"border countries": ["iceland", "scandanavia", "northern europe", "western europe"]
+				"border countries": ["iceland", "scandinavia", "northern europe", "western europe"]
 			},
 			"northern europe": {
 				"card": "horse",
-				"border countries": ["great britain", "scandanavia", "russia", "southern europe", "western europe"]
+				"border countries": ["great britain", "scandinavia", "russia", "southern europe", "western europe"]
 			},
 			"western europe": {
 				"card": "soldier",
