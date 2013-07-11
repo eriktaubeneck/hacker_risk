@@ -14,6 +14,13 @@ class TestBoard(unittest.TestCase):
         self.assertIn(country_A, country_B.border_countries)
         self.assertIn(country_B, country_A.border_countries)
 
+    def test_all_borders(self):
+        for country_A in self.board.countries:
+            for country_B in country_A.border_countries:
+                print(country_A, countryB)
+                self.assertIn(country_A, country_B.border_countries)
+                self.assertIn(country_B, country_A.border_countries)
+
     def test_not_border_countries(self):
         country_A = self.board.countries['iceland']
         country_B = self.board.countries['northwest territory']
@@ -27,7 +34,7 @@ class TestBoard(unittest.TestCase):
         country_A.troops = 20
         erty.deploy_troops(country_A, 10)
         self.assertEqual(country_A.troops, 30)
-    
+
     def test_deploy_troops_to_wrong_country(self):
         country_A = self.board.countries['northwest territory']
         erty = models.Player('Erty')
@@ -119,4 +126,3 @@ class TestBoard(unittest.TestCase):
         alex = models.Player("Alex")
         alex.cards = { card2, card3}
         self.assertEqual(alex.has_card_set(), False)
-        
