@@ -39,7 +39,7 @@ class Player(BasePlayer):
             country = game.board.countries[r['data']]
             country.add_troops(self,1)
             self.available_actions = []
-            game.last_aciton = "%s chose country %s" % (self,country)
+            game.last_action = "%s chose country %s" % (self,country)
             return True
         except Exception as e:
             self.got_exception(game,e)
@@ -126,7 +126,7 @@ class Player(BasePlayer):
                 game.last_action = "%s attacked %s. %s lost %s. %s lost %s." \
                 % (attacking_country, defending_country,
                    attacking_country, attacking_country_lost,
-                   defending_country, defending_coutnry_lost)
+                   defending_country, defending_country_lost)
                 self.available_actions = []
                 return False
         except Exception as e:
