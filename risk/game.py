@@ -116,6 +116,7 @@ class Game(object):
         elif self.turn == self.max_turns:
             self.winner = "Draw"
             print "Reached 1000 turns. DRAW"
+            return True
         else:
             return False
 
