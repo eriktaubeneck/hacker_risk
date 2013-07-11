@@ -131,8 +131,8 @@ class Game(object):
         assert cards[0].is_set_with(cards[1], cards[2])
         self.players.current_player.cards -= set(cards)
         for card in cards:
-            if card.country in self.players.current_player.countries:
-                card.country.troops += 2
+            if self.board.countries[card.country_name] in self.players.current_player.countries:
+                self.board.countries[card.country_name].troops += 2
                 break
         if(self.card_sets_traded_in < 6):
             self.card_sets_traded_in += 1
@@ -186,7 +186,7 @@ class GameEncoder(json.JSONEncoder):
             return {'countries': obj.countries, 'bonus':obj.bonus}
 
         elif isinstance(obj, models.Card):
-            return { 'country':obj.country, 'value':obj.value }
+            return { 'country_name':obj.country_name, 'value':obj.value }
 
         else:
             return json.JSONEncoder.default(self, obj)

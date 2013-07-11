@@ -99,14 +99,14 @@ class Board(object):
 
 
 class Card(object):
-    def __init__(self, country, value):
-        self.country = country
+    def __init__(self, country_name, value):
+        self.country_name = country_name
         self.value = value
 
     def is_set_with(self, card_two, card_three):
         assert card_two is not None
         assert card_three is not None
-        wild_cards = [card for card in [self, card_two, card_three] if card.value in ["wild1", "wild2"]]
+        wild_cards = [card for card in [self, card_two, card_three] if card.value == 'wild']
         return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
 
 
@@ -255,7 +255,7 @@ def import_board_data(json_url):
         board.continents[continent_name] = Continent(continent_name,board_json[continent_name]["bonus"])
         for country_name in board_json[continent_name]["countries"]:
             countries[country_name] = Country(country_name, board_json[continent_name]["countries"][country_name]["border countries"])
-            cards[country_name] = (Card(countries[country_name], board_json[continent_name]["countries"][country_name]["card"]))
+            cards[country_name] = (Card(country_name, board_json[continent_name]["countries"][country_name]["card"]))
             board.continents[continent_name].countries[country_name] = countries[country_name]
     #loop through the country list and replace all of the border country strings with references to that country
     for country_name in countries:
@@ -263,8 +263,8 @@ def import_board_data(json_url):
         countries[country_name].border_countries = borders
     board.countries = countries
     #add the two wild cards
-    cards['wild1'] = (Card(None, "wild1"))
-    cards['wild2'] = (Card(None, "wild2"))
+    cards['wild1'] = (Card("wild1", "wild"))
+    cards['wild2'] = (Card("wild2", "wild"))
     #add cards to board
     board.cards = cards
     #return a tuple with the board and the cards

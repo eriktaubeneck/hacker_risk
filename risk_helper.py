@@ -47,18 +47,18 @@ class Player(BasePlayer):
 
     def get_card_spend(self, game, force=False):
         assert self.has_card_set()
-        if self.is_neutral():
+        if self.is_neutral:
             game.last_action = "%s is neutral, spent no cards" % self.name
             return True
         if len(self.cards) >= 5:
             force = True
         self.available_actions = ['spend_cards']
         if not force:
-            self.available_actions = ['pass']
+            self.available_actions.append('pass')
         try:
             r = self.send_request(game)
             if r['action'] == 'spend_cards':
-                cards = [game.card_lookup[k] for k in r['data']]
+                cards = [game.board.cards[k] for k in r['data']]
                 self.troops_to_deploy += game.get_troops_for_card_set(cards)
                 game.last_action = "%s spent cards %s" % (self.name, r['data'])
                 self.available_actions = []
