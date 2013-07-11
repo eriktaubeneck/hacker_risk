@@ -130,7 +130,7 @@ class Game(object):
             assert card in self.players.current_player.cards
         assert cards[0].is_set_with(cards[1], cards[2])
         self.players.current_player.cards -= set(cards)
-        for card in cards:
+        for card in [c for c in cards if c.value != 'wild']:
             if self.board.countries[card.country_name] in self.players.current_player.countries:
                 self.board.countries[card.country_name].troops += 2
                 break
