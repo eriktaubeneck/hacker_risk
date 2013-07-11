@@ -133,7 +133,7 @@ class Game(object):
     def game_state_json(self, player): # player should be a Player object
         """
         Returns game state as JSON for sending to clients.
-        Where g = Game(*args), 
+        Where g = Game(*args),
         g.game_state_json(player)
         returns a JSON object of the entire game state as visible to player,
         where player is the requesting player
@@ -152,9 +152,14 @@ class GameEncoder(json.JSONEncoder):
     """Special JSON encoder for our objects"""
     def default(self, obj):
         if isinstance(obj, models.Country):
-            return { 'owner':obj.owner.name,
-                    'troops':obj.troops
-            }
+            if obj.owner is None:
+                return {'owner': 'none',
+                        'troops': obj.troops
+                }
+            else:
+                return {'owner': obj.owner.name,
+                        'troops': obj.troops
+                }
 
         elif isinstance(obj, models.Player):
             return { 'name':obj.name,
@@ -172,5 +177,5 @@ class GameEncoder(json.JSONEncoder):
         elif isinstance(obj, models.Card):
             return { 'country':obj.country, 'value':obj.value }
 
-        else: 
+        else:
             return json.JSONEncoder.default(self, obj)

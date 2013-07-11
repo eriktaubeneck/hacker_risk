@@ -130,7 +130,7 @@ class Player(object):
     def check_neutralized(self):
         if self.errors >= 3:
             self.is_neutral = True
-    
+
     def has_card_set(self):
         combos = itertools.combinations(self.cards, 3)
         for potential_set in combos:
@@ -161,7 +161,7 @@ class Player(object):
 
     def __eq__(self, other):
         return isinstance(other, Player) and self.name == other.name
-    
+
 
 
 class Players(object):
