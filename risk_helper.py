@@ -85,7 +85,7 @@ class Player(BasePlayer):
             self.troops_to_deploy = 0
             for country_name in r['data'].keys():
                 country = game.board.countries[country_name]
-                country.add_troops(self, countries[country])
+                country.add_troops(self, r['data'][country_name])
             game.last_action = "%s deployed %s" % (self.name, r['data'])
             self.available_actions = []
             return True
