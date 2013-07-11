@@ -74,22 +74,16 @@ The server will make a POST request to your URL with the POST variable "risk". A
 ```
 {
 	"game": {
-		"continents": {
-			"europe": {
-				"bonus": 5,
-				"countries": {
-					"northern europe": {
-						"owner": "Erty's Awesome AI",
+			 "countries": {
+				"northern europe": {
+					"owner": "Erty's Awesome AI",
 						"troops": 13
-					},
-					[...]
-				}
-			},
-			[...]
-		}
+				},
+				[...]
+			}
 	},
 	"you": {
-		"cards": [{"country": "argentina", "value": "soldier"}],
+		"cards": [{"country_name": "argentina", "value": "soldier"}],
 		"earned_cards_this_turn": false,
 		"is_eliminated": false,
 		"countries": ["northern europe", "venezuela", "western united states"],
@@ -125,12 +119,11 @@ A list of the names of all of the countries you own. You can find out more detai
 
 A list of the actions which your server can take in its current state. The actions which can be in this list are:
 
- - ```choose_country```
- - ```deploy_troops```
- - ```use_cards```
- - ```attack```
- - ```reinforce```
- - ```end_turn```
+ - `choose_country`
+ - `deploy_troops`
+ - `spend_cards`, `pass`
+ - `attack`, `end_attack_phase`
+ - `reinforce`, `end_turn`
 
 ##### choose_country
 
@@ -167,7 +160,7 @@ Example:
 {"action": "deploy_troops", "data": {"eastern united states": 3, "western united states": 2}}
 ```
 
-##### use_cards
+##### spend_cards
 
 Trade in a set of cards for units. You can do this at the beginning of your turn or (after you eliminate a player and you now have >= 5 cards).
 
@@ -176,18 +169,19 @@ Trade in a set of cards for units. You can do this at the beginning of your turn
  - Cards are represented by their country name
  - Wild cards are represented by the string "wild"
  - The cards should be sent as a list. If you own any of the countries on the cards, only the first one in the list will be credited 2 extra units.
- - This option may be available even if you don't have a valid set of cards
+ - This option will be skipped if you do not have a set which can be traded in.
+ - You can pass if the option `pass` is available, however if you have 5 or more cards, you must spend until you have less than 5 cards.
 
 Response:
 
 ```
-{"action": "use_cards", "data": [<card 1>, <card 2>, <card 3>]}
+{"action": "spend_cards", "data": [<card 1>, <card 2>, <card 3>]}
 ```
 
 Example:
 
 ```
-{"action": "use_cards", "data": ["argentina", "china", "iceland"]}
+{"action": "spend_cards", "data": ["argentina", "china", "iceland"]}
 ```
 
 ##### attack
@@ -200,7 +194,7 @@ Attack a country adjacent to one of your countries. Specify an origin country,  
  - You must own the attacking country, and not the defending country
  - You must leave at least one unit in the attacking country when you invade the defending country
  - This command may be available even if you have no legal attacks
-
+ - When you wish end the attacking phase, you will have to send `end_attack_phase` (see next section).
 Response:
 
 ```
@@ -211,6 +205,22 @@ Example:
 
 ```
 {"action": "attack", "data": {"attacking_country": "western united states", "defending_country": "eastern united states", "attacking_troops": 3, "moving_troops": 15}}
+```
+
+##### end_attack_phase
+
+When you wish to end the attack phase without reinforcing, you must perform the `end_turn` action. This action takes no extra data parameters.
+
+Response:
+
+```
+{"action": "end_attack_phase"}
+```
+
+Example:
+
+```
+{"action": "end_attack_phase"}
 ```
 
 ##### reinforce
@@ -236,7 +246,7 @@ Example:
 
 ##### end_turn
 
-If you wish to end your turn without reinforcing, you may perform the ```end_turn``` action. This action takes no extra data parameters.
+If you wish to end your turn without reinforcing, you may perform the `end_turn` action. This action takes no extra data parameters.
 
 Response:
 
@@ -252,8 +262,12 @@ Example:
 
 ### Game Flow
 
-The game starts with all players choosing countries one at a time, using the ```choose_country``` command. After all countries have been chosen, players will place troops using the ```deploy_troops``` command, one troop at a time.
+The game starts with all players choosing countries one at a time, using the `choose_country` command. After all countries have been chosen, players will place troops using the `deploy_troops` command, one troop at a time.
 
-At the beginning of a player's turn, if the player has more than three cards, the ```use_cards``` and ```deploy_troops``` options will be available. If you have more than 5 cards, the ```use_cards``` option will be the only one available, and after performing that action, ```deploy_troops``` will become available.
+At the beginning of a player's turn, if the player has a useable set of card, the `use_cards`. If you have less than 5 cards, you will also recieve the `pass` option.
 
-During the main phase of a turn, the actions available are ```attack```, ```reinforce```, and ```end_turn```. A player may attack as many times as they want during a turn. Calling ```reinforce``` or ```end_turn``` will end the player's turn and move on to the next.
+Next, the `deploy_troops` options will be available. This step is required.
+
+During the main phase of a turn, the actions available are `attack` and `end_attacking_phase`. A player may attack as many times as they want during a turn, and when the player is done attacking, they must call `end_attacking_phase`.
+
+The final options after the attacking phase will be `reinforce` and `end_turn`.  Calling `end_turn` will end the player's turn and move on to the next without reinforcing any countries.
