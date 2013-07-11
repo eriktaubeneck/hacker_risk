@@ -59,6 +59,7 @@ class Country(object):
 
         if(self.owner is None):
             self.owner = owner
+            self.owner.countries.add(self)
         self.troops += troops
 
     def __hash__(self):
