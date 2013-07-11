@@ -152,7 +152,7 @@ class GameEncoder(json.JSONEncoder):
     """Special JSON encoder for our objects"""
     def default(self, obj):
         if isinstance(obj, models.Country):
-            return { 'owner':obj.owner,
+            return { 'owner':obj.owner.name,
                     'troops':obj.troops
             }
 
