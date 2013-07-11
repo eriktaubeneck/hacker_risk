@@ -50,7 +50,7 @@ class Country(object):
             self.owner.countries.add(country)
             country.owner = self.owner
             country.troops = attacking_troops + moving_troops
-            self.troops -= attacking_troops
+            self.troops -= (attacking_troops + moving_troops)
             return True
         return False
 
