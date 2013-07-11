@@ -158,6 +158,6 @@ class Player(BasePlayer):
     def broadcast_game(self, game):
         payload = {'risk': game.game_state_json(self)}
         try:
-            r = requests.post(self.broadcast_url, data=payload, timeout=0.001)
-        except requests.exeptions.Timeout:
+            r = requests.post(self.broadcast_url, data=payload, timeout=0.1)
+        except requests.exceptions.Timeout:
             pass

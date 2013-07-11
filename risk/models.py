@@ -117,7 +117,7 @@ class Player(object):
         self.countries = set()
         self.earned_card_this_turn = False
         self.troops_to_deploy = 0
-        self.avaliable_actions = []
+        self.available_actions = []
         self.errors = 0
 
     def choose_country(self, country):
@@ -237,7 +237,7 @@ class Players(object):
         self.broadcast_game(game)
 
     def broadcast_game(self, game):
-        [player.send_game(game) for player in self.other_players]
+        [player.broadcast_game(game) for player in self.other_players]
 
 
 def import_board_data(json_url):
