@@ -50,7 +50,7 @@ class Country(object):
             self.owner.countries.add(country)
             country.owner = self.owner
             country.troops = attacking_troops + moving_troops
-            self.troops -= attacking_troops
+            self.troops -= (attacking_troops + moving_troops)
             return True
         return False
 
@@ -195,10 +195,12 @@ class Players(object):
         return len(self.players_list)
 
     def __generate_other_players(self):
-        self.other_players = [player for player in self.players_list if player is not self.current_player]
+        self.other_players = [player for player in self.players_list if player is not self.current_player and not player.is_eliminated]
 
     def next(self):
         self.current_player = self.players_cycle.next()
+        if self.current_player.is_eliminated:
+            self.next()
         self.__generate_other_players()
         return self.current_player
 
