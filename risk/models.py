@@ -92,6 +92,7 @@ class Board(object):
     def __init__(self):
         self.continents = {}
         self.countries = {}
+        self.cards = {}
 
 
 class Card(object):
@@ -261,5 +262,7 @@ def import_board_data(json_url):
     #add the two wild cards
     cards['wild1'] = (Card(None, "wild1"))
     cards['wild2'] = (Card(None, "wild2"))
+    #add cards to board
+    board.cards = cards
     #return a tuple with the board and the cards
-    return board, cards
+    return board
