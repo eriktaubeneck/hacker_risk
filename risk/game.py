@@ -82,11 +82,12 @@ class Game(object):
     def attack(self, attacking_country, defending_country, attacking_troops, moving_troops):
         self.phase = 'attacking'
         assert attacking_country.owner == self.players.current_player
+        defending_country_player = defending_country.owner
         country_invaded = attacking_country.attack(defending_country, attacking_troops, moving_troops)
         if country_invaded and not self.players.current_player.earned_card_this_turn:
             self.players.current_player.earned_card_this_turn = True
-        if not defending_country.owner.countries:
-            self.eliminate_player(self.players.current_player, defending_country.owner)
+        if not defending_country_player.countries:
+            self.eliminate_player(self.players.current_player, defending_country_player)
             if len(self.players.current_player.cards) >= 5:
                 self.players.force_cards_spend(self)
         return country_invaded
