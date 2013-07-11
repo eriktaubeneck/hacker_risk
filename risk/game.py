@@ -34,6 +34,8 @@ class Game(object):
 
     def init_deploy(self):
 
+        print "started deployment"
+
         troops_to_deploy = initial_troops[len(self.players)]*len(self.players)
 
         while {c for c in self.board.countries.values() if not c.owner}:
@@ -42,16 +44,24 @@ class Game(object):
             self.players.choose_country(self)
             troops_to_deploy -= 1
 
+        print "countries choosen"
+
         for _ in xrange(len(self.players) * troops_to_deploy):
             self.players.next()
             self.init_turn += 1
             self.players.current_player.troops_to_deploy = 1
             self.players.deploy_troops(self)
 
+        print "initial troops deployed"
+
     def play_game(self):
+
+        print "starting game"
+
         self.players.restart()
         while not self.check_for_winner():
             self.turn += 1
+            print "starting turn %s" % self.turn
             self.players.next()
             self.deployment_phase()
             self.players.attack(self)
