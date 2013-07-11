@@ -62,6 +62,7 @@ class Game(object):
         while not self.check_for_winner():
             self.turn += 1
             print "starting turn %s" % self.turn
+            print {p.name:{'countries':len(p.countries),'total troops':sum([c.troops for c in p.countries])} for p in self.players}
             self.players.next()
             self.deployment_phase()
             self.players.attack(self)
@@ -106,10 +107,15 @@ class Game(object):
         neutral_players = {p for p in players_remaining if p.is_neutral}
         if len(players_remaining) == 1:
             self.winner = list(players_remaining)[0]
+            print "Player %s DOMINATES!" % self.winner.name
             return True
         elif players_remaining == neutral_players:
             self.winner = "Draw"
+            print "All players quit. DRAW"
             return True
+        elif self.turn == self.max_turns:
+            self.winner = "Draw"
+            print "Reached 1000 turns. DRAW"
         else:
             return False
 
