@@ -27,10 +27,10 @@ To conquer the world by occupying every country, thus eliminating all your oppon
 ### Initial Army Placement
 The number of troops that each player will need:
 
-	- 3 Players: 35 Troops Each
-	- 4 Players: 30 Troops Each
-	- 5 Players: 25 Troops Each
-	- 6 Players: 20 Troops Each
+    - 3 Players: 35 Troops Each
+    - 4 Players: 30 Troops Each
+    - 5 Players: 25 Troops Each
+    - 6 Players: 20 Troops Each
 
 The order of play will be selected randomly by the server. Each player will take turns placing a troop into an empty country on the board. Once all countries have been taken, players continue placing troops on countries that they own, until they have run out of troops to place.
 
@@ -73,23 +73,40 @@ The server will make a POST request to your URL with the POST variable "risk". A
 
 ```
 {
-	"game": {
-			 "countries": {
-				"northern europe": {
-					"owner": "Erty's Awesome AI",
-						"troops": 13
-				},
-				[...]
-			}
-	},
-	"you": {
-		"cards": [{"country_name": "argentina", "value": "soldier"}],
-		"earned_cards_this_turn": false,
-		"is_eliminated": false,
-		"countries": ["northern europe", "venezuela", "western united states"],
-		"troops_to_deploy": 0,
-		"available_actions": ["attack", "end_turn", "reinforce"]
-	}
+    "game": {
+             "countries": {
+                 "northern europe": {
+                      "owner": "Erty's Awesome AI",
+                       "troops": 13
+                 },
+                 […]
+             }
+             "other_players":{
+                 "Erty's Awesome AI": {
+                     "cards": 2,
+                      "is_eliminated": False,
+                      "is_neutral": False
+                      },
+                 […]
+             }
+    },
+    "you": {
+        "cards": [{
+                   "country_name": "argentina",
+                   "value": "soldier"
+                  },
+                   […]
+                 ],
+        "earned_cards_this_turn": false,
+        "is_eliminated": false,
+        "countries": ["northern europe",
+                      "venezuela", 
+                      "western united states"],
+        "troops_to_deploy": 0,
+        "available_actions": ["attack",
+                              "end_turn",
+                              "reinforce"]
+    }
 }
 ```
 
@@ -101,7 +118,7 @@ An API request made to your server will have a "you" section, which indicates da
 
 #### cards
 
-An array containing the Risk cards which you currently hold. If you have more than 5 of these at the beginning of your turn, or after you eliminate and enemy (and take their cards), you will be forced to spend these cards through the ```spend_cards``` action.
+On the players attribute, the count of cards the player has. On the "you" attribute, an array containing the Risk cards which you currently hold. If you have more than 5 of these at the beginning of your turn, or after you eliminate and enemy (and take their cards), you will be forced to spend these cards through the ```spend_cards``` action.
 
 #### earned_cards_this_turn
 
@@ -110,6 +127,10 @@ Whether or not you have successfully conquered at least one country this turn, a
 #### is_eliminated
 
 Whether or not you have been removed from the game, due to either owning no countries, or failing to abide by the rules of the server.
+
+#### is_neutral
+
+Players that make illegal move or stop responding have the `is_neutral` attibute set to `True`. These players will not recieve or deploy troops, will not attack, and will not reinforce. They will defend as normal, and will retain their cards until eliminated or if the game ends.
 
 #### countries
 
