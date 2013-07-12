@@ -61,7 +61,7 @@ class Game(object):
         self.players.restart()
         while not self.check_for_winner():
             self.turn += 1
-            print "starting turn %s" % self.turn
+            print "starting turn %s - player %s's turn" % (self.turn, self.players.current_player.name)
             print {p.name:{'countries':len(p.countries),'total troops':sum([c.troops for c in p.countries])} for p in self.players}
             self.players.next()
             self.deployment_phase()
