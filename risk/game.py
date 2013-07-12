@@ -149,7 +149,7 @@ class Game(object):
             self.card_sets_traded_in += 1
             return (self.card_sets_traded_in - 3) * 5
 
-    def game_state_json(self, player): # player should be a Player object
+    def game_state_json(self, player):
         """
         Returns game state as JSON for sending to clients.
         Where g = Game(*args),
@@ -162,7 +162,7 @@ class Game(object):
         for key in self.board.countries:
             country = self.board.countries[key]
             game_state['game']['countries'][key] = country
-
+        game_state['game']['players'] = self.players
         game_state['you'] = player
         return json.dumps(game_state, cls=GameEncoder)
 
@@ -173,28 +173,33 @@ class GameEncoder(json.JSONEncoder):
         if isinstance(obj, models.Country):
             if obj.owner is None:
                 return {'owner': 'none',
-                        'troops': obj.troops
-                }
+                        'troops': obj.troops,
+                        }
             else:
                 return {'owner': obj.owner.name,
-                        'troops': obj.troops
-                }
+                        'troops': obj.troops,
+                        }
 
         elif isinstance(obj, models.Player):
-            return { 'name':obj.name,
-                     'is_eliminated':obj.is_eliminated,
-                     'cards':list(obj.cards),
-                     'earned_cards_this_turn':obj.earned_card_this_turn,
-                     'countries':[ country.name for country in obj.countries ],
-                     'troops_to_deploy':obj.troops_to_deploy,
-                     'available_actions':obj.available_actions,
-            }
-
+            return {'name': obj.name,
+                    'is_eliminated': obj.is_eliminated,
+                    'cards': list(obj.cards),
+                    'earned_cards_this_turn': obj.earned_card_this_turn,
+                    'countries': [country.name for country in obj.countries],
+                    'troops_to_deploy': obj.troops_to_deploy,
+                    'available_actions': obj.available_actions,
+                    }
+        elif isinstance(obj, models.Players):
+            return {p.name:{'is_eliminated': p.is_eliminated,
+                            'cards': len(p.cards),
+                            'is_neutral': p.is_neutral,
+                            }
+                    for p in obj.players_list}
         elif isinstance(obj, models.Continent):
-            return {'countries': obj.countries, 'bonus':obj.bonus}
+            return {'countries': obj.countries, 'bonus': obj.bonus}
 
         elif isinstance(obj, models.Card):
-            return { 'country_name':obj.country_name, 'value':obj.value }
+            return {'country_name':obj.country_name, 'value': obj.value}
 
         else:
             return json.JSONEncoder.default(self, obj)
