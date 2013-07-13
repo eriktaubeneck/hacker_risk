@@ -207,15 +207,18 @@ Example:
 
 ##### attack
 
-Attack a country adjacent to one of your countries. Specify an origin country,  destination country, number of troops to attack with (1, 2, or 3), and a number of troops to move if you win the engagement.
+Attack a country adjacent to one of your countries. Specify an origin country,  destination country, number of troops to attack with (1, 2, or 3), and a number of additional troops to move if you win the engagement.
 
  - There is no way to lose troops and conquer a country in the same attack round
  - The opponent will always defend with as many troops as they can (1 or 2)
  - The attacking and defending countries must be adjacent
  - You must own the attacking country, and not the defending country
- - You must leave at least one unit in the attacking country when you invade the defending country
+ - You must leave at least one unit in the attacking country when you invade the defending country, and thus can only attack from countries with 2 or more troops
+ - The attack is declared a win if the attack results in you eliminating all of the troops in the defending country. You will become the owner of the defending country and all `attacking_troops` will move there.
+ - `moving_troops` are additional troops that will move from the attacking country to the defending country if the attack results in a win. You must leave at least 1 troop in all countries, so you must choose such that `attacking_country.troops - (attacking_troops + troops_to_move) >= 1`
  - This command may be available even if you have no legal attacks
  - When you wish end the attacking phase, you will have to send `end_attack_phase` (see next section).
+
 Response:
 
 ```
