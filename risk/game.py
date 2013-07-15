@@ -45,6 +45,7 @@ class Game(object):
             troops_to_deploy -= 1
 
         print "countries choosen"
+        print {p.name:[c.name for c in p.countries] for p in self.players}
 
         for _ in xrange(len(self.players) * troops_to_deploy):
             self.players.next()
