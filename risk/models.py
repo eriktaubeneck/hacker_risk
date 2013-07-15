@@ -141,6 +141,14 @@ class Player(object):
                 return True
         return False
 
+    def has_attack(self):
+        return bool({c for c in self.countries if c.troops > 1 and
+                     {bc for bc in c.boarder_countries if bc.owner != self}})
+
+    def has_reinforce(self):
+        return bool({c for c in self.countries if c.troops > 1 and
+                     {bc for bc in c.border_countries if bc.owner == self}})
+
     def get_country_choice(self):
         pass
 
@@ -232,14 +240,16 @@ class Players(object):
         self.broadcast_game(game)
 
     def attack(self, game):
-        while not self.current_player.get_attack_order(game):
+        if self.current_player.has_attack():
+            while not self.current_player.get_attack_order(game):
+                self.broadcast_game(game)
             self.broadcast_game(game)
-        self.broadcast_game(game)
 
     def reinforce(self, game):
-        while not self.current_player.get_reinforce_order(game):
+        if self.current_player.has_reinforce():
+            while not self.current_player.get_reinforce_order(game):
+                self.broadcast_game(game)
             self.broadcast_game(game)
-        self.broadcast_game(game)
 
     def broadcast_game(self, game):
         [player.broadcast_game(game) for player in self.other_players]
