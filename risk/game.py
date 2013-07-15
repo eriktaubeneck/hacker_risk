@@ -165,6 +165,8 @@ class Game(object):
             game_state['game']['countries'][key] = country
         game_state['game']['players'] = self.players
         game_state['you'] = player
+        game_state['game']['turn'] = self.turn
+        game_state['game']['uid'] = str(self.uid)
         return json.dumps(game_state, cls=GameEncoder)
 
 

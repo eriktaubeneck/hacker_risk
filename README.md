@@ -80,7 +80,7 @@ The server will make a POST request to your URL with the POST variable "risk". A
                        "troops": 13
                  },
                  […]
-             }
+             },
              "other_players":{
                  "Erty's Awesome AI": {
                      "cards": 2,
@@ -88,7 +88,9 @@ The server will make a POST request to your URL with the POST variable "risk". A
                       "is_neutral": False
                       },
                  […]
-             }
+             },
+             "turn":5,
+             "uid":"cb2fd860-98b0-46d3-a69f-41683c05ad17"
     },
     "you": {
         "cards": [{
