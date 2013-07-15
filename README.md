@@ -218,7 +218,7 @@ Attack a country adjacent to one of your countries. Specify an origin country,  
  - You must leave at least one unit in the attacking country when you invade the defending country, and thus can only attack from countries with 2 or more troops
  - The attack is declared a win if the attack results in you eliminating all of the troops in the defending country. You will become the owner of the defending country and all `attacking_troops` will move there.
  - `moving_troops` are additional troops that will move from the attacking country to the defending country if the attack results in a win. You must leave at least 1 troop in all countries, so you must choose such that `attacking_country.troops - (attacking_troops + troops_to_move) >= 1`
- - This command may be available even if you have no legal attacks
+ - This command will only be avaliable when you have a possbile legal attack.
  - When you wish end the attacking phase, you will have to send `end_attack_phase` (see next section).
 
 Response:
@@ -253,10 +253,11 @@ Example:
 
 This command allows you to move troops from one of your countries to an adjacent country, once. Performing this action will end your turn.
 
- - You must leave at least one unit in the origin country
- - You must move at least one unit to the destination country
- - You must have the number of troops in the origin country that you wish to move
- - You must own the origin and destination countries
+ - You must leave at least one unit in the origin country.
+ - You must move at least one unit to the destination country.
+ - You must have the number of troops in the origin country that you wish to move.
+ - You must own the origin and destination countries.
+ - This command will only be avaliable if you have a possible legal reinforment to make.
 
 Response:
 
