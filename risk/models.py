@@ -143,7 +143,7 @@ class Player(object):
 
     def has_attack(self):
         return bool({c for c in self.countries if c.troops > 1 and
-                     {bc for bc in c.boarder_countries if bc.owner != self}})
+                     {bc for bc in c.border_countries if bc.owner != self}})
 
     def has_reinforce(self):
         return bool({c for c in self.countries if c.troops > 1 and
