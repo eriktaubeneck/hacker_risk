@@ -1,18 +1,14 @@
 from risk_helper import Player
 from risk.models import Players
 from risk.game import Game
+import sys
 
-player1_name = 'player 1'
-player1_url = 'http://localhost:4444'
-player2_name = 'player 2'
-player2_url = 'http://localhost:4445'
-player3_name = 'player 3'
-player3_url = 'http://localhost:4446'
+n_players = int(sys.argv[1])
+first_port = 4444
 
 players = Players()
-players.add_player(Player(player1_name, player1_url))
-players.add_player(Player(player2_name, player2_url))
-players.add_player(Player(player3_name, player3_url))
+for i in range(n_players):
+    players.add_player(Player('player %s' % i, 'http://localhost:%s' % (first_port)))
 
 game = Game(players)
 
