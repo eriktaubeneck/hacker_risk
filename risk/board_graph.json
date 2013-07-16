@@ -103,7 +103,7 @@
 			},
 			"egypt": {
 				"card": "horse",
-				"border countries": ["southern europe", "central africa", "middle east", "east africa", "north africa"]
+				"border countries": ["southern europe", "middle east", "east africa", "north africa"]
 			},
 			"east africa": {
 				"card": "soldier",
@@ -111,7 +111,7 @@
 			},
 			"central africa": {
 				"card": "cannon",
-				"border countries": ["north africa", "egypt", "east africa", "south africa"]
+				"border countries": ["north africa", "east africa", "south africa"]
 			},
 			"south africa": {
 				"card": "cannon",
