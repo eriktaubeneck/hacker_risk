@@ -41,7 +41,8 @@ def signup():
         user = User(username, base_url)
         db.session.add(user)
         db.session.commit()
-    return render_template("signup.html")
+        form = UserForm()
+    return render_template("signup.html", form=form)
 
 @app.route("/start_game")
 def start_game():
