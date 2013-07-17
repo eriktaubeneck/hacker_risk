@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+
+{% block nav %}
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li class="active"><a href="/signup">Sign Up</a></li>
+          <li><a href="https://github.com/eriktaubeneck/hacker_risk">Github</a></li>
+{% endblock %}
 {% block body %}
       <div class="jumbotron">
         <h1>Add your AI to the Battleroom!</h1>

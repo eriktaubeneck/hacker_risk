@@ -71,10 +71,12 @@
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
+          {% block nav %}
           <li class="active"><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
           <li><a href="/signup">Sign Up</a></li>
           <li><a href="https://github.com/eriktaubeneck/hacker_risk">Github</a></li>
+          {% endblock %}
         </ul>
         <h3 class="muted">Hacker Risk Battleroom</h3>
       </div>
