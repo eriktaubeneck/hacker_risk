@@ -252,6 +252,7 @@ class Players(object):
             self.broadcast_game(game)
 
     def broadcast_game(self, game):
+        game.broadcast_count += 1
         [player.broadcast_game(game) for player in self.other_players]
 
 

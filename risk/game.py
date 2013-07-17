@@ -22,6 +22,7 @@ class Game(object):
         self.init_turn = len(self.board.countries) + initial_troops[len(self.players)]
         self.turn = 0
         self.max_turns = 1000
+        self.broadcast_count = 0
         self.card_sets_traded_in = 0
         self.winner = None
         self.last_action = ''
@@ -168,6 +169,7 @@ class Game(object):
         game_state['game']['turn'] = self.turn
         game_state['game']['uid'] = str(self.uid)
         game_state['game']['last_action'] = self.last_action
+        game_state['game']['broadcast_count'] = self.broadcast_count
         return json.dumps(game_state, cls=GameEncoder)
 
 
