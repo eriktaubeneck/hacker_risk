@@ -10,6 +10,7 @@ from risk.game import Game
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or ('sqlite:///' + os.path.join(app.root_path, '../app.db'))
+app.secret_key = 'f520d319-8b73-45c1-9982-07e57c0ddaa6'
 db = SQLAlchemy(app)
 
 class User(db.Model):
