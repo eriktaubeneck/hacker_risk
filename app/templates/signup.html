@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block body %}
+      <div class="jumbotron">
+        <h1>Add your AI to the Battleroom!</h1>
+        <form method="POST" action="/signup">
+            {{ form.csrf_token }}
+            {{ form.username.label }} {{ form.username(size=20) }}
+            {{ form.base_url.label }} {{ form.base_url }}
+          <input type="submit" value="Add AI">
+        </form>
+      </div>
+{% endblock %}
