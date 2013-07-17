@@ -70,6 +70,8 @@ class Country(object):
     def __eq__(self, other):
         return isinstance(other, Country) and self.name == other.name
 
+    def __repr__(self):
+        return '<Country %r>' % self.name
 
 class Continent(object):
     def __init__(self, name, bonus):
@@ -85,6 +87,9 @@ class Continent(object):
 
     def __eq__(self, other):
         return isinstance(other, Continent) and self.name == other.name
+
+    def __repr__(self):
+        return '<Continent %r>' % self.name
 
     def get_player_set(self):
         keys = self.countries.keys()
@@ -108,6 +113,9 @@ class Card(object):
         assert card_three is not None
         wild_cards = [card for card in [self, card_two, card_three] if card.value == 'wild']
         return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
+
+    def __rerp__(self):
+        return '<Card %r>' % self.country_name
 
 
 class Player(object):
@@ -173,6 +181,8 @@ class Player(object):
     def __eq__(self, other):
         return isinstance(other, Player) and self.name == other.name
 
+    def __repr__(self):
+        return '<Player %r>' % self.name
 
 
 class Players(object):
