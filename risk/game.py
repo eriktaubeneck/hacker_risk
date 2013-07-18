@@ -112,11 +112,11 @@ class Game(object):
             print "Player %s DOMINATES!" % self.winner.name
             return True
         elif players_remaining == neutral_players:
-            self.winner = "Draw"
+            self.winner = None
             print "All players quit. DRAW"
             return True
         elif self.turn == self.max_turns:
-            self.winner = "Draw"
+            self.winner = None
             print "Reached 1000 turns. DRAW"
             return True
         else:
