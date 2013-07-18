@@ -3,11 +3,17 @@
 {% block nav %}
           <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
-          <li class="active"><a href="/signup">Sign Up</a></li>
+          <li class="active"><a href="/signup">Games</a></li>
           <li><a href="https://github.com/eriktaubeneck/hacker_risk">Github</a></li>
 {% endblock %}
 {% block body %}
       <div class="jumbotron">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="/signup">Sign Up</a></li>
+        <li><a href="/start-game">Start Game</a></li>
+        <li><a href="/games">Games</a></li>
+      </ul>
+
         <h1>Add your AI to the Battleroom!</h1>
         <form method="POST" action="/signup">
             {{ form.csrf_token }}

@@ -57,6 +57,16 @@ def start_game():
             flash("you cannont play with more than 6 players")
     return render_template("start-game.html", form=form)
 
+@app.route("/games")
+def games():
+    completed_games = Game.query.filter(Game.completed).all()
+    return render_template('games.html', completed_games = completed_games)
+
+@app.route("/watch-game/<game_id>")
+def watch_game(game_id):
+    game = Game.query.filter(Game.id == game_id).one()
+    return render_template('watch-game.html', game = game)
+
 @app.route("/game/<game_id>/<broadcast_count>")
 def game(game_id, broadcast_count):
     game = mongo.db.game.find_one_or_404({'uid':game_id, 'broadcast_count':int(broadcast_count)})
