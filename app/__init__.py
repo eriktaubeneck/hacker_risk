@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.wtf import Form
 from flask.ext.wtf.html5 import URLField
