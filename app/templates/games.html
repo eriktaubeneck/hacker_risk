@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block nav %}
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li class="active"><a href="/games">Games</a></li>
+          <li><a href="https://github.com/eriktaubeneck/hacker_risk">Github</a></li>
+{% endblock %}
+{% block body %}
+
+    <div class="jubotron">
+      <ul class="nav nav-tabs">
+        <li><a href="/signup">Sign Up</a></li>
+        <li><a href="/start-game">Start Game</a></li>
+        <li class="active"><a href="/games">Games</a></li>
+      </ul>
+      
+      <h1>Completed Games</h1>
+      {% for game in completed_games %}
+        <h3> Game {{ game.id }} </h3>
+        <p>
+        {% if game.winner %}
+          {{ game.winner.username }} won!
+        {% else %}
+          The game was a draw.
+        {% endif %}
+        </p>
+        <h4> Players </h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th> Username </th>
+              <th> Games Won </th>
+              <th> Games Played </th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for user in game.users %}
+            <tr>
+              <td> {{ user.username }} </td>
+              <td> {{ user.games|length }} </td>
+              <td> {{ user.games_won|length }} </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      <a class="btn btn-large btn-success" href="/watch-game/{{ game.id }}">
+        Watch Game </a>
+      {% endfor %}
+    </div>
+
+{% endblock %}
