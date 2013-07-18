@@ -139,22 +139,24 @@
         }); 
     }
     var initializeStatusDisplay = function() {
-        var tempTurn = getTurn(1); 
-        var players = JSON.parse(tempTurn["risk"])["game"]["players"]; 
-        var index = 0; 
-        $.each(players, function (key, value) {
-            playerList[key] = index; 
-            index ++; 
-            var playerDiv = document.createElement("div");
-            playerDiv.innerHTML = key + ": cards: " + value["card"]; 
-            playerDiv.id = key.split(" ").join(""); 
-            $("#gameStats").append(playerDiv); 
+        $.getJSON("/game/" + gameID + "/1", function(data) {
+            var players = data["players"]; 
+            var index = 0; 
+            $.each(players, function (key, value) {
+                playerList[key] = index; 
+                index ++; 
+                var playerDiv = document.createElement("div");
+                playerDiv.innerHTML = key + ": cards: " + value["card"]; 
+                playerDiv.id = key.split(" ").join(""); 
+                $("#gameStats").append(playerDiv); 
+            });
+            var lastAction = document.createElement("div");
+            lastAction.innerHTML = "Last Action"; 
+            lastAction.id = "lastAction"; 
+            $("#gameStats").append(lastAction); 
         });
-        var lastAction = document.createElement("div");
-        lastAction.innerHTML = "Last Action"; 
-        lastAction.id = "lastAction"; 
-        $("#gameStats").append(lastAction); 
-    }; 
+    };
+        
 
     var force; 
     function doStuff() {    
@@ -267,9 +269,9 @@
                 min:0, 
                 max: sliderMax,
                 slide: function (event, ui) {
-                    var turnData = JSON.parse(getTurn(ui.value)["risk"]); 
+                    var turnData = JSON.parse(getTurn(ui.value)); 
                     $.getJSON("/game/" + gameID + "/" + ui.value, function(data) {
-                        $("#turn").text("Turn: " + data["game"]["turn"]);
+                        $("#turn").text("Turn: " + data["turn"]);
                         updateNodes(data); 
                         updateStats(data); 
                     }); 
@@ -279,8 +281,7 @@
         });
     }
 
-    var updateStats = function(currentTurn) {
-        var game = currentTurn["game"];
+    var updateStats = function(game) {
         var countries = game["countries"];
         var players= game["players"];
         var lastAction = game["last_action"];
@@ -302,7 +303,7 @@
     }
 
     var updateNodes = function(currentTurn) {
-        var countries = currentTurn["game"]["countries"];
+        var countries = currentTurn["countries"];
         var data = [];
         var currentData = d3.selectAll(".node").data();
         for (i in currentData) {
@@ -320,10 +321,11 @@
     var autoSlide = function(slideTo) {
         slideTo = slideTo || $("#slider").slider("value")+1; 
         $("#slider").slider("value", slideTo);  
-        var turnData = JSON.parse(getTurn(slideTo)["risk"]); 
-        $("#turn").text("Turn: " + turnData["game"]["turn"])
-        updateNodes(turnData);
-        updateStats(turnData); 
+        $.getJSON("/game/" + gameID + "/"+ slideTo, function(data) {
+            $("#turn").text("Turn: " + data["turn"])
+            updateNodes(data);
+            updateStats(data);
+        });
     };
 
     var play = function(speed) {

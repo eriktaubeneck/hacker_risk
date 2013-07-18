@@ -3,15 +3,14 @@
 {% block head %}
     <link rel="stylesheet" type="text/css" href="/static/css/watch-game.css" />
     <link rel="stylesheet" type ="text/css" href="/static/css/jquery-ui-1.10.3/themes/base/jquery.ui. all.css"></link> 
+    <script> 
+        var gameID = "{{game.uid}}";
+        var broadcasts = {{game.broadcast_count}};  
+    </script>
     <script type="text/javascript" src="/static/js/jquery.js"></script>
     <script type="text/javascript" src="/static/js/d3.v3.js"></script> 
     <script type="text/javascript" src="/static/js/jquery-ui-1.10.3/ui/jquery-ui.js"></script> 
     <script type="text/javascript" src="/static/js/watch-game.js"></script>     
-    <script> 
-        var id = {{game.uid}};
-        var broadcastCount = {{game.broadcast_count}};  
-        setInfo(id, broadcastCount); 
-    </script>
 {% endblock %}
 
 {% block nav %}

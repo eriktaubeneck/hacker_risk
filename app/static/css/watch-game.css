@@ -27,7 +27,7 @@ path.link {
 }
 
 svg {
-    background-image: url('svg/Risk_board.svg');
+    background-image: url('/static/img/Risk_board.svg');
 }
 line {
   stroke: #666;
