@@ -38,8 +38,8 @@
           {% for user in game.users %}
             <tr>
               <td> {{ user.username }} </td>
-              <td> {{ user.games|length }} </td>
               <td> {{ user.games_won|length }} </td>
+              <td> {{ user.games|length }} </td>
             </tr>
           {% endfor %}
           </tbody>

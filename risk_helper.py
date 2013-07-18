@@ -2,7 +2,7 @@ from risk.models import Player as BasePlayer, Players as BasePlayers
 import requests
 import json
 import random
-from app import app, mongo
+
 
 class Player(BasePlayer):
 
@@ -172,3 +172,5 @@ class Players(BasePlayers):
         super(Players, self).broadcast_game(game)
         with app.app_context():
             mongo.db.game.insert(json.loads(game.game_state_json(None))['game'])
+
+from app import app, mongo

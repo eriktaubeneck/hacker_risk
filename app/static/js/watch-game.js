@@ -68,7 +68,7 @@
             }); 
             makeSlider();
             initializeStatusDisplay(); 
-        }
+        });
     };
 
     var startFromDB = function () {
