@@ -46,19 +46,12 @@
         margin-top: 28px;
       }
     </style>
-    <link href="{{ url_for('static', filename='css/bootstrap-responsive.css') }}" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="../assets/js/html5shiv.js"></script>
     <![endif]-->
 
-    <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ url_for('static', filename='ico/apple-touch-icon-144-precomposed.png') }}">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ url_for('static', filename='ico/apple-touch-icon-114-precomposed.png') }}">
-      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_for('static', filename='ico/apple-touch-icon-72-precomposed.png') }}">
-                    <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='ico/apple-touch-icon-57-precomposed.png') }}">
-                                   <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.png') }}">
   </head>
 
   <body>
@@ -68,7 +61,6 @@
            alt="Fork me on GitHub">
     </a>
     <div class="container-narrow">
-
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           {% block nav %}
@@ -91,22 +83,8 @@
 
     </div> <!-- /container -->
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-transition.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-alert.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-modal.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-dropdown.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-scrollspy.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-tab.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-tooltip.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-popover.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-button.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-collapse.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-carousel.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-typeahead.js') }}"></script>
+
+
 
   </body>
 </html>
