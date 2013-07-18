@@ -1,5 +1,6 @@
 from flask import Flask, render_template, flash
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.pymongo import PyMongo
 from flask.ext.wtf import Form
 from flask.ext.wtf.html5 import URLField
 from wtforms import TextField, SelectMultipleField
@@ -13,6 +14,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or ('sqlite:///' + os.path.join(app.root_path, '../app.db'))
 app.secret_key = 'f520d319-8b73-45c1-9982-07e57c0ddaa6'
 db = SQLAlchemy(app)
+mongo = PyMongo(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -66,3 +68,9 @@ def start_game():
         else:
             flash("you cannont play with more than 6 players")
     return render_template("start-game.html", form=form)
+
+@app.route("/game/<game_id>/<broadcast_count>")
+def game(game_id, broadcast_count):
+    game = mongo.db.game.find_one_or_404({'uid':game_id, 'broadcast_count':int(broadcast_count)})
+    game = {k:game[k] for k in game if k != '_id'}
+    return json.dumps(game)

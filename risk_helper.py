@@ -2,6 +2,7 @@ from risk.models import Player as BasePlayer, Players as BasePlayers
 import requests
 import json
 import random
+from app import app, mongo
 
 class Player(BasePlayer):
 
@@ -161,3 +162,13 @@ class Player(BasePlayer):
             r = requests.post(self.broadcast_url, data=payload, timeout=0.1)
         except requests.exceptions.Timeout:
             pass
+
+class Players(BasePlayers):
+
+    def __init__(self, *args):
+        super(Players, self).__init__(*args)
+
+    def broadcast_game(self, game):
+        super(Players, self).broadcast_game(game)
+        with app.app_context():
+            mongo.db.game.insert(json.loads(game.game_state_json(None))['game'])
