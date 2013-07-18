@@ -68,6 +68,7 @@
             }); 
             makeSlider();
             initializeStatusDisplay(); 
+        }
     };
 
     var startFromDB = function () {
@@ -132,9 +133,14 @@
             callback();
         });  
     }
-    
+    var getTurn = function(broadcastID) {
+        $.getJSON("/game/" + gameID + "/" + broadcastID, function(data) {
+            return data; 
+        }); 
+    }
     var initializeStatusDisplay = function() {
-        var players = JSON.parse(gameLog[0]["risk"])["game"]["players"]; 
+        var tempTurn = getTurn(1); 
+        var players = JSON.parse(tempTurn["risk"])["game"]["players"]; 
         var index = 0; 
         $.each(players, function (key, value) {
             playerList[key] = index; 
@@ -247,7 +253,7 @@
     }; 
 
     var makeSlider = function() {
-        var sliderMax = broadcastCount-1;
+        var sliderMax = broadcasts-1;
         $(function() {
             $("#play").button().click(function(event) {
                 $("#play").data("intervalID", play(10));    
@@ -261,7 +267,7 @@
                 min:0, 
                 max: sliderMax,
                 slide: function (event, ui) {
-                    var turnData = JSON.parse(gameLog[ui.value]["risk"]); 
+                    var turnData = JSON.parse(getTurn(ui.value)["risk"]); 
                     $.getJSON("/game/" + gameID + "/" + ui.value, function(data) {
                         $("#turn").text("Turn: " + data["game"]["turn"]);
                         updateNodes(data); 
@@ -314,7 +320,7 @@
     var autoSlide = function(slideTo) {
         slideTo = slideTo || $("#slider").slider("value")+1; 
         $("#slider").slider("value", slideTo);  
-        var turnData = JSON.parse(gameLog[slideTo]["risk"]); 
+        var turnData = JSON.parse(getTurn(slideTo)["risk"]); 
         $("#turn").text("Turn: " + turnData["game"]["turn"])
         updateNodes(turnData);
         updateStats(turnData); 
