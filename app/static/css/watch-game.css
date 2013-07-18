@@ -1,0 +1,49 @@
+#gameStats {
+  position: absolute;
+  right: 2px;
+  width: 200px; 
+  background-color: grey; 
+  padding: 3px; 
+  border-color: black; 
+  border: solid; 
+  margin: 2px; 
+}
+
+path.link {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+.label {
+    color: black;  
+    font-weight: bold; 
+}
+
+.line {
+  stroke: #666;
+  fill: white; 
+  stroke-width: 1.5px; 
+}
+
+svg {
+    background-image: url('svg/Risk_board.svg');
+}
+line {
+  stroke: #666;
+  stroke-width: 1.5px; 
+}
+
+circle {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: 3.0px;
+}
+
+text {
+  fill: #000;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+

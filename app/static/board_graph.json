@@ -1,0 +1,200 @@
+{
+	"north america": {
+		"bonus": 5,
+		"countries": {
+			"alaska": {
+				"card": "cannon",
+				"border countries": ["kamchatka", "northwest territory", "alberta"]
+			},
+			"northwest territory": {
+				"card": "horse",
+				"border countries": ["alaska", "alberta", "ontario", "greenland"]
+			},
+			"greenland": {
+				"card": "horse",
+				"border countries": ["northwest territory", "ontario", "eastern canada", "iceland"]
+			},
+			"alberta": {
+				"card": "cannon",
+				"border countries": ["alaska", "northwest territory", "ontario", "western united states"]
+			},
+			"ontario": {
+				"card": "cannon",
+				"border countries": ["northwest territory", "alberta", "western united states", "eastern united states", "eastern canada", "greenland"]
+			},
+			"eastern canada": {
+				"card": "cannon",
+				"border countries": ["ontario", "eastern united states", "greenland"]
+			},
+			"western united states": {
+				"card": "cannon",
+				"border countries": ["alberta", "ontario", "eastern united states", "central america"]
+			},
+			"eastern united states": {
+				"card": "cannon",
+				"border countries": ["western united states", "ontario", "eastern canada", "central america"]
+			},
+			"central america": {
+				"card": "soldier",
+				"border countries": ["western united states", "eastern united states", "venezuela"]
+			}
+		}
+	},
+	"south america": {
+		"bonus": 2,
+		"countries": {
+			"venezuela": {
+				"card": "horse",
+				"border countries": ["central america", "peru", "brazil"]
+			},
+			"peru": {
+				"card": "horse",
+				"border countries": ["venezuela", "brazil", "argentina"]
+			},
+			"brazil": {
+				"card": "soldier",
+				"border countries": ["venezuela", "peru", "argentina", "north africa"]
+			},
+			"argentina": {
+				"card": "soldier",
+				"border countries": ["peru", "brazil"]
+			}
+		}
+	},
+	"europe": {
+		"bonus": 5,
+		"countries": {
+			"iceland": {
+				"card": "horse",
+				"border countries": ["greenland", "great britain", "scandinavia"]
+			},
+			"scandinavia": {
+				"card": "soldier",
+				"border countries": ["iceland", "great britain", "northern europe", "russia"]
+			},
+			"russia": {
+				"card": "soldier",
+				"border countries": ["scandinavia", "northern europe", "southern europe", "ural", "afghanistan", "middle east"]
+			},
+			"great britain": {
+				"card": "soldier",
+				"border countries": ["iceland", "scandinavia", "northern europe", "western europe"]
+			},
+			"northern europe": {
+				"card": "horse",
+				"border countries": ["great britain", "scandinavia", "russia", "southern europe", "western europe"]
+			},
+			"western europe": {
+				"card": "soldier",
+				"border countries": ["great britain", "northern europe", "southern europe", "north africa"]
+			},
+			"southern europe": {
+				"card": "soldier",
+				"border countries": ["western europe", "northern europe", "russia", "middle east", "north africa", "egypt"]
+			}
+		}
+	},
+	"africa": {
+		"bonus": 3,
+		"countries": {
+			"north africa": {
+				"card": "soldier",
+				"border countries": ["brazil", "western europe", "egypt", "southern europe", "east africa", "central africa"]
+			},
+			"egypt": {
+				"card": "horse",
+				"border countries": ["southern europe", "middle east", "east africa", "north africa"]
+			},
+			"east africa": {
+				"card": "soldier",
+				"border countries": ["egypt", "middle east", "madagascar", "south africa", "central africa", "north africa"]
+			},
+			"central africa": {
+				"card": "cannon",
+				"border countries": ["north africa", "east africa", "south africa"]
+			},
+			"south africa": {
+				"card": "cannon",
+				"border countries": ["central africa", "east africa", "madagascar"]
+			},
+			"madagascar": {
+				"card": "horse",
+				"border countries": ["east africa", "south africa"]
+			}
+		}
+	},
+	"asia": {
+		"bonus": 7,
+		"countries": {
+			"ural": {
+				"card": "soldier",
+				"border countries": ["russia", "siberia", "china", "afghanistan"]
+			},
+			"siberia": {
+				"card": "soldier",
+				"border countries": ["ural", "china", "mongolia", "yakutsk", "irkutsk"]
+			},
+			"yakutsk": {
+				"card": "cannon",
+				"border countries": ["siberia", "irkutsk", "kamchatka"]
+			},
+			"kamchatka": {
+				"card": "cannon",
+				"border countries": ["yakutsk", "irkutsk", "mongolia", "japan", "alaska"]
+			},
+			"irkutsk": {
+				"card": "cannon",
+				"border countries": ["siberia", "yakutsk", "kamchatka", "mongolia"]
+			},
+			"mongolia": {
+				"card": "horse",
+				"border countries": ["siberia", "irkutsk", "kamchatka", "japan", "china"]
+			},
+			"japan": {
+				"card": "horse",
+				"border countries": ["kamchatka", "mongolia"]
+			},
+			"afghanistan": {
+				"card": "soldier",
+				"border countries": ["russia", "ural", "china", "india", "middle east"]
+			},
+			"china": {
+				"card": "cannon",
+				"border countries": ["afghanistan", "ural", "siberia", "mongolia", "southeast asia", "india"]
+			},
+			"middle east": {
+				"card": "cannon",
+				"border countries": ["southern europe", "russia", "afghanistan", "india", "east africa", "egypt"]
+			},
+			"india": {
+				"card": "horse",
+				"border countries": ["middle east", "afghanistan", "china", "southeast asia"]
+			},
+			"southeast asia": {
+				"card": "horse",
+				"border countries": ["india", "china", "indonesia"]
+			}
+		}
+	},
+	"australia": {
+		"bonus": 2,
+		"countries": {
+			"indonesia": {
+				"card": "soldier",
+				"border countries": ["southeast asia", "new guinea", "western australia"]
+			},
+			"new guinea": {
+				"card": "horse",
+				"border countries": ["indonesia", "eastern australia"]
+			},
+			"western australia": {
+				"card": "cannon",
+				"border countries": ["indonesia", "eastern australia"]
+			},
+			"eastern australia": {
+				"card": "horse",
+				"border countries": ["new guinea", "western australia"]
+			}
+		}
+	}
+}
