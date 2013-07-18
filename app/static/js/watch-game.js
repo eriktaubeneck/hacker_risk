@@ -4,8 +4,7 @@
     var nodeList = []; 
     var linkList = [];
     var playerList = {}; 
-    //TODO: add more colors. make them prettier, too. 
-    var colors = ["#66FFFF", "#33FF33", "#FFFF4D"]; 
+    var colors = ["#66FFFF", "#33FF33", "#FFFF4D", "#FF66CC", "#FFA366", "#C299C2"]; 
     var gameID; 
     var broadcasts; 
     
@@ -147,6 +146,7 @@
                 index ++; 
                 var playerDiv = document.createElement("div");
                 playerDiv.innerHTML = key + ": cards: " + value["card"]; 
+                playerDiv.style.color = colors[playerList[key]]; 
                 playerDiv.id = key.split(" ").join(""); 
                 $("#gameStats").append(playerDiv); 
             });
