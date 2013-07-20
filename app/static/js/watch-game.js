@@ -234,7 +234,7 @@
 
             circle.attr("r", function(d) {
                 var troops = d.troops || 1; 
-                var radius = 7 * Math.sqrt(Math.sqrt(troops)); 
+                var radius = 7 * (Math.sqrt(troops));
                 return radius; 
             });
             
@@ -246,7 +246,7 @@
             
             label.attr("x", function(d) {
                 var troops = d.troops || 1; 
-                var circleRadius = 7 * Math.sqrt(Math.sqrt(troops)); 
+                var circleRadius = 7 * (Math.sqrt(troops));
                 var offset = 2 + circleRadius; 
                 return offset;
             }); 
@@ -269,7 +269,6 @@
                 min:0, 
                 max: sliderMax,
                 slide: function (event, ui) {
-                    var turnData = JSON.parse(getTurn(ui.value)); 
                     $.getJSON("/game/" + gameID + "/" + ui.value, function(data) {
                         $("#turn").text("Turn: " + data["turn"]);
                         updateNodes(data); 
