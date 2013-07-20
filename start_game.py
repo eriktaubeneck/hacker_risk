@@ -21,7 +21,7 @@ def start_risk_game(user_ids, game_id):
     game.is_running = False
     game.completed = True
     if risk_game.winner:
-        game.winner = User.query.filter(User.username == risk_game.winner).one()
+        game.winner_id = User.query.filter(User.username == risk_game.winner.name).one().id
     game.broadcast_count = risk_game.broadcast_count
     db.session.add(game)
     db.session.commit()
