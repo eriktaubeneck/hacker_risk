@@ -10,7 +10,7 @@
     var force; 
     
     //fixed positions for overlay onto risk board
-    var fixedPositions = 
+    var fixedPositions = { 
         "alaska" : {x: 50, y:30, forced:true},
         "northwest territory" : {x: 150, y:70},
         "kamchatka" : {x: 700, y:30, forced:true},
@@ -123,14 +123,18 @@
             for (player in players) {
                 playerList[player] = index; 
                 index ++; 
-                var playerDiv = d3.select("#gameStats").append("div")
+                var playerP = d3.select("#gameStats").append("p")
                     .text(player + ": cards: " + players[player]["card"]) 
-                    .style("color", colors[playerList[player]]) 
+                    .style("color", colors[playerList[player]])
+                    .style("font-weight", "bold")
                     .attr("id", player.split(" ").join(""));
             });
-            var lastAction = d3.select("#gameStats").append("div")
+            var lastAction = d3.select("#gameStats").append("p")
                 .text("Last Action")
                 .attr("id", "lastAction"); 
+            var lastActionResults = d3.select("#gameStats").append("p")
+                .text("Results")
+                .attr("id", "lastActionResults"); 
         };
     };
         
