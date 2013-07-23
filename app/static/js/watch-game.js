@@ -128,14 +128,14 @@
                     .style("color", colors[playerList[player]])
                     .style("font-weight", "bold")
                     .attr("id", player.split(" ").join(""));
-            }});
+            }
             var lastAction = d3.select("#gameStats").append("p")
                 .text("Last Action")
                 .attr("id", "lastAction"); 
             var lastActionResults = d3.select("#gameStats").append("p")
                 .text("Results")
                 .attr("id", "lastActionResults"); 
-        };
+        });
     };
         
     function doStuff() {    
