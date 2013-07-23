@@ -41,6 +41,7 @@ class Player(BasePlayer):
     def got_exception(self, game, e):
         self.errors += 1
         game.last_action = 'error %s' % self.errors
+        raise e
         self.available_actions = []
         self.check_neutralized()
 
