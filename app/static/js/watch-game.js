@@ -4,72 +4,57 @@
     var nodeList = []; 
     var linkList = [];
     var playerList = {}; 
-    var colors = ["#66FFFF", "#33FF33", "#FFFF4D", "#FF66CC", "#FFA366", "#C299C2"]; 
+    var colors = d3.shuffle(["#66FFFF", "#33FF33", "#FFFF4D", "#FF66CC", "#FFA366", "#C299C2"]); 
     var gameID; 
     var broadcasts; 
+    var force; 
     
-    var setInfo = function(id, broadcastCount) {
-        gameID = id;
-        broadcasts = broadcastCount; 
-    };
-
     //fixed positions for overlay onto risk board
-    var fixedPositions = {
-        "alaska" : {x: 50, y:30}, 
-        "northwest territory" : {x: 150, y:70}, 
-        "kamchatka" : {x: 700, y:30}, 
-        "central america" : {x: 130, y:250}, 
-        "central africa" : {x: 400, y:375}, 
-        "north africa" : {x: 344, y:304}, 
-        "eastern united states" : {x: 175, y:190}, 
-        "western united states" : {x: 120, y:175}, 
-        "greenland" : {x: 250, y:50}, 
-        "indonesia" : {x: 600, y:375}, 
-        "eastern australia" : {x: 690, y:410}, 
-        "western australia" : {x: 630, y:440}, 
-        "new guinea" : {x: 690, y:350}, 
-        "alberta" : {x: 115, y:125}, 
-        "ontario" : {x: 175, y:135}, 
-        "eastern canada" : {x: 230, y:125}, 
-        "brazil" : {x: 238, y:332}, 
-        "india" : {x: 550, y:280}, 
-        "afghanistan" : {x: 500, y:200}, 
-        "middle east" : {x: 450, y:250}, 
-        "southeast asia" : {x: 615, y:290}, 
-        "madagascar" : {x: 475, y:440}, 
-        "argentina" : {x: 190, y:415}, 
-        "yakutsk" : {x: 600, y:65}, 
-        "japan" : {x: 685, y:180}, 
-        "china" : {x: 590, y:230}, 
-        "mongolia" : {x: 610, y:180}, 
-        "ural" : {x: 515, y:130}, 
-        "irkutsk" : {x: 595, y:115}, 
-        "siberia" : {x: 550, y:80}, 
-        "russia" : {x: 450, y:140}, 
-        "iceland" : {x: 320, y:85}, 
+    var fixedPositions = 
+        "alaska" : {x: 50, y:30, forced:true},
+        "northwest territory" : {x: 150, y:70},
+        "kamchatka" : {x: 700, y:30, forced:true},
+        "central america" : {x: 130, y:250},
+        "central africa" : {x: 400, y:375},
+        "north africa" : {x: 344, y:304, forced:true},
+        "eastern united states" : {x: 175, y:190, forced:true},
+        "western united states" : {x: 120, y:175, forced:true},
+        "greenland" : {x: 250, y:50, forced:true},
+        "indonesia" : {x: 600, y:375},
+        "eastern australia" : {x: 690, y:410},
+        "western australia" : {x: 630, y:440, forced:true},
+        "new guinea" : {x: 690, y:350},
+        "alberta" : {x: 115, y:125},
+        "ontario" : {x: 175, y:135},
+        "eastern canada" : {x: 230, y:125},
+        "brazil" : {x: 238, y:332, forced:true},
+        "india" : {x: 550, y:280, forced:true},
+        "afghanistan" : {x: 500, y:200},
+        "middle east" : {x: 450, y:250},
+        "southeast asia" : {x: 615, y:290},
+        "madagascar" : {x: 475, y:440, forced:true},
+        "argentina" : {x: 190, y:415, forced:true},
+        "yakutsk" : {x: 600, y:65},
+        "japan" : {x: 685, y:180, forced:true},
+        "china" : {x: 590, y:230},
+        "mongolia" : {x: 610, y:180},
+        "ural" : {x: 515, y:130},
+        "irkutsk" : {x: 595, y:115},
+        "siberia" : {x: 550, y:80},
+        "russia" : {x: 450, y:140, forced:true},
+        "iceland" : {x: 320, y:85},
         "northern europe" : {x: 375, y:170},
         "southern europe" : {x: 375, y:215},
-        "south africa" : {x: 400, y:440},
+        "south africa" : {x: 400, y:440, forced:true},
         "western europe" : {x: 325, y:230},
-        "great britain" : {x: 300, y:165},
-        "scandinavia" : {x: 385, y:85},
+        "great britain" : {x: 300, y:165, forced:true},
+        "scandinavia" : {x: 385, y:85, forced:true},
         "east africa" : {x: 450, y:350},
         "venezuela" : {x:185, y:278},
         "peru" : {x:170, y:350},
         "egypt" : {x:400, y:290},
-    }; 
-    
-    var importFromFile = function() {
-        $.getJSON("/static/game_log.json", function(data) {
-            console.log("game data loaded");
-            $.each(data, function(key, val) {
-                gameLog.push(val); 
-            }); 
-            makeSlider();
-            initializeStatusDisplay(); 
-        });
     };
-
+    
     var startFromDB = function () {
         makeSlider(); 
         initializeStatusDisplay(); 
@@ -78,26 +63,23 @@
     $(document).ready(function(){
         createGraph(doStuff); 
         startFromDB(); 
-        //importFromFile(); 
     });
 
     var createGraph = function (callback) {
         $.getJSON("/static/board_graph.json", function(data) {
-            $.each(data, function (key, val) {
-                var continent = val;
+            //add nodes (countries) first
+            $.each(data, function (key, continent) {
                 var countries = continent["countries"]; 
-                $.each(countries, function(k, v) {
+                $.each(countries, function(name, data) {
                     var node = {};
-                    var countryObject = v; 
-                    var borderCountries = countryObject["border countries"];
-                    node.name = k;
+                    node.name = name;
+                    var borderCountries = data["border countries"];
                     if (fixedPositions[node.name]) {
                         node.x=fixedPositions[node.name]["x"]; 
                         node.y=fixedPositions[node.name]["y"]; 
-                        node.fixed=true; 
+                        node.fixed=fixedPositions[node.name]["forced"] || false; 
                     }
                     node.continent = key; 
-                    node.fixed=true; 
                     node.owner = null; 
                     node.troops = 0;
                     node.borderCountries = borderCountries; 
@@ -105,7 +87,8 @@
                 });
             });
             console.log("node list created"); 
-            
+
+            //then create links between them based on border countries
             for (var i = 0; i<nodeList.length; i++) {
                 var node = nodeList[i]; 
                 borderCountries = node.borderCountries; 
@@ -132,33 +115,25 @@
             callback();
         });  
     }
-    var getTurn = function(broadcastID) {
-        $.getJSON("/game/" + gameID + "/" + broadcastID, function(data) {
-            return data; 
-        }); 
-    }
+    
     var initializeStatusDisplay = function() {
-        $.getJSON("/game/" + gameID + "/1", function(data) {
+        d3.json("/game/" + gameID + "/1", function(data) {
             var players = data["players"]; 
             var index = 0; 
-            $.each(players, function (key, value) {
-                playerList[key] = index; 
+            for (player in players) {
+                playerList[player] = index; 
                 index ++; 
-                var playerDiv = document.createElement("div");
-                playerDiv.innerHTML = key + ": cards: " + value["card"]; 
-                playerDiv.style.color = colors[playerList[key]]; 
-                playerDiv.id = key.split(" ").join(""); 
-                $("#gameStats").append(playerDiv); 
+                var playerDiv = d3.select("#gameStats").append("div")
+                    .text(player + ": cards: " + players[player]["card"]) 
+                    .style("color", colors[playerList[player]]) 
+                    .attr("id", player.split(" ").join(""));
             });
-            var lastAction = document.createElement("div");
-            lastAction.innerHTML = "Last Action"; 
-            lastAction.id = "lastAction"; 
-            $("#gameStats").append(lastAction); 
-        });
+            var lastAction = d3.select("#gameStats").append("div")
+                .text("Last Action")
+                .attr("id", "lastAction"); 
+        };
     };
         
-
-    var force; 
     function doStuff() {    
         var height = 500; 
         var width = 800; 
@@ -173,9 +148,21 @@
             .on("tick", tick)
             .start(); 
             
-        var svg = d3.select("body").append("svg")
+        // Create D3 Layout Container
+        var svg = d3.select("#map").append("svg")
             .attr("width", width)
-            .attr("height", height); 
+            .attr("height", height)
+            .attr("style", "z-index: 1")
+            .attr("id", "d3Layout"); 
+   
+        //Create br so background image is positioned correctly
+        d3.select("#map").append("br"); 
+ 
+        //create element for risk board background image
+        var background = d3.select("#map").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("id", "background"); 
 
     //add links 
         var path = svg.append("svg:g").selectAll("path")
@@ -195,26 +182,30 @@
             })
             .call(force.drag); 
     //add nodes?
+        
         var conts = {
-            "europe": "#0000FF", 
-            "asia": "#006600", 
-            "north america": "#000000", 
-            "south america": "#FF0000", 
-            "africa": "#FFFF00", 
-            "australia": "#853385"
+            "europe": "#4D4DFF",
+            "asia": "#009933",
+            "north america": "#000000",
+            "south america": "#FF3333",
+            "africa": "#FF944D",
+            "australia": "#A347A3"
         };
 
         var circle = node.append("circle")
-            .attr("r", 10)
+            .attr("r", 7)
             .attr("class", "countryCircle")
             .style("stroke", function(d) {return conts[d.continent];}); 
-    //add text?
+
+        //add text?
         var label = node.append("text")
             .attr("x", 12)
             .classed ("label", true)
+            .style("fill", "black")
             .attr("dy", ".35em")
             .text(function(d) {return d.name;});
 
+        // add troop count number
         var troopCount = node.append("text")
             .attr("dx", -3)
             .attr("dy", 3)
@@ -258,10 +249,12 @@
         var sliderMax = broadcasts-1;
         $(function() {
             $("#play").button().click(function(event) {
-                $("#play").data("intervalID", play(10));    
+                if(!$("#play").data("intervalID"))
+                    $("#play").data("intervalID", play(10));    
             });
             $("#pause").button().click(function(event) {
-                pause($("#play").data("intervalID")); 
+                pause($("#play").data("intervalID"));
+                $("#play").data("intervalID", null);
             });
         }); 
         $(function() {
@@ -276,7 +269,7 @@
                     }); 
                 }
             });
-            $("#turn").text("Turn: 0");
+            $("#turn").text("Turn: 0 - Initial Deployment");
         });
     }
 
@@ -284,20 +277,23 @@
         var countries = game["countries"];
         var players= game["players"];
         var lastAction = game["last_action"];
-        $.each(players, function(player, data) {
+        for (player in players) {
             var playerName = player.split(" ").join("");
             var totalTroops = 0; 
             var countryCount = 0; 
-            $.each(countries, function (countryName, value) {
+            for (countryName in countries) {
                 if(value["owner"] == player) {
                     countryCount++; 
-                    totalTroops += value["troops"]; 
+                    totalTroops += countries[countryName]["troops"]; 
                 }
-            });
-            $("#" +playerName).text(player + " -- cards: " + data["cards"] + " -- troops: " + totalTroops); 
-        });
+            };
+            $("#" +playerName).text(player + " -- cards: " + players[player]["cards"] + " -- troops: " + totalTroops); 
+        };
         //TODO: parse last Action into 1) readable text
         //                             2) animated shit on graph
+        var actions = ["deployed", "attacked", "reinforced", "defeated", "spent"];
+        var pos = (actions.map(function(x) {return lastAction.indexOf(x);})); 
+        var action = actions[pos.indexOf(d3.max(pos))];
         $("#lastAction").text(lastAction); 
     }
 
@@ -321,7 +317,11 @@
         slideTo = slideTo || $("#slider").slider("value")+1; 
         $("#slider").slider("value", slideTo);  
         $.getJSON("/game/" + gameID + "/"+ slideTo, function(data) {
-            $("#turn").text("Turn: " + data["turn"])
+            if (data["turn"] == 0) { 
+                $("#turn").text("Turn: " + data["turn"] + " - Initial Deployment");
+            } else {
+                $("#turn").text("Turn: " + data["turn"]);
+            }
             updateNodes(data);
             updateStats(data);
         });

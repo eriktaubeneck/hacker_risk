@@ -32,9 +32,19 @@ path.link {
   stroke-width: 1.5px; 
 }
 
-svg {
-    background-image: url('/static/img/Risk_board.svg');
+#map {
+    text-align: center; 
 }
+
+#background {
+    background-image: url('/static/img/Risk_board.svg'); 
+    position: relative; 
+    top: -500px; 
+    left: 0px; 
+    z-index: -1; 
+    -webkit-filter: grayscale(1); 
+}
+
 line {
   stroke: #666;
   stroke-width: 1.5px; 
@@ -48,7 +58,7 @@ circle {
 
 text {
   fill: #000;
-  font: 10px sans-serif;
+  font: 12px sans-serif;
   pointer-events: none;
 }
 
