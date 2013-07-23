@@ -32,6 +32,7 @@
               <th> Username </th>
               <th> Games Won </th>
               <th> Games Played </th>
+              <th> Win Percentage </th>
             </tr>
           </thead>
           <tbody>
@@ -39,7 +40,8 @@
             <tr>
               <td> {{ user.username }} </td>
               <td> {{ user.games_won|length }} </td>
-              <td> {{ user.games|length }} </td>
+              <td> {{ user.completed_games|length }} </td>
+              <td> {{ (user.games_won|length * 100) // user.completed_games|length }}% </td>
             </tr>
           {% endfor %}
           </tbody>

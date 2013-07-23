@@ -18,10 +18,14 @@ def start_risk_game(user_ids, game_id):
     db.session.add(game)
     db.session.commit()
     risk_game.start_game()
+    game = db.session.query(Game).filter(Game.id == game_id).one()
     game.is_running = False
     game.completed = True
     if risk_game.winner:
-        game.winner_id = User.query.filter(User.username == risk_game.winner.name).one().id
+        game.winner = User.query.filter(User.username == risk_game.winner.name).one()
+    for user_id in user_ids:
+        user = User.query.filter(User.id == user_id).one()
+        game.completed_users.append(user)
     game.broadcast_count = risk_game.broadcast_count
     db.session.add(game)
     db.session.commit()

@@ -5,6 +5,11 @@ game_user_table = db.Table('game_user', db.Model.metadata,
     db.Column('game_id', db.Integer, db.ForeignKey('game.id'))
 )
 
+completed_game_user_table = db.Table('completed_game_user', db.Model.metadata,
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('game_id', db.Integer, db.ForeignKey('game.id'))
+)
+
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,6 +18,9 @@ class User(db.Model):
     games = db.relationship("Game",
                             secondary=game_user_table,
                             backref="users")
+    completed_games = db.relationship("Game",
+                                      secondary=completed_game_user_table,
+                                      backref="completed_users")
     games_won = db.relationship("Game", backref='winner')
 
     def __init__(self, username, base_url):
