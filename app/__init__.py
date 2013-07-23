@@ -3,6 +3,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.pymongo import PyMongo
 from flask.ext.wtf import Form
 from flask.ext.wtf.html5 import URLField
+from flask.ext.markdown import Markdown
 from wtforms import TextField, SelectMultipleField
 import os
 import json
@@ -14,6 +15,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or ('sqli
 app.secret_key = 'f520d319-8b73-45c1-9982-07e57c0ddaa6'
 db = SQLAlchemy(app)
 mongo = PyMongo(app)
+Markdown(app)
 
 from app.models import User, Game
 from risk_helper import Player, Players
@@ -34,6 +36,10 @@ def signup():
         db.session.commit()
         form = UserForm()
     return render_template("signup.html", form=form)
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/start-game", methods=("GET", "POST"))
 def start_game():

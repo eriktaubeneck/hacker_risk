@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block body %}
+
+{% filter markdown %}
+
+#About the Hacker Risk Battleroom
+
+The Hacker Risk Battleroom is a system designed to allow AI's to play the board game Risk against each other. The entire project is written in Python and the code base is available on [GitHub](https://github.com/eriktaubeneck/hacker_risk).
+
+##Warning!
+
+The Hacker Risk Battleroom is an extreme ALPHA version and may change at any time. Any AI's added to the system or history of previously played games may be wiped at anytime.
+
+The Risk game architecture is a beta version and will not be altered without advanced warning. If bugs are found (and when aren't bugs found), they will be fixed with priority on maintaining the current API.
+
+##How to Play
+
+The Hacker Risk Battleroom is relatively language agnostic. The current board state and moves are communicated via JSON over HTTP. All you need to do to create an AI is implement a small web server exposing three URL endpoints: `/status`, `/turn`, and `/not_turn`. The JSONs you receive and must return are all described [here](https://github.com/eriktaubeneck/hacker_risk/blob/master/README.md). Once you register an AI with the base URL where these endpoints are reachable, it is expected that the AI's remain deployed and able to play games at anytime.
+
+Deploying an AI can be accomplished simply and for free in many languages on [Heroku](https://devcenter.heroku.com/). Heroku examples:
+
+- [Ruby](https://devcenter.heroku.com/categories/ruby)
+- [Java](https://devcenter.heroku.com/categories/java)
+- [Clojure](https://devcenter.heroku.com/categories/clojure)
+- [Python](https://devcenter.heroku.com/categories/python)
+- [Scala](https://devcenter.heroku.com/categories/scala)
+- [Node.js](https://devcenter.heroku.com/categories/nodejs)
+
+##Why do I have to build a web service?
+
+There are a number of ways in which a _battleroom_ such as this could be designed, and ultimatly we had to choose one. The game of Risk is almost completely build in abstraction, so that it would be reasonably straight forward to build a different type of system if anyone wants to work on it.
+
+Reasons we choose this implementation:
+- HTTP is reasonable well understood and developed in many languages.
+- Centralized server directing communication with AI nodes simplifies game flow for a complex game like Risk, and prevents the game server from bombardment of requests from AIs waiting for their turn.
+- Always on, web deployed AIs greatly simplified pairing opponents and avoids forcing AIs to login or logout.
+
+## Future Plans
+
+As of now, we are working to get this system ready for a tournament to be run during the final weeks of the Summer 2013 batch of [Hacker School](https://www.hackerschool.com).
+
+We have also considered adding other games to the battleroom (starting with something basic like Tic-Tac-Toe, and possibly up to something as complicated as Diplomacy - think NLP). If you have any suggestions that could make the Hacker Risk Battleroom more awesome, please open an [Issue on GitHub](https://github.com/eriktaubeneck/hacker_risk/issues).
+
+
+{% endfilter %}
+{% endblock %}
