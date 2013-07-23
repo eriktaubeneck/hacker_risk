@@ -1,6 +1,7 @@
 import random
 import json
 import itertools
+import os
 
 class Country(object):
     def __init__(self, name, border_countries):
@@ -266,8 +267,11 @@ class Players(object):
         [player.broadcast_game(game) for player in self.other_players]
 
 
-def import_board_data(json_url):
-    board_file = open(json_url)
+def import_board_data(json_filename=None):
+    if json_filename:
+        board_file = open(json_filename)
+    else:
+        board_file = open(os.path.join(os.path.dirname(__file__), 'board_graph.json'))
     board_json = json.load(board_file)
     board_file.close()
     board = Board()
