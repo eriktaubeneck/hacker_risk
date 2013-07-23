@@ -1,11 +1,12 @@
 #gameStats {
   position: absolute;
+  top: 300px;
   right: 2px;
   width: 200px; 
   background-color: #333333; 
   padding: 3px; 
   border-color: black; 
-  border: solid; 
+  border: solid 2px; 
   margin: 2px; 
 }
 
@@ -18,7 +19,7 @@ h2 {
 path.link {
   fill: none;
   stroke: #666;
-  stroke-width: 1.5px;
+  stroke-width: 3px; 
 }
 
 .label {
@@ -29,17 +30,19 @@ path.link {
 .line {
   stroke: #666;
   fill: white; 
-  stroke-width: 1.5px; 
+  stroke-width: 3px; 
 }
 
 #map {
     text-align: center; 
+    height: 600px; 
+    width: 750px; 
 }
 
 #background {
     background-image: url('/static/img/Risk_board.svg'); 
     position: relative; 
-    top: -500px; 
+    top: -600px; 
     left: 0px; 
     z-index: -1; 
     -webkit-filter: grayscale(1); 

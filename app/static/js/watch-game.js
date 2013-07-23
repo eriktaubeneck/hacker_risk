@@ -139,7 +139,7 @@
     };
         
     function doStuff() {    
-        var height = 500; 
+        var height = 600; 
         var width = 800; 
 
         force = d3.layout.force()
@@ -286,7 +286,7 @@
             var totalTroops = 0; 
             var countryCount = 0; 
             for (countryName in countries) {
-                if(value["owner"] == player) {
+                if(countries[countryName]["owner"] == player) {
                     countryCount++; 
                     totalTroops += countries[countryName]["troops"]; 
                 }
