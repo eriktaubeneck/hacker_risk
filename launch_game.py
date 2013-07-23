@@ -1,7 +1,14 @@
 from risk_helper import Player
 from risk.models import Players
-from risk.game import Game
+from risk.game import Game as BaseGame
 import sys
+
+debug = sys.argv[2] or True
+
+class Game(BaseGame):
+    def check_for_winner(self):
+        raw_input('waiting')
+        super(Game, self).check_for_winner()
 
 n_players = int(sys.argv[1])
 first_port = 4444
