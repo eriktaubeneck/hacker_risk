@@ -1,19 +1,6 @@
-{% extends "base.html" %}
+{% extends "games_base.html" %}
 
-{% block nav %}
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li class="active"><a href="/games">Games</a></li>
-          <li><a href="https://github.com/eriktaubeneck/hacker_risk">Github</a></li>
-{% endblock %}
-{% block body %}
-
-    <div class="jubotron">
-      <ul class="nav nav-tabs">
-        <li><a href="/signup">Sign Up</a></li>
-        <li><a href="/start-game">Start Game</a></li>
-        <li class="active"><a href="/games">Games</a></li>
-      </ul>
+{% block body2 %}
 
       <h1>Completed Games</h1>
       {% for game in completed_games %}

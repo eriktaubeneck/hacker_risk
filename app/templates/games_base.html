@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="jubotron">
+      <ul class="nav nav-tabs">
+        <li {% if request.path == url_for('signup') %}class="active" {% endif %}><a href="/signup">Sign Up</a></li>
+        <li {% if request.path == url_for('start_game') %}class="active" {% endif %}><a href="/start-game">Start Game</a></li>
+        <li {% if request.path == url_for('games') or 'watch-game' in request.path  %}class="active" {% endif %}><a href="/games">Games</a></li>
+      </ul>
+
+{% block body2 %}{% endblock %}
+{% endblock %}

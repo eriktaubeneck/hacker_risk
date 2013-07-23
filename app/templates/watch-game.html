@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "games_base.html" %}
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="/static/css/watch-game.css" />
@@ -13,26 +13,13 @@
     <script type="text/javascript" src="/static/js/watch-game.js"></script>     
 {% endblock %}
 
-{% block nav %}
-    <li><a href="/">Home</a></li>
-    <li><a href="/about">About</a></li>
-    <li><a href="/games">Games</a></li>
-    <li><a href="https://github.com/eriktaubeneck/hacker_risk">Github</a></li>
-{% endblock %}
-{% block body %}
-    <div class="jumbotron">
-      <ul class="nav nav-tabs">
-        <li><a href="/signup">Sign Up</a></li>
-        <li><a href="/start-game">Start Game</a></li>
-        <li class="active"><a href="/games">Games</a></li>
-      </ul>
-    <div id = "turn"></div>
-    <div id = "slider"></div>
-    <br>
-    <button id = "play">Play Game</button>
-    <button id = "pause">Pause</button>
-    <br><br>
-    <div id = "map"></div>
-    <br><br>
-    <div id = "gameStats"><h2>Game Statistics</h2></div>
+{% block body2 %}
+      <div id = "turn"></div>
+      <div id = "slider"></div>
+      <button id = "play">Play Game</button>
+      <button id = "pause">Pause</button>
+      <br><br>
+      <div id = "gameLoader"></div>
+      <div id = "gameStats"><h2>Game Statistics</h2></div>
+    </div>
 {% endblock %} 
