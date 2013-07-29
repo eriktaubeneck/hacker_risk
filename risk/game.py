@@ -166,6 +166,7 @@ class Game(object):
             game_state['game']['countries'][key] = country
         game_state['game']['players'] = self.players
         game_state['you'] = player
+        game_state['game']['cards_left'] = len(self.card_deck)
         game_state['game']['turn'] = self.turn
         game_state['game']['uid'] = str(self.uid)
         game_state['game']['last_action'] = self.last_action
