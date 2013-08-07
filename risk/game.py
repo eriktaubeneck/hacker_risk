@@ -171,7 +171,7 @@ class Game(object):
         game_state['game']['uid'] = str(self.uid)
         game_state['game']['last_action'] = self.last_action
         game_state['game']['broadcast_count'] = self.broadcast_count
-        return json.dumps(game_state, cls=GameEncoder)
+        return json.dumps({"risk":game_state}, cls=GameEncoder)
 
 
 class GameEncoder(json.JSONEncoder):
