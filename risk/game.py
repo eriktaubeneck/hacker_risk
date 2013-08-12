@@ -91,7 +91,7 @@ class Game(object):
             self.players.current_player.earned_card_this_turn = True
         if not defending_country_player.countries:
             self.eliminate_player(self.players.current_player, defending_country_player)
-            if len(self.players.current_player.cards) >= 5:
+            if len(self.players.current_player.cards) >= 6:
                 self.players.force_cards_spend(self)
         return country_invaded
 
