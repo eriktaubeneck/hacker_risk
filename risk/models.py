@@ -113,7 +113,7 @@ class Card(object):
         assert card_two is not None
         assert card_three is not None
         wild_cards = [card for card in [self, card_two, card_three] if card.value == 'wild']
-        return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value != card_three.value)
+        return (len(wild_cards) >= 1) or (self.value == card_two.value == card_three.value) or (self.value != card_two.value && self.value != card_three.value && card_two.value != card_three.value)
 
     def __rerp__(self):
         return '<Card %r>' % self.country_name
